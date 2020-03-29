@@ -1,0 +1,16 @@
+\begin{center}
+\begin{circuitikz}[american]
+\draw (5,0)
+	to[dcvsource, v=$V_0$] (2,0)
+	to[R=$r_{G}$] (0,0)
+	to[R=$R_c$, *-*] (0,3)
+	to[ammeter, i=$I_{\rm mis}$] (5,3)
+	to[short, -*] (5,0)
+	node[ground]{};
+\draw (0, 0)
+	to [short] (-2, 0)
+	to [voltmeter, v^=$V_{\rm mis}$] (-2, 3)
+	to[short] (0,3);
+\draw[gray, dashed] (4.2,-1)--(0.3,-1)--(0.3,1)--(4.2,1)--cycle;	
+\end{circuitikz}
+\end{center}

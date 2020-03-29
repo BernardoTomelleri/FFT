@@ -1,0 +1,24 @@
+\begin{center}
+\begin{circuitikz}[american]
+\draw (2,4)
+	to[short, f>^=$\text{CH1}_{\rm osc}$] (0,4)
+	node[oscopeshape] {};		
+\draw (2,2)
+	to[short,*-, f>^=$\text{CH2}_{\rm osc}$] (0,2)
+	node[oscopeshape] {};
+\draw (0,0)
+	to[short] (0,4)
+	to[short] (2,4)
+	to[R=0.22 <\ohm>, *-] (2,2)
+	to[Do, l=1N4007, -*] (2,0)
+	to[short] (0,0)
+	to[short,-*] (5,0)
+	to[short] (5,-0.2)
+	node[eground]{};	
+\draw (2,0)
+	to[short] (5,0)
+	to[C, l_=100<\farad>] (5,5)
+	to[spst, l_=SW$_1$] (2,5)
+	to[short] (2,4);
+\end{circuitikz}
+\end{center}

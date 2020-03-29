@@ -1,0 +1,10 @@
+\begin{center}
+\begin{circuitikz}
+\draw (-2, 0)
+	to[dcvsource, v=$\Delta V$, *-] (0,0)
+	to[R=$r$, v=$\Delta V_r$, *-*] (2,0)
+	to[Do, v=$\Delta V_d$,  *-*] (5,0)
+	node[ground]{};
+\draw[gray, dashed] (-2,-2)--(-2,2)--(5,2)--(5,-2)--cycle;
+\end{circuitikz}
+\end{center}
