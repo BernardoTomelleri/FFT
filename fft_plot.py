@@ -6,28 +6,10 @@ Created on Sat Nov  2 17:19:42 2019
 Visualizza dati con opportune bellurie
 """
 import numpy as np
-import cmath as c
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
-from scipy.misc import derivative
-import glob
 from sys import exit
-
-# Estrazione e stampa a schermo delle medie delle misure di x
-ddpfiles = glob.glob('../../plothist_data/avgdevs/*txt')
-def digitddp():
-    x=[]
-    dx=[]
-    for f in ddpfiles:
-        #print(f)
-        D = np.loadtxt(f, unpack = True, usecols=0)
-        n = len(D)
-        av = np.mean(D)
-        dev = np.std(D, ddof=1)/np.sqrt(n)
-        x.append(av)
-        dx.append(dev)
-        print('X = %f +- %f ' %(av, dev))
-    return x, dx
+from lib import chitest, mod, sine, f_1
 
 ''' Variables that control the script '''
 DSO = True # Sampling from Digital Oscilloscope
@@ -64,36 +46,6 @@ x1 = x[x>x_min]; sx = x1[x1<x_max];
 y1 = y[x>x_min]; sy = y1[x1<x_max];
 dx1 = dx[x>x_min]; sdx = dx1[x1<x_max];
 dy1 = dy[x>x_min]; sdy = dy1[x1<x_max];
-
-# Modello sinusoidale e parabolico
-def sine(t, A, omega, f, B):
-    return A*np.sin(omega*t + f) + B
-
-def parabola(x, A , T, B):
-    """ Definizione modulare della parabola integrale di un onda triangolare"""
-    if (x < T/2.):
-        return (A*x*((2*x/T)- 1) + B)
-    else:
-        return (A*(3*x -(2*x**2)/T - T) + B)
-
-def mod(vect, A, T, f, B):
-    y = []
-    for x in vect:
-        y.append(parabola((x+f)%T, A, T, B))
-    return y
-
-def f_1 (x, pars):
-    return derivative(mod, x, dx = 1e-6, n = 1, args = pars);
-
-def chitest(data, unc, model, ddof=0):
-    """ Evaluates Chi-square goodness of fit test for a function, model, to
-    a set of data """
-    res = data - model
-    resnorm = res/unc
-    ndof = len(data) - ddof
-    chisq = (resnorm**2).sum()
-    sigma = (chisq - ndof)/np.sqrt(2*ndof)
-    return chisq, ndof, sigma    
 
 # Grafico preliminare dati
 if tex:
@@ -138,7 +90,7 @@ xsort=np.sort(sx)
 for i in range (0,len(Dx)):
     Dx[i]=xsort[i+1]-xsort[i]
 
-Dxavg=np.average(Dx)
+Dxavg=np.mean(Dx)
 Dxstd=np.std(Dx)
 print("Delta t average = %.e s" %Dxavg)
 print("Delta t stdev = %.e s" %Dxstd)
@@ -429,32 +381,4 @@ if tick:
     ax2.set_ylim(min(normin)-np.std(normin), max(normin)+np.std(normin))
 ax2.tick_params(direction='in', length=5, width=1., top=True, right=True)
 ax2.tick_params(which='minor', direction='in', width=1., top=True, right=True)
-
-
-ax2.set_xlabel('Lettura digitalizzata [digit]', x=0.83)
-ax2.set_ylabel('Residui')
-ax2.axhline(0, c='r', zorder=10)
-ax2.errorbar(sx, resnorm, None, None, 'ko', elinewidth=1, capsize=2, ms=2.5,
-             ls='--', lw=1., zorder=0)
-ax2.grid(color ='gray', ls = '--', alpha=0.7)
-if tick:
-    ax2.xaxis.set_major_locator(plt.MultipleLocator(abs(x[0]-x[len(x)-1])/8.))
-    ax2.xaxis.set_minor_locator(plt.MultipleLocator(abs(x[0]-x[len(x)-1])/40.))
-    ax2.yaxis.set_major_locator(plt.MultipleLocator(0.5))
-    ax2.yaxis.set_minor_locator(plt.MultipleLocator(0.1))
-ax2.tick_params(direction='in', length=5, width=1., top=True, right=True)
-ax2.tick_params(which='minor', direction='in', width=1., top=True, right=True)
-
-ax2.set_xlabel('Lettura digitalizzata [digit]', x=0.83)
-ax2.set_ylabel('Residui')
-ax2.axhline(0, c='r', zorder=10)
-ax2.errorbar(sx, resnorm, None, None, 'ko', elinewidth=1, capsize=2, ms=2.5,
-             ls='--', lw=1., zorder=0)
-ax2.grid(color ='gray', ls = '--', alpha=0.7)
-if tick:
-    ax2.xaxis.set_major_locator(plt.MultipleLocator(abs(x[0]-x[len(x)-1])/8.))
-    ax2.xaxis.set_minor_locator(plt.MultipleLocator(abs(x[0]-x[len(x)-1])/40.))
-    ax2.yaxis.set_major_locator(plt.MultipleLocator(0.5))
-    ax2.yaxis.set_minor_locator(plt.MultipleLocator(0.1))
-ax2.tick_params(direction='in', length=5, width=1., top=True, right=True)
-ax2.tick_params(which='minor', direction='in', width=1., top=True, right=True)
+plt.show()

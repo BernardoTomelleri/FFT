@@ -7,7 +7,7 @@ Created on Mon Mar  2 17:46:05 2020
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
-from sys import exit
+
 """ Estrazione dei dati corrispondenti all'intervallo di ddp selezionato
 tempo in microsecondi, allora quando lo dividi per 10^3 lo trasformi 
 in millisecondi, dio cane. differenza di potenziale in unità arbitrarie """

@@ -4,7 +4,7 @@
 \input{math}
 
 \geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
-\title{Modellizzazione della resistenza interna di diodi a giunzione PN}
+\title{Esercizio obbligatorio sulla FFT}
 \author{B.~Tomelleri(\thanks{Dipartimento di Fisica E.~Fermi, Universit\`a di
 Pisa - Pisa, Italy})}
 
@@ -232,18 +232,10 @@ determinare la corrente di lavoro del diodo grazie alla legge di Ohm.
 Si \`e quindi effettuato un filtraggio volto all'eliminazione degli outliers e 
 dei punti meno significativi, assumendoli quali variabili indipendenti e di 
 natura gaussiana. Per una discussione dettagliata si rimanda all'\nameref{app: 
-B}. E’ opportuno sottolineare che, all’interno della stessa appendice, 
+A}. E’ opportuno sottolineare che, all’interno della stessa appendice, 
 $\sigma_x^2$ rappresenta la varianza delle letture e non le incertezze ad esse
 associate.
 
-Successivamente, \`e stato effettuato un fit ai minimi degli scarti quadratici.
-Per il procedimento avremmo potuto pensare di adottare come modello la legge
-\eqref{eq: model} direttamente, tuttavia ci\`o comporterebbe il fallimento del
-fit a causa dei valori negativi o nulli che pu\`o assumere l'argomento del
-logaritmo. Si \`e scelto quindi di utilizzare la funzione inversa come modello
-per il fit, la quale \`e stata implementata numericamente secondo il metodo
-delle tangenti (o di Newton).
-Per una trattazione approfondita, si rimanda all'\nameref{app: C}.
 
 Risulta evidente, osservando i punti campionati con la resistenza da
 $R1 = 220 \; \si{\kohm}$, la presenza di un rumore di natura non statistica
