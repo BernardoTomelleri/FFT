@@ -143,6 +143,7 @@ def outlier(xmes, dx, ymes, dy, model, pars, thr=5, out=False):
     return xmes[isin], dx[isin], ymes[isin], dy[isin]
 
 def grid(ax, xlab = None, ylab = None):
+    """ Adds standard grid and labels for measured data plots to ax. """
     ax.grid(color = 'gray', ls = '--', alpha=0.7)
     ax.set_xlabel('%s' %(xlab if xlab else 'x [a.u.]'), x=0.9)
     ax.set_ylabel('%s' %(ylab if ylab else 'y [a.u.]'))
@@ -151,6 +152,16 @@ def grid(ax, xlab = None, ylab = None):
     ax.tick_params(which='minor', direction='in', width=1., top=True, right=True)
     return ax
     
+def tick(ax, xmaj = None, xmin = None, ymaj = None, ymin = None):
+    """ Adds linearly spaced ticks to ax. """
+    if not xmin: xmin = xmaj/5. if xmaj else None
+    if not ymin: ymin = ymaj/5. if xmaj else None
+    if xmaj: ax.xaxis.set_major_locator(plt.MultipleLocator(xmaj))
+    if xmin: ax.xaxis.set_minor_locator(plt.MultipleLocator(xmin))
+    if ymaj: ax.yaxis.set_major_locator(plt.MultipleLocator(ymaj))
+    if ymin: ax.yaxis.set_minor_locator(plt.MultipleLocator(ymin))
+    return ax
+
 def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
 # Variables that control the script 
     # kwargs.setdefault(
@@ -198,8 +209,8 @@ def sampling(space, v=False):
     Dxavg=np.mean(Deltas)
     Dxstd=np.std(Deltas)
     if v:
-        print("Delta t average = %.e s" %Dxavg)
-        print("Delta t stdev = %.e s" %Dxstd)
+        print(f"Delta t average = {Dxavg:.2e} s" )
+        print(f"Delta t stdev = {Dxstd:.2e}")
     return Dxavg, Dxstd
 
 # Estrazione e stampa a schermo delle medie delle misure di x

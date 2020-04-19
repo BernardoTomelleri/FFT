@@ -28,7 +28,7 @@ def damp(t, A, tau, B):
 DSO = False # Sampling from Digital Oscilloscope
 fit = False # attempt to fit the data
 log = False # log-scale axis/es
-tick = False # manually choose spacing between axis ticks
+tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
 
 init = (900., 4., 2., 0., 450.)
@@ -54,14 +54,14 @@ ax1.set_ylabel('Differenza di potenziale $\Delta V$ [a.u.]')
 if fit:   
     ax1.plot(tt, damp(tt, pars[0, 1, 3]), c='b')
     ax1.plot(tt, -damp(tt, *[pars[:2], -pars[3]]), c='b')
-if tick:
+if tix:
     ax1.yaxis.set_major_locator(plt.MultipleLocator(100.))
     ax1.yaxis.set_minor_locator(plt.MultipleLocator(20.))
 legend = ax1.legend(loc='best')
 
 ax2.set_xlabel('Tempo $t$ [ms]', x=0.92)
 ax2.set_ylabel('Residui [a.u.]')
-if tick:
+if tix:
     ax2.xaxis.set_major_locator(plt.MultipleLocator(1.))
     ax2.xaxis.set_minor_locator(plt.MultipleLocator(0.2))
     ax2.yaxis.set_major_locator(plt.MultipleLocator(5.))
@@ -86,7 +86,7 @@ ax1.errorbar(outT, outV, doutV, doutT, 'gx',  ms=3.5, elinewidth=1.,
              capsize=1.5, ls='', label='outliers')
 ax1.set_ylabel('Differenza di potenziale $\Delta V$ [a.u.]')
 legend = ax1.legend(loc='best')
-if tick:
+if tix:
     ax1.yaxis.set_major_locator(plt.MultipleLocator(100.))
     ax1.yaxis.set_minor_locator(plt.MultipleLocator(20.))
 
@@ -94,7 +94,7 @@ ax2.errorbar(outT, normout, None, None, 'gx', elinewidth = 0.7, capsize=0.7,
              ms=3., ls='', zorder=5)
 ax2.set_xlabel('Tempo $t$ [ms]', x=0.92)
 ax2.set_ylabel('Residui')
-if tick:
+if tix:
     ax2.ticklabel_format(axis='both', style='sci', scilimits=None,
                          useMathText=True)
     ax2.xaxis.set_major_locator(plt.MultipleLocator(1))
