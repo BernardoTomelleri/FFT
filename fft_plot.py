@@ -13,8 +13,8 @@ from lab import (chitest, sine, propfit, sampling, srange, grid, errcor,
                  prnpar, prncor, outlier, pltfitres, tick)
 
 ''' Variables that control the script '''
-DSO = False # Sampling from Digital Oscilloscope
-fit = True # attempt to fit the data
+DSO = True # Sampling from Digital Oscilloscope
+fit = False # attempt to fit the data
 log = False # log-scale axis/es
 dB = True # plots response y-axis in deciBels
 tix = True # manually choose spacing between axis ticks
@@ -62,11 +62,11 @@ if tix:
 
 # Costanti per la trasformata discreta di Fourier     
 fres, frstd = sampling(space=x, v=True)
-# Lunghezza dell'array su cui calcola la trasformata
 fftsize = len(x)
+
 tran = np.fft.fftshift(np.fft.fft(y*np.bartlett(len(y)), fftsize))
 freq = np.fft.fftshift(np.fft.fftfreq(fftsize, d=fres))
-
+tran/=np.max(tran)
 # plotfft(freq, tran, dB=False, re_im=False)
 fft = tran.real if re_im else 20*np.log10(np.abs(tran)) if dB else np.abs(tran)
 
@@ -89,7 +89,7 @@ if log:
                                               numticks = 16))
 elif tix:
     tick(ax1, xmaj=100, ymaj=1e3)
-    if dB: tick(ax1, ymaj=20)
+    if dB: tick(ax1, ymaj=20, ymin=5)
 
 ax2 = grid(ax2, 'Time $t$ [s]', '$V(t)$ [digit]')
 if DSO: ax2.set_ylabel('$V(t)$ [V]')
@@ -106,11 +106,11 @@ else:
     ax2.set_xlim(0, 0.1)
     if tix: 
         tick(ax2, xmaj=1e-2, ymaj=20, ymin=5)
-        if DSO: tick(ax2, ymaj=0.1)
+        if DSO: tick(ax2, ymaj=0.2, ymin=5e-2)
 plt.show()
 if not fit: exit()
     
-#Fit con sinusoide
+#Fit V(t) con sinusoide
 pars, covm = curve_fit(sine, sx, sy, init, sdy, absolute_sigma = False)
 sdy, pars, covm = propfit(sx, sdx, sy, sdy, sine, pars)
 perr, pcor = errcor(covm)
