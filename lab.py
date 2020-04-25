@@ -35,6 +35,10 @@ def mod(vect, A, T, phs=0, ofs=0):
         y.append(parabola((x+phs)%T, A, T, ofs))
     return y
 
+def fder(f, x, pars):
+    return np.gradient(f(x, *pars), 1)
+
+# UTILITIES FOR MANAGING PARAMETER ESTIMATES AND TEST RESULTS
 def chitest(data, unc, model, ddof=0, gauss=False, v=False):
     """ Evaluates Chi-square goodness of fit test for a function, model, to
     a set of data. """
@@ -67,11 +71,43 @@ def prnpar(pars, perr, model, prec=2):
     pnms = getfullargspec(model)[0][1:]
     dec = np.abs((np.log10(perr) - prec)).astype(int)
     for nam, par, err, d in zip(pnms, pars, perr, dec):
-        print(f'{nam} = {par:.{d}f} +- {err:.{d}f}')
-        
-def fder(f, x, pars):
-    return np.gradient(f(x, *pars), 1)
+        print(f'{nam} = {par:.{d}f} +- {err:.{d}f}')        
 
+# UTILITIES FOR MANAGING FIGURE AXES AND PLOTS
+def grid(ax, xlab = None, ylab = None):
+    """ Adds standard grid and labels for measured data plots to ax. """
+    ax.grid(color = 'gray', ls = '--', alpha=0.7)
+    ax.set_xlabel('%s' %(xlab if xlab else 'x [a.u.]'), x=0.9)
+    ax.set_ylabel('%s' %(ylab if ylab else 'y [a.u.]'))
+    ax.minorticks_on()
+    ax.tick_params(direction='in', length=5, width=1., top=True, right=True)
+    ax.tick_params(which='minor', direction='in', width=1., top=True, right=True)
+    return ax
+    
+def tick(ax, xmaj = None, xmin = None, ymaj = None, ymin = None):
+    """ Adds linearly spaced ticks to ax. """
+    if not xmin: xmin = xmaj/5. if xmaj else None
+    if not ymin: ymin = ymaj/5. if xmaj else None
+    if xmaj: ax.xaxis.set_major_locator(plt.MultipleLocator(xmaj))
+    if xmin: ax.xaxis.set_minor_locator(plt.MultipleLocator(xmin))
+    if ymaj: ax.yaxis.set_major_locator(plt.MultipleLocator(ymaj))
+    if ymin: ax.yaxis.set_minor_locator(plt.MultipleLocator(ymin))
+    return ax
+
+def logx(ax, tix=None):
+    ax.set_xscale('log')
+    if tix:
+        ax.xaxis.set_major_locator(plt.LogLocator(numticks=tix))
+        ax.xaxis.set_minor_locator(plt.LogLocator(subs=np.arange(2, 10)*.1,
+                                                  numticks = tix))
+def logy(ax, tix=None):
+    ax.set_yscale('log')
+    if tix:
+        ax.yaxis.set_major_locator(plt.LogLocator(numticks=tix))
+        ax.yaxis.set_minor_locator(plt.LogLocator(subs=np.arange(2, 10)*.1,
+                                                  numticks = tix))
+
+# LEAST SQUARE FITTING ROUTINES AND OUTPUT GRAPHS
 # Compatibilità errori
 def propfit(xmes, dx, ymes, dy, model, p0=None, thr=5, max_iter=20):
     """ Modified non-linear least squares (curve_fit) algorithm to
@@ -142,26 +178,6 @@ def outlier(xmes, dx, ymes, dy, model, pars, thr=5, out=False):
     
     return xmes[isin], dx[isin], ymes[isin], dy[isin]
 
-def grid(ax, xlab = None, ylab = None):
-    """ Adds standard grid and labels for measured data plots to ax. """
-    ax.grid(color = 'gray', ls = '--', alpha=0.7)
-    ax.set_xlabel('%s' %(xlab if xlab else 'x [a.u.]'), x=0.9)
-    ax.set_ylabel('%s' %(ylab if ylab else 'y [a.u.]'))
-    ax.minorticks_on()
-    ax.tick_params(direction='in', length=5, width=1., top=True, right=True)
-    ax.tick_params(which='minor', direction='in', width=1., top=True, right=True)
-    return ax
-    
-def tick(ax, xmaj = None, xmin = None, ymaj = None, ymin = None):
-    """ Adds linearly spaced ticks to ax. """
-    if not xmin: xmin = xmaj/5. if xmaj else None
-    if not ymin: ymin = ymaj/5. if xmaj else None
-    if xmaj: ax.xaxis.set_major_locator(plt.MultipleLocator(xmaj))
-    if xmin: ax.xaxis.set_minor_locator(plt.MultipleLocator(xmin))
-    if ymaj: ax.yaxis.set_major_locator(plt.MultipleLocator(ymaj))
-    if ymin: ax.yaxis.set_minor_locator(plt.MultipleLocator(ymin))
-    return ax
-
 def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
 # Variables that control the script 
     # kwargs.setdefault(
@@ -191,7 +207,7 @@ def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
     ax2.axhline(0, c='r', alpha=0.7, zorder=10)
     return fig, (ax1, ax2)
 
-
+# UTILITIES FOR MANAGING DATA FILES
 def srange(x, dx, y, dy, x_min=0, x_max=1e9):
     """ Extracts and returns the data inside selected range [min, max]. """ 
     xsup = x[x > x_min]; sx = xsup[xsup < x_max];

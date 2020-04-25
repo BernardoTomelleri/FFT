@@ -10,17 +10,18 @@ from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 from sys import exit
 from lab import (chitest, sine, propfit, sampling, srange, grid, errcor,
-                 prnpar, prncor, outlier, pltfitres, tick)
+                 prnpar, prncor, outlier, pltfitres, tick, logy)
 
 ''' Variables that control the script '''
 DSO = True # Sampling from Digital Oscilloscope
 fit = False # attempt to fit the data
-log = False # log-scale axis/es
-dB = True # plots response y-axis in deciBels
-tix = True # manually choose spacing between axis ticks
+log = True # log-scale axis/es
+dB = False # plots response y-axis in deciBels
+tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
 re_im = False # Whether to plot (Re, Im) or (Mag, Phs) of FFT
 angle = False # Whether to plot phase of FFT or V(t)
+lock = True
 
 # Extrazione dei vettori di dati grezzi
 Dir = './RC_int/'
@@ -33,12 +34,16 @@ if DSO:
     V1, V2 = np.genfromtxt(Dir+'DSO1_41.csv', float, delimiter=',',
                      skip_header = 2, usecols=(0, 1), unpack = True)
     x_min = -0.3; x_max = 2.5
-
+if lock:
+    V1 = np.linspace(x_min, x_max, 1_000_000)
+    V2 = sine(V1, A=1, frq=1000) + sine(V1, A=1, frq=1005)
+    V2 += np.random.normal(loc=0, scale=100, size=len(V1))
+    
 # Trasformazione dei dati nelle grandezze da fittare
 x = V1
 dx = np.full(len(x), (V1[1]-V1[2])/2)
-y = V2 - np.mean(V2)
-dy = np.full(len(y), (V2[1]-V2[2])/2)
+y = V2 if lock else V2 - np.mean(V2)
+dy = np.full(len(y), (V2[1]-V2[2])/20)
 # Estrazione di un sottointervallo di dati
 sx, sdx, sy, sdy = srange(x, dx, y, dy, x_min, x_max)
 
@@ -64,13 +69,13 @@ if tix:
 fres, frstd = sampling(space=x, v=True)
 fftsize = len(x)
 
-tran = np.fft.fftshift(np.fft.fft(y*np.bartlett(len(y)), fftsize))
+tran = np.fft.fftshift(np.fft.fft(y, fftsize))
 freq = np.fft.fftshift(np.fft.fftfreq(fftsize, d=fres))
-tran/=np.max(tran)
+# tran/=np.max(tran)
 # plotfft(freq, tran, dB=False, re_im=False)
 fft = tran.real if re_im else 20*np.log10(np.abs(tran)) if dB else np.abs(tran)
 
-if angle:
+if angle or re_im:
     fig, (ax1, ax2) = plt.subplots(2,1, True, gridspec_kw={'wspace':0.05,
          'hspace':0.05})
 else: fig, (ax2, ax1) = plt.subplots(2, 1, gridspec_kw={'wspace':0.25,
@@ -81,19 +86,14 @@ ax1.plot(freq, fft, c='k', lw='0.9')
 ax1.set_ylabel('$\widetilde{V}(f)$ Magnitude [%s]' %('dB' if dB else 'arb. un.'))
 if re_im: ax1.set_ylabel('Fourier Transform [Re]')    
 ax1.set_xlim(0, 1400)
-if log:
-    ax1.set_yscale('log')
-    if tix:
-        ax1.yaxis.set_major_locator(plt.LogLocator(numticks=16))
-        ax1.yaxis.set_minor_locator(plt.LogLocator(subs=np.arange(2, 10)*.1,
-                                              numticks = 16))
+if log: logy(ax1, 16)
 elif tix:
     tick(ax1, xmaj=100, ymaj=1e3)
     if dB: tick(ax1, ymaj=20, ymin=5)
 
 ax2 = grid(ax2, 'Time $t$ [s]', '$V(t)$ [digit]')
 if DSO: ax2.set_ylabel('$V(t)$ [V]')
-if angle: 
+if angle or re_im: 
     fft = tran.imag if re_im else np.angle(tran)
     ax2.plot(freq, fft, c='k', lw='0.9')
     ax2.set_xlabel('Frequency $f$ [Hz]'); 
