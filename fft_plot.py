@@ -35,8 +35,8 @@ if DSO:
                      skip_header = 2, usecols=(0, 1), unpack = True)
     x_min = -0.3; x_max = 2.5
 if lock:
-    V1 = np.linspace(x_min, x_max, 1_000_000)
-    V2 = sine(V1, A=1, frq=1000) + sine(V1, A=1, frq=1005)
+    V1 = np.linspace(x_min, x_max, 2_000_000)
+    V2 = sine(V1, A=1, frq=1000) + sine(V1, A=1, frq=1002)
     V2 += np.random.normal(loc=0, scale=100, size=len(V1))
     
 # Trasformazione dei dati nelle grandezze da fittare
@@ -69,7 +69,7 @@ if tix:
 fres, frstd = sampling(space=x, v=True)
 fftsize = len(x)
 
-tran = np.fft.fftshift(np.fft.fft(y, fftsize))
+tran = np.fft.fftshift(np.fft.fft(y*np.bartlett(len(y)), fftsize))
 freq = np.fft.fftshift(np.fft.fftfreq(fftsize, d=fres))
 # tran/=np.max(tran)
 # plotfft(freq, tran, dB=False, re_im=False)
