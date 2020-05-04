@@ -1,5 +1,5 @@
 \documentclass{article}[a4paper, oneside, 11pt]
-
+\synctex=1
 \input{preamble}
 \input{math}
 
@@ -64,24 +64,24 @@ Per poter esplorare una larga banda di correnti di lavoro
 si \`e variata opportunamente la resistenza in serie al diodo, scegliendo tra
 le seguenti:
 \begin{table}[H]
-    \begin{center}
-	\begin{tabular}{lll}
-	    \toprule
-		$R1$ nom. [$\si{\ohm}$] & $R1$ mis. [$\si{\ohm}$] \\ 
-	    \midrule
-	    \midrule
-	    $0.22 \pm 3 \% $         	& $0.226 \pm 0.008$ \\
-	    $2.2 \pm 5 \% $          	& $2.212 \pm 0.008$ \\
-	    $22 \pm 5 \% $           	& $21.86 \pm 0.010$ \\ 
-		$220 \pm 5 \% $          	& $216.22 \pm 0.07$ \\
-		$2.2\; \si{k} \pm 5 \% $       & $2202.1 \pm 0.4$ \\
-		$22\; \si{k} \pm 5 \% $       & ($21.7 \pm 0.3)10^3$ \\
-		$0.22\; \si{M} \pm 5 \% $      & ($217 \pm 3)10^3$ \\
-	    \bottomrule
-	\end{tabular}
-	\caption{I valori delle resistenze poste in serie al diodo, riportate in
-		valore nominale e misurate con multimetro digitale. \label{tab: res}}
-    \end{center}
+\begin{center}
+\begin{tabular}{lll}
+	\toprule
+	$R1$ nom. [$\si{\ohm}$] & $R1$ mis. [$\si{\ohm}$] \\ 
+	\midrule
+	\midrule
+	$0.22 \pm 3 \% $         	& $0.226 \pm 0.008$ \\
+	$2.2 \pm 5 \% $          	& $2.212 \pm 0.008$ \\
+	$22 \pm 5 \% $           	& $21.86 \pm 0.010$ \\ 
+	$220 \pm 5 \% $          	& $216.22 \pm 0.07$ \\
+	$2.2\; \si{k} \pm 5 \% $       & $2202.1 \pm 0.4$ \\
+	$22\; \si{k} \pm 5 \% $       & ($21.7 \pm 0.3)10^3$ \\
+	$0.22\; \si{M} \pm 5 \% $      & ($217 \pm 3)10^3$ \\
+	\bottomrule
+\end{tabular}
+\caption{I valori delle resistenze poste in serie al diodo, riportate in
+	valore nominale e misurate con multimetro digitale. \label{tab: res}}
+\end{center}
 \end{table}
 
 Per una descrizione del metodo di misurazione delle resistenze si rimanda 
@@ -110,16 +110,16 @@ fondamentale per acquisire coppie di dati per le tensioni ai capi del diodo
 e della resistenza.
 
 \begin{figure}[!htb]
-	\centering 
- 		\includegraphics[scale=0.5]{./measure.png}
- 	\caption{Schema circuitale del sistema di lettura (verso\texttt{Teensy})
-	\label{sch:rdng}}
+\centering 
+	\includegraphics[scale=0.5]{./measure.png}
+\caption{Schema circuitale del sistema di lettura (verso\texttt{Teensy})
+\label{sch:rdng}}
 \end{figure}
 
 \begin{figure}[h!t]
-	\centering 
- 		\includegraphics[scale=0.5]{./gestione.png}
- 	\caption{Circuito globale per la gestione del diodo \label{sch:gest}}
+\centering 
+	\includegraphics[scale=0.5]{./gestione.png}
+\caption{Circuito globale per la gestione del diodo \label{sch:gest}}
 \end{figure}
 
 %===============================
@@ -161,28 +161,28 @@ lasciando liberi entrambi i parametri $m$ e $q$. Riportiamo sotto le miglior
 stime dei parametri determinati dai fit relativi ad \verb+ADC0+ ed \verb+ADC1+ 
 e le rispettive covarianze:
 \begin{align*}
-	&\qquad \texttt{ADC0}	&&\qquad  \texttt{ADC1} \\
-	m_0 &= 0.7968 \pm  0.0033  \; \mathrm{mV/digit} 
-	& m_1  &= 0.7954 \pm 0.0026  \; \mathrm{mV/digit} \\
-	q_0 &= - 0.18 \pm 0.34  \; \si{\mV} 	
-	&q_1 &= 3.84  \pm 0.26  \; \si{\mV} \\
-	\corr{m_0} {q_0} &= - 0.15      &\corr{m_1}{q_1} &= - 0.09 \\
-	\chi^2/\text{ndof} &= 145/15	&\chi^2/\text{ndof} &= 96/15 \\ 
-	\text{abs\_sigma} &= \rm False	&\text{abs\_sigma} &= \rm False
+&\qquad \texttt{ADC0}	&&\qquad  \texttt{ADC1} \\
+m_0 &= 0.7968 \pm  0.0033  \; \mathrm{mV/digit} 
+& m_1  &= 0.7954 \pm 0.0026  \; \mathrm{mV/digit} \\
+q_0 &= - 0.18 \pm 0.34  \; \si{\mV} 	
+&q_1 &= 3.84  \pm 0.26  \; \si{\mV} \\
+\corr{m_0} {q_0} &= - 0.15      &\corr{m_1}{q_1} &= - 0.09 \\
+\chi^2/\text{ndof} &= 145/15	&\chi^2/\text{ndof} &= 96/15 \\ 
+\text{abs\_sigma} &= \rm False	&\text{abs\_sigma} &= \rm False
 \end{align*}
 
 \begin{figure}[H]
-	\centering
-	\begin{subfigure}{.5\textwidth}
-		\def\svgwidth{\columnwidth}
-		\includesvg{cal0}
-	\label{fig: cal0}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-		\def\svgwidth{\columnwidth}
-		\includesvg{cal1}
-	\label{fig: cal1}
-	\end{subfigure}
+\centering
+\begin{subfigure}{.5\textwidth}
+	\def\svgwidth{\columnwidth}
+	\includesvg{cal0}
+\label{fig: cal0}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+	\def\svgwidth{\columnwidth}
+	\includesvg{cal1}
+\label{fig: cal1}
+\end{subfigure}
 \end{figure}
 
 I coefficienti cos\`i ricavati ci permetteranno di fornire una buona stima 
@@ -246,22 +246,22 @@ per questa presa dati, essa non \`e stata considerata nella procedura di
 fit eseguita successivamente, in quanto i relativi punti avrebbero avuto un
 peso sovrastimato in confronto agli altri, introducendo cos\`i un bias
 nei risultati finali.
- 
+
 Si riportano i valori ottimali dei parametri stimati dal fit e le relative
 covarianze: 
 \begin{align*}
-	R_{\text{diodo}} &= 46.112\iffalse 18 \fi \pm 0.007\iffalse 2 \fi \; \si{\mohm} 
-	&\sigma_{I_0, \eta V_T} &= 0.97  \\
-	\eta V_T &= 47.579\iffalse 86 \fi \pm 0.003\iffalse 3 \fi \; \si{\mV} 	
-	&\sigma_{I_0, R_d} &= -0.62 \\
-	I_0 &= 4.518\iffalse 0 \fi \pm 0.004\iffalse 3 \fi \; \si{\nA}
-	&\sigma_{I_0, \text{ofst}} &= -0.49 \\
-	\text{offset} &=\; - 2.204\iffalse 3 \fi \pm 0.007 \iffalse 3 \fi \; \si{\uA}
-	&\sigma_{\eta V_T, R_d} &= -0.70  \\ 
-	\chi^2/\text{ndof} &= 72207/251066
-	&\sigma_{\eta V_T, \text{ofst}} &= -0.43\\
-	\text{abs\_sigma} &= \rm False
-	&\sigma_{R_d, \text{ofst}} &= 0.22
+R_{\text{diodo}} &= 46.112\iffalse 18 \fi \pm 0.007\iffalse 2 \fi \; \si{\mohm} 
+&\sigma_{I_0, \eta V_T} &= 0.97  \\
+\eta V_T &= 47.579\iffalse 86 \fi \pm 0.003\iffalse 3 \fi \; \si{\mV} 	
+&\sigma_{I_0, R_d} &= -0.62 \\
+I_0 &= 4.518\iffalse 0 \fi \pm 0.004\iffalse 3 \fi \; \si{\nA}
+&\sigma_{I_0, \text{ofst}} &= -0.49 \\
+\text{offset} &=\; - 2.204\iffalse 3 \fi \pm 0.007 \iffalse 3 \fi \; \si{\uA}
+&\sigma_{\eta V_T, R_d} &= -0.70  \\ 
+\chi^2/\text{ndof} &= 72207/251066
+&\sigma_{\eta V_T, \text{ofst}} &= -0.43\\
+\text{abs\_sigma} &= \rm False
+&\sigma_{R_d, \text{ofst}} &= 0.22
 \end{align*}
 Infine si mostrano i dati acquisiti con sovrapposta la funzione di best-fit
 nei grafici \ref{fig: sck_lin}, in scala lineare, e \ref{fig: sck_log}
@@ -273,11 +273,25 @@ Per gli script si rimanda alla
 definisce i parametri fondamentali.
 
 \begin{figure}[!ht]
-	\centering
-		\includegraphics{phs1_41.pdf}
-	\label{fig: phs1_41}
+\centering
+	\includegraphics{phs1_41.pdf}
+\label{fig: phs1_41}
 \end{figure}
-
+Si noti come, alla fine del segnale oscillante\footnote{alla fine del
+semiperiodo positivo dell'onda quadra in uscita dal generatore di funzioni}
+si riesce ad apprezzare un picco positivo di circa $100$ digit $\approx 97$ mV,
+questo coincide esattamente con il fronte di salita dell'onda quadra in
+ingresso al circuito RLC.
+Questo si deve alla somma di due effetti: Quando l'onda passa da LOW a
+HIGH, la corrente che scorre nella maglia RLC passa da circa $-100$ a
+$100 \si{\micro\A}$. Dunque la bobina da $L=0.5 \si{\H}$ fornisce una tensione
+$DV(t) = L \frac{\ud I}{\ud t}$ secondo la legge degli induttori.
+Un secondo possibile contributo al picco di tensione alla
+fine del segnale oscillante è dovuto all'accoppiamento capacitivo/capacità
+parassita del diodo, che possiamo modellare come $Cjo = 1-4 \si{\pico\farad}$
+in parallelo al diodo. Quando il fronte d'onda sale rapidamente, parte dell'onda
+quadra viene lasciata passare dal condensatore, aggiungendo qualche $\si{\nano\V}$
+al picco finale.
 \begin{figure}[H]
 	\centering 
 		\includegraphics[width=16cm, height= 11cm]

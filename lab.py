@@ -8,14 +8,18 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 from inspect import getfullargspec
+from collections import namedtuple
 import glob
 
 # Standard argument order for periodical functions:
-# A: Amplitude, frq: frequency, phs: phase, ofs: DC offset, tau: damp time 
+# A: Amplitude, frq: frequency, phs: phase, ofs: DC offset, tau: damp time
+args=namedtuple('pars', 'A frq phs ofs')
+ 
 def sine(t, A, frq, phs=0, ofs=0):
     """ Sinusoidal model function. Standard argument order """
     return A*np.sin(2*np.pi*frq*t + phs) + ofs
-
+def cosn(t, A, frq, phs=0, ofs=0):
+    return sine(t, A, frq, phs + np.pi/2., ofs)
 def dosc(t, A, frq, phs, ofs, tau):
     """ Dampened oscillation model function. Std argument order"""
     return np.exp(-t/tau)*sine(t, A, frq, phs) + ofs
@@ -37,6 +41,12 @@ def mod(vect, A, T, phs=0, ofs=0):
 
 def fder(f, x, pars):
     return np.gradient(f(x, *pars), 1)
+
+def LPF(data, gain=1e-3):
+    fir = [data[0]]
+    for x in data[1:]:
+        fir.append(fir[-1] + gain*(x - fir[-1]))
+    return np.asarray(fir)
 
 # UTILITIES FOR MANAGING PARAMETER ESTIMATES AND TEST RESULTS
 def chitest(data, unc, model, ddof=0, gauss=False, v=False):
