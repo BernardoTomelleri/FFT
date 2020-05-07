@@ -14,7 +14,7 @@ from lab import (chitest, sine, propfit, sampling, srange, grid, errcor,
 
 ''' Variables that control the script '''
 lock = True # Simulates frequency extraction from noisy data
-DSO = True # Sampling from Digital Oscilloscope
+DSO = False # Sampling from Digital Oscilloscope
 fit = False # attempt to fit the data
 log = True # log-scale axis/es
 dB = False # plots response y-axis in deciBels
@@ -28,21 +28,20 @@ Dir = './RLC_data/'
 V1, V2 = np.loadtxt(Dir +'long0.1uF_b3' +'.txt', unpack=True)#,
                     #skiprows=2*256, max_rows=250)
 V1*=1e-6
-x_min = 0; x_max = 0.06
+x_min = 0; x_max = x_min + 0.047
 if DSO:
     Dir ='phase_shift/DSO/' 
     V1, V2 = np.genfromtxt(Dir +'DSO1_41' +'.csv', float, delimiter=',',
                      skip_header = 2, usecols=(0, 1), unpack = True)
     x_min = -0.3; x_max = 2.5
 if lock:
-    V1 = np.linspace(x_min, x_max, 500_000)
-    V2 = sine(V1, A=1, frq=1000) + sine(V1, A=1, frq=1002)
-    V2 += np.random.normal(loc=0, scale=100, size=len(V1))
+    from lockin import t as V1; from lockin import Xphs as V2
+    x_min = V1[0]; x_max = V1[-1]
     
 # Trasformazione dei dati nelle grandezze da fittare
 x = V1
 dx = np.full(len(x), (V1[1]-V1[2])/2)
-y = V2 #if lock else V2 - np.mean(V2)
+y = V2 - np.mean(V2)
 dy = np.full(len(y), (V2[1]-V2[2])/20)
 # Estrazione di un sottointervallo di dati
 sx, sdx, sy, sdy = srange(x, dx, y, dy, x_min, x_max)
@@ -74,7 +73,7 @@ freq = np.fft.fftshift(np.fft.fftfreq(fftsize, d=fres))
 # tran/=np.max(tran)
 # plotfft(freq, tran, dB=False, re_im=False)
 fft = tran.real if re_im else 20*np.log10(np.abs(tran)) if dB else np.abs(tran)
-
+fft/=np.max(fft)
 if angle or re_im:
     fig, (ax1, ax2) = plt.subplots(2,1, True, gridspec_kw={'wspace':0.05,
          'hspace':0.05})
@@ -85,7 +84,7 @@ ax1 = grid(ax1, xlab = 'Frequency $f$ [Hz]')
 ax1.plot(freq, fft, c='k', lw='0.9')
 ax1.set_ylabel('$\widetilde{V}(f)$ Magnitude [%s]' %('dB' if dB else 'arb. un.'))
 if re_im: ax1.set_ylabel('Fourier Transform [Re]')    
-ax1.set_xlim(0, 1400)
+ax1.set_xlim(0, 500)
 if log: logy(ax1, 16)
 elif tix:
     tick(ax1, xmaj=100, ymaj=1e3)
@@ -101,7 +100,7 @@ if angle or re_im:
     if re_im: ax2.set_ylabel('Fourier Transform [Im]')    
     if tix: tick(ax2, xmaj=50, ymaj=0.5)
 else:
-    ax2.errorbar(sx, sy, sdy, sdx, 'ko', ms=1.2, elinewidth=0.8, capsize= 1.1,
+    ax2.errorbar(x, y, dy, dx, 'ko', ms=1.2, elinewidth=0.8, capsize= 1.1,
                  ls='',label='data', zorder=5)
     # ax2.set_xlim(0, 0.1)
     if tix: 

@@ -42,11 +42,11 @@ def mod(vect, A, T, phs=0, ofs=0):
 def fder(f, x, pars):
     return np.gradient(f(x, *pars), 1)
 
-def LPF(data, gain=1e-3):
-    fir = [data[0]]
+def LPF(data, gain=1e-1):
+    fltr = [data[0]]
     for x in data[1:]:
-        fir.append(fir[-1] + gain*(x - fir[-1]))
-    return np.asarray(fir)
+        fltr.append(fltr[-1] + gain*(x - fltr[-1]))
+    return np.asarray(fltr)
 
 # UTILITIES FOR MANAGING PARAMETER ESTIMATES AND TEST RESULTS
 def chitest(data, unc, model, ddof=0, gauss=False, v=False):
