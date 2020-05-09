@@ -4,35 +4,40 @@ Created on Mon Mar  2 17:46:05 2020
 @author: berni
 FFT by itself cannot resolve signals buried in noise of more than 30 times
 greater amplitude. Simulates working principle of a lock in amplifier, given
-enough time it can isolate signal from noise of arbitrarily large scale. 
+enough time it can isolate signal phase and frequency from noise of
+arbitrarily large scale through FFT of the demodulated argument, with improving
+range from noise as LPF gain approaches unity. FFT of the modulus however seems
+only to yield noticeable results for gain <1e-3, offers no improvement
+on signal extraction from noisy environment over regular FFT (SNR < 1/30).
+gain = 1/(noise.scale * 100)  
 """
-import numpy as np
-from matplotlib import pyplot as plt
 import scipy.signal as sg
-from lab import srange, sine, cosn, grid, LPF, args, sampling
+from lab import np, plt, sine, cosn, grid, LPF, RMS, RMSE, args
 
 ''' Variables that control the script '''
 log = False # log-scale axis/es
 dB = False # plots response y-axis in deciBels
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-DAQ = False # Use a real sampled singal or simulated
+DAQ = True # Use a real sampled singal or simulate it internally 
 
 x_min = 0.; x_max = 2
-t = np.linspace(x_min, x_max, 50_000)
-cut = round(len(t)*1e-1) # Discarded initial points from LPFed components 
-
-ref = args(A=10, frq=1e2, phs=0, ofs=0)
+t = np.linspace(x_min, x_max, 100_000)
+ref = args(A=1, frq=167.72, phs=0, ofs=0)
 sig = args(A=1, frq=1e2, phs=0.2, ofs=0)
+cut = round(len(t)*2e-1) # Discarded initial points from LPFed components 
+
+Vsig = sine(t, *sig)
+if DAQ: from data import x as t, y as Vsig, DSO, fres, fftsize
+noise = 0*np.random.normal(loc=0, scale=10, size=len(t))
+print('Gaussian Noise: avg = %.2f std = %.2f' %(np.mean(noise), np.std(noise)))
+Vsig+=noise
 Vsin = sine(t, *ref); Vcos = cosn(t, *ref)
-noise = np.random.normal(loc=0, scale=1000, size=len(t))
-Vsig = cosn(t, *sig) + (noise - np.mean(noise))
+
 Vsin = np.multiply(Vsin, Vsig); Vcos = np.multiply(Vcos, Vsig)
-X = LPF(Vcos)/(ref.A/2); Y = LPF(Vsin)/(ref.A/2)
+Y = 2*LPF(Vcos)/(ref.A); X = 2*LPF(Vsin)/(ref.A)
 Z = X + 1j*Y
-Xmag = np.sqrt(X**2 + Y**2); Xphs = np.arctan2(Y, X)
-avg_mag = np.mean(Xmag); avg_phs = np.mean(Xphs)
-std_mag = np.std(Xmag); std_phs = np.std(Xphs)
+Xmag = np.sqrt(X**2 + Y**2); Xphs = np.arctan2(Y, X);
 
 # Plot
 if tex: plt.rc('text', usetex=True); plt.rc('font', family='serif')
@@ -40,16 +45,21 @@ fig_sig, (ax1, ax2) = plt.subplots(2, 1, True, gridspec_kw={'wspace':0.05,'hspac
 grid(ax1, ylab='$V_{\\rm{sig}}(t)$')
 ax1.errorbar(t, Vsig, ls='--', lw=0.9, c='k')
 grid(ax2, xlab='Time $t$ [ms]', ylab='$V_{\\rm{ref}}(t)$')
-ax2.errorbar(t, Vsin, lw=0.9, label='sin'); ax2.plot(t, Vcos, lw=0.9, label='cos')
+ax2.plot(t, Vsin, lw=0.8, label='sin'); ax2.plot(t, Vcos, lw=0.8, label='cos')
 leg_sig = ax2.legend(loc='best', framealpha=0.3)
 
+# Discard initial transient of the digital filter > 1/10 of length
 t = t[cut:]; Vsin = Vsin[cut:]; Vcos = Vcos[cut:]; X = X[cut:]; Y = Y[cut:]
-Xmag = Xmag[cut:]; Xphs = Xphs[cut:];
+Xmag = Xmag[cut:]; Xphs = Xphs[cut:]; Z = Z[cut:]
+avg_mag = np.mean(Xmag); avg_phs = np.mean(Xphs); RMS_mag = RMS(Xmag)
+std_mag = np.std(Xmag); std_phs = np.std(Xphs)
+
 fig_mult, (ax1, ax2) = plt.subplots(2, 1, True, gridspec_kw={'wspace':0.05,'hspace':0.05})
 grid(ax1, ylab='Magnitude $V(t)$')
 ax1.plot(t, Xmag)
 ax1.axhline(avg_mag + std_mag, c='orange', ls='--', lw=.9)
 ax1.axhline(avg_mag, c='r', label='$V(t)$ Average Mag = %.2f' %avg_mag)
+ax1.axhline(RMS_mag, c='g', lw=1, label='$V(t)$ RMS = %.2f' %RMS_mag)
 ax1.axhline(avg_mag - std_mag, c='orange', lw=.9, ls='--', label='Mag std. dev = %.2f'%std_mag)
 
 grid(ax2, xlab ='Time $t$ [ms]', ylab='Phase $\phi(t)$')

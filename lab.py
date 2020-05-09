@@ -18,8 +18,10 @@ args=namedtuple('pars', 'A frq phs ofs')
 def sine(t, A, frq, phs=0, ofs=0):
     """ Sinusoidal model function. Standard argument order """
     return A*np.sin(2*np.pi*frq*t + phs) + ofs
+
 def cosn(t, A, frq, phs=0, ofs=0):
     return sine(t, A, frq, phs + np.pi/2., ofs)
+
 def dosc(t, A, frq, phs, ofs, tau):
     """ Dampened oscillation model function. Std argument order"""
     return np.exp(-t/tau)*sine(t, A, frq, phs) + ofs
@@ -42,7 +44,7 @@ def mod(vect, A, T, phs=0, ofs=0):
 def fder(f, x, pars):
     return np.gradient(f(x, *pars), 1)
 
-def LPF(data, gain=1e-1):
+def LPF(data, gain=2e-4):
     fltr = [data[0]]
     for x in data[1:]:
         fltr.append(fltr[-1] + gain*(x - fltr[-1]))
@@ -81,7 +83,14 @@ def prnpar(pars, perr, model, prec=2):
     pnms = getfullargspec(model)[0][1:]
     dec = np.abs((np.log10(perr) - prec)).astype(int)
     for nam, par, err, d in zip(pnms, pars, perr, dec):
-        print(f'{nam} = {par:.{d}f} +- {err:.{d}f}')        
+        print(f'{nam} = {par:.{d}f} +- {err:.{d}f}')
+        
+def RMS(seq):
+    return np.sqrt(np.mean(np.square(np.abs(seq))))
+
+def RMSE(seq, exp=None):
+    if not exp: exp = RMS(seq)
+    return np.sqrt(np.mean(np.square(seq - exp)))
 
 # UTILITIES FOR MANAGING FIGURE AXES AND PLOTS
 def grid(ax, xlab = None, ylab = None):
