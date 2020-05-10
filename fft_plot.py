@@ -6,7 +6,7 @@ Created on Sat Nov  2 17:19:42 2019
 Computes Fast Fourier Transforms and fits periodic signals.
 """
 from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor,
-                 prnpar, prncor, outlier, pltfitres, tick, logy, dosc)
+                 prnpar, prncor, outlier, pltfitres, tick, logy, FFT, plotfft)
 from sys import exit
 
 ''' Variables that control the script '''
@@ -15,12 +15,10 @@ log = True # log-scale axis/es
 dB = False # plots response y-axis in deciBels
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-re_im = False # Whether to plot (Re, Im) or (Mag, Phs) of FFT
-angle = False # Whether to plot phase of FFT or V(t)
 lock = True # Lock-in amplify data before FFT
 
-if lock: from lockin import t as x, Xmag as y, fres, fftsize, DSO
-else: from data import x, dx, y, dy, sx, sdx, sy, sdy, init, fres, fftsize, DSO
+if lock: from lockin import t as x, Xmag as y, DSO
+else: from data import x, dx, y, dy, sx, sdx, sy, sdy, init, DSO
 
 # Grafico preliminare dati
 if tex: plt.rc('text', usetex=True); plt.rc('font', family='serif')
@@ -39,43 +37,20 @@ if tix:
     tick(ax, xmaj=5e-2, ymaj=20, ymin=5)
     if DSO: tick(ax, ymaj=0.1)
 
-tran = np.fft.fftshift(np.fft.fft(y*np.kaiser(len(y), 4), fftsize))
-freq = np.fft.fftshift(np.fft.fftfreq(fftsize, d=fres))
-# plotfft(freq, tran, dB=False, re_im=False)
-fft = tran.real if re_im else 20*np.log10(np.abs(tran)) if dB else np.abs(tran)
-fft/=np.max(fft)
-if angle or re_im:
-    fig, (ax1, ax2) = plt.subplots(2,1, True, gridspec_kw={'wspace':0.05,
-         'hspace':0.05})
-else: fig, (ax2, ax1) = plt.subplots(2, 1, gridspec_kw={'wspace':0.25,
-         'hspace':0.25})
-
-ax1 = grid(ax1, xlab = 'Frequency $f$ [Hz]')
-ax1.plot(freq, fft, c='k', lw='0.9')
-ax1.set_ylabel('$\widetilde{V}(f)$ Magnitude [%s]' %('dB' if dB else 'arb. un.'))
-if re_im: ax1.set_ylabel('Fourier Transform [Re]')    
-ax1.set_xlim(0, 700)
-if log: logy(ax1, 16)
+# FFT Computation with numpy window functions
+freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.kaiser, beta=4)
+# FFT and signal plot
+fig, (ax1, ax2) = plotfft(freq, tran, signal=(x,dx,y,dy), norm=True,
+                          dB=False, re_im=False)
+ax2.set_xlim(0, 700)
+if log: logy(ax2, 16)
 elif tix:
-    tick(ax1, xmaj=100, ymaj=1e3)
-    if dB: tick(ax1, ymaj=20, ymin=5)
+    tick(ax2, xmaj=100, ymaj=1e3)
+    if dB: tick(ax2, ymaj=20, ymin=5)
 
-ax2 = grid(ax2, 'Time $t$ [s]', '$V(t)$ [digit]')
-if DSO: ax2.set_ylabel('$V(t)$ [V]')
-if angle or re_im: 
-    fft = tran.imag if re_im else np.angle(tran)
-    ax2.plot(freq, fft, c='k', lw='0.9')
-    ax2.set_xlabel('Frequency $f$ [Hz]'); 
-    ax2.set_ylabel('$\widetilde{V}(f)$ Phase [rad]')
-    if re_im: ax2.set_ylabel('Fourier Transform [Im]')    
-    if tix: tick(ax2, xmaj=50, ymaj=0.5)
-else:
-    ax2.errorbar(x, y, dy, dx, 'ko', ms=1.2, elinewidth=0.8, capsize= 1.1,
-                 ls='',label='data', zorder=5)
-    # ax2.set_xlim(0, 0.1)
-    if tix: 
-        tick(ax2, xmaj=1e-2, ymaj=20, ymin=5)
-        if DSO: tick(ax2, ymaj=0.2, ymin=5e-2)
+if tix: 
+    tick(ax1, xmaj=1e-2, ymaj=20, ymin=5)
+    if DSO: tick(ax1, ymaj=0.2, ymin=5e-2)
 
 if not fit: plt.show(); exit()
 #Fit V(t) con sinusoide

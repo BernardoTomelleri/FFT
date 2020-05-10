@@ -9,6 +9,7 @@ from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 from inspect import getfullargspec
 from collections import namedtuple
+from enum import Enum
 import glob
 
 # Standard argument order for periodical functions:
@@ -226,6 +227,48 @@ def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
     ax2.axhline(0, c='r', alpha=0.7, zorder=10)
     return fig, (ax1, ax2)
 
+# UTILITIES FOR FOURIER TRANSFORMS OF DATA ARRAYS
+    
+def FFT(time, signal, window=None, beta=0, specres=None):
+    # Spectral resolution and number of points over which FFT is computed      
+    if specres: fres = specres
+    else: fres, frstd = sampling(space=time, v=True)
+    fftsize = len(time)
+    
+    if beta: window = lambda M: np.kaiser(M, beta=beta)
+    elif window == np.kaiser: window = lambda M: np.kaiser(M, beta=0)
+    tran = np.fft.fftshift(np.fft.fft(signal*window(len(signal)), fftsize))
+    freq = np.fft.fftshift(np.fft.fftfreq(fftsize, d=fres))
+    if not specres: return freq, tran, fres, frstd
+    return freq, tran
+
+def plotfft(freq, tran, signal=None, norm=False, dB=False, re_im=False, mod_ph=False):
+    fft = tran.real if re_im else 20*np.log10(np.abs(tran)) if dB else np.abs(tran)
+    if norm: fft/=np.max(fft)
+    if mod_ph or re_im:
+        fig, (ax1, ax2) = plt.subplots(2,1, True, gridspec_kw={'wspace':0.05,
+                                                               'hspace':0.05})
+    else: fig, (ax2, ax1) = plt.subplots(2, 1, gridspec_kw={'wspace':0.25,
+                                                            'hspace':0.25}) 
+    ax1 = grid(ax1, xlab = 'Frequency $f$ [Hz]')
+    ax1.plot(freq, fft, c='k', lw='0.9')
+    ax1.set_ylabel('$\widetilde{V}(f)$ Magnitude [%s]' %('dB' if dB else 'arb. un.'))
+    if re_im: ax1.set_ylabel('Fourier Transform [Re]')    
+
+    ax2 = grid(ax2, 'Time $t$ [s]', '$V(t)$ [digit]')
+    if mod_ph or re_im: 
+        fft = tran.imag if re_im else np.angle(tran)
+        ax2.plot(freq, fft, c='k', lw='0.9')
+        ax2.set_xlabel('Frequency $f$ [Hz]'); 
+        ax2.set_ylabel('$\widetilde{V}(f)$ Phase [rad]')
+        if re_im: ax2.set_ylabel('Fourier Transform [Im]')    
+    else:
+        xmes, dx, ymes, dy = signal
+        ax2.errorbar(xmes, ymes, dy, dx, 'ko', ms=1.2, elinewidth=0.8,
+                     capsize= 1.1, ls='',label='data', zorder=5)
+    if signal: ax1, ax2 = [ax2, ax1]
+    return fig, (ax1, ax2)
+    
 # UTILITIES FOR MANAGING DATA FILES
 def srange(x, dx, y, dy, x_min=0, x_max=1e9):
     """ Extracts and returns the data inside selected range [min, max]. """ 

@@ -6,13 +6,14 @@ FFT by itself cannot resolve signals buried in noise of more than 30 times
 greater amplitude. Simulates working principle of a lock in amplifier, given
 enough time it can isolate signal phase and frequency from noise of
 arbitrarily large scale through FFT of the demodulated argument, with improving
-range from noise as LPF gain approaches unity. FFT of the modulus however seems
-only to yield noticeable results for gain <1e-3, offers no improvement
-on signal extraction from noisy environment over regular FFT (SNR < 1/30).
-gain = 1/(noise.scale * 100)  
+range from noise as LPF gain approaches 0 and window filters become narrower.
+FFT of the modulus seems only to have noticeable harmonics for
+gain <1e-3, seems to offer improvement on signal extraction from noisy
+environment over regular FFT (SNR < 1/30). Experimentally best results in
+extraction are obtained for gain = 1/(noise.scale * 100) and kaiser beta ~ 4. 
 """
 import scipy.signal as sg
-from lab import np, plt, sine, cosn, grid, LPF, RMS, RMSE, args
+from lab import np, plt, sine, cosn, grid, LPF, RMS, sampling, args
 
 ''' Variables that control the script '''
 log = False # log-scale axis/es
@@ -23,12 +24,14 @@ DAQ = True # Use a real sampled singal or simulate it internally
 
 x_min = 0.; x_max = 2
 t = np.linspace(x_min, x_max, 100_000)
-ref = args(A=1, frq=167.72, phs=0, ofs=0)
+if DAQ: ref = args(A=1, frq=167.72, phs=0, ofs=0)
+else: ref = args(1, frq=1e2, phs=0, ofs=0)
 sig = args(A=1, frq=1e2, phs=0.2, ofs=0)
 cut = round(len(t)*2e-1) # Discarded initial points from LPFed components 
 
 Vsig = sine(t, *sig)
-if DAQ: from data import x as t, y as Vsig, DSO, fres, fftsize
+if DAQ: from data import x as t, y as Vsig, DSO
+else: DSO = False
 noise = 0*np.random.normal(loc=0, scale=10, size=len(t))
 print('Gaussian Noise: avg = %.2f std = %.2f' %(np.mean(noise), np.std(noise)))
 Vsig+=noise
