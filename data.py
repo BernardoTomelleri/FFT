@@ -28,4 +28,3 @@ y = V2 - np.mean(V2)
 dy = np.full(len(y), (V2[1]-V2[2])/20)
 # Estrazione di un sottointervallo di dati
 sx, sdx, sy, sdy = srange(x, dx, y, dy, x_min, x_max)
-init =(0.7, 168, 3., np.mean(sy)) if DSO else (400, 250, 0., np.mean(sy), 0.02)

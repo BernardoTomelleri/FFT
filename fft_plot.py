@@ -5,24 +5,24 @@ Created on Sat Nov  2 17:19:42 2019
 @author: berna
 Computes Fast Fourier Transforms and fits periodic signals.
 """
-from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor,
+from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor, std_unc,
                  prnpar, prncor, outlier, pltfitres, tick, logy, FFT, plotfft)
 from sys import exit
 
 ''' Variables that control the script '''
-fit = False # attempt to fit the data
+fit = True # attempt to fit the data
 log = True # log-scale axis/es
 dB = False # plots response y-axis in deciBels
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-lock = True # Lock-in amplify data before FFT
+lock = False # Lock-in amplify data before FFT
 
-if lock: from lockin import t as x, Xmag as y, DSO
-else: from data import x, dx, y, dy, sx, sdx, sy, sdy, init, DSO
+if lock: from lockin import t as x, Xmag as y, DSO; fit = False
+else: from data import x, dx, y, dy, sx, sdx, sy, sdy, DSO
 
 # Grafico preliminare dati
 if tex: plt.rc('text', usetex=True); plt.rc('font', family='serif')
-if lock: dx = dy = None
+if lock: dx = std_unc(x); dy = std_unc(y)
 xx = np.linspace(min(x), max(x), 500)
 fig, ax = plt.subplots()
 grid(ax, xlab='Time $t$ [s]', ylab='ADC voltage [digit]')
@@ -30,7 +30,9 @@ if DSO: ax.set_xlabel('Time $t$ [s]'); ax.set_ylabel('DSO voltage [V]')
 ax.errorbar(x, y, dy, dx, 'ko', ms=1.2, elinewidth=0.8, capsize= 1.1,
         ls='',label='data', zorder=5)
 ax.plot(x, y, 'gray', ls='-', lw=0.8, alpha = 0.8)
-if fit: ax.plot(xx, sine(xx, *init), 'k--', lw=0.8, zorder=10, alpha =0.6,
+if fit:
+    init = (0.7, 168, 3., np.mean(sy)) if DSO else (400, 250, 0., np.mean(sy), 0.02)
+    ax.plot(xx, sine(xx, *init), 'k--', lw=0.8, zorder=10, alpha =0.6,
                 label='initial fit')
 legend = ax.legend(loc ='best')
 if tix:
@@ -96,7 +98,7 @@ fig2, (ax1, ax2) = pltfitres(TT, dTT, VV, dVV, sine, pars)
 ax1.errorbar(outT, outV, doutV, doutT, 'gx',  ms=3, elinewidth=1.,
              capsize=1.5, ls='', label='outliers')
 ax1.set_ylabel('Differenza di potenziale $\Delta V$ [digit]')
-if log: ax1.set_xscale('log')
+if log: ax1.set_yscale('log')
 elif tix: tick(ax1, ymaj=20, ymin=5)
 legend = ax1.legend(loc ='lower right', framealpha = 0.3)
 legend.set_zorder(100)

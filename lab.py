@@ -7,9 +7,9 @@ Created on Sat Apr 11 23:19:50 2020
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
+from scipy import signal as sg
 from inspect import getfullargspec
 from collections import namedtuple
-from enum import Enum
 import glob
 
 # Standard argument order for periodical functions:
@@ -24,8 +24,16 @@ def cosn(t, A, frq, phs=0, ofs=0):
     return sine(t, A, frq, phs + np.pi/2., ofs)
 
 def dosc(t, A, frq, phs, ofs, tau):
-    """ Dampened oscillation model function. Std argument order"""
+    """ Dampened oscillation model function. Std argument order + tau"""
     return np.exp(-t/tau)*sine(t, A, frq, phs) + ofs
+
+def trg(t, A, frq, phs=0, ofs=0, duty=0.5):
+    """ Triangular wave model function. Std argument order + duty cycle"""
+    return A * sg.sawtooth(2*np.pi*frq*t + phs, duty) + ofs
+    
+def sqw(t, A, frq, phs, ofs=0, duty=0.5):
+    """ Square wave model function. Std argument order + duty cycle"""
+    return A * sg.square(2*np.pi*frq*t + phs, duty) + ofs
 
 def parabola(x, A, T, phs=0, ofs=0):
     """ Modular definition of parabolae / integral of a triangle wave."""
@@ -290,6 +298,10 @@ def sampling(space, v=False):
         print(f"Delta t average = {Dxavg:.2e} s" )
         print(f"Delta t stdev = {Dxstd:.2e}")
     return Dxavg, Dxstd
+
+def std_unc(measure):
+    V = np.asarray(measure)
+    return np.diff(V)/2/np.sqrt(12)
 
 # Estrazione e stampa a schermo delle medie delle misure di x
 def digitddp():

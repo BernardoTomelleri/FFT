@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex FFT"] 1588201482 "FFT.aux" "FFT.bbl" "FFT" 1588420261
+["bibtex FFT"] 1588201482 "FFT.aux" "FFT.bbl" "FFT" 1589318719
   "./IEEEtrandoi.bst" 1577387200 60815 f4ed9ef17005d390213cd57d581f7b76 ""
   "FFT.aux" 1588420261 9235 5f0e15506b1f8266ba64fb70e891275e "pdflatex"
   "refs.bib" 1585504628 2031 267511be1f467b8f88894d9260e63783 ""
   (generated)
-  "FFT.blg"
   "FFT.bbl"
-["pdflatex"] 1588420257 "FFT.tex" "FFT.pdf" "FFT" 1588420261
+  "FFT.blg"
+["pdflatex"] 1588420257 "FFT.tex" "FFT.pdf" "FFT" 1589318719
   "/home/berni/texlive/2020/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/home/berni/texlive/2020/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/home/berni/texlive/2020/texmf-dist/fonts/tfm/adobe/palatino/pplb8r.tfm" 1136768653 2532 9ad73cf4dd2173a847f2a5f5608e0b9a ""
@@ -336,7 +336,7 @@
   "FFT.aux" 1588420261 9235 5f0e15506b1f8266ba64fb70e891275e "pdflatex"
   "FFT.bbl" 1588201482 1594 535476be227b98cc9c9946ce2ee516e5 "bibtex FFT"
   "FFT.out" 1588420261 927 90abcda953c95321136e67e3f40afcb0 "pdflatex"
-  "FFT.tex" 1588420257 26708 27625cb42df660d95918586586dd3a41 ""
+  "FFT.tex" 1589299531 26708 27625cb42df660d95918586586dd3a41 ""
   "figs/./filtered.png" 1583613767 122950 22140471d52386e83afe42c00f230c7c ""
   "figs/./gestione.png" 1583343164 32428 368fdb43ba4501cde48635b2394b6ed8 ""
   "figs/./measure.png" 1583343164 5537 b70dae15c2d9b26099da8d8a61d29300 ""
@@ -353,8 +353,8 @@
   "phs1_41.pdf" 1587919065 3289854 8f4bfcfa87342c34e5a3241d2e04f9be ""
   "preamble.tex" 1587489587 1776 a464af8078891f5375a4aeb7976e2bb3 ""
   (generated)
-  "FFT.log"
-  "FFT.auxlock"
-  "FFT.aux"
   "FFT.out"
+  "FFT.log"
+  "FFT.aux"
   "FFT.pdf"
+  "FFT.auxlock"
