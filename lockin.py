@@ -12,7 +12,7 @@ gain <1e-3, seems to offer improvement on signal extraction from noisy
 environment over regular FFT (SNR < 1/30). Experimentally best results in
 extraction are obtained for gain = 1/(noise.scale * 100) and kaiser beta ~ 4. 
 """
-from lab import np, plt, sine, cosn, grid, LPF, RMS, args
+from lab import np, plt, sine, cosn, grid, RMS, args, butf, sampling
 
 ''' Variables that control the script '''
 log = False # log-scale axis/es
@@ -21,24 +21,26 @@ tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
 DAQ = False # Use a real sampled singal or simulate it internally 
 
-x_min = 0.; x_max = 2
+x_min = 0.; x_max = 1
 t = np.linspace(x_min, x_max, 100_000)
 if DAQ: ref = args(A=1, frq=167.72, phs=0, ofs=0)
 else: ref = args(100, frq=1e2, phs=0, ofs=0)
 sig = args(A=1, frq=1e2, phs=0.2, ofs=0)
-cut = round(len(t)*2e-1) # Discarded initial points from LPFed components 
+cut = round(len(t)*5e-2) # Discarded initial points from LPFed components
 
 Vsig = sine(t, *sig)
 if DAQ: from data import x as t, y as Vsig, DSO
 else: DSO = False
-noise = 10*np.random.normal(loc=0, scale=10, size=len(t))
+# fs = 1./sampling(t)
+fs = len(t)/x_max
+noise = np.random.normal(loc=0, scale=20, size=len(t))
 print('Gaussian Noise: avg = %.2f std = %.2f' %(np.mean(noise), np.std(noise)))
 Vsig+=noise
 Vsin = sine(t, *ref); Vcos = cosn(t, *ref)
 
 Vsin = np.multiply(Vsin, Vsig); Vcos = np.multiply(Vcos, Vsig)
-Y = 2*LPF(Vcos)/(ref.A); X = 2*LPF(Vsin)/(ref.A)
-Z = X + 1j*Y
+Y = 2*butf(Vcos, 1, fc=2, sampf=fs); X = 2*butf(Vsin, 1, fc=2, sampf=fs)
+X /= ref.A; Y /= ref.A; Z = X + 1j*Y
 Xmag = np.sqrt(X**2 + Y**2); Xphs = np.arctan2(Y, X);
 
 # Plot

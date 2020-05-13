@@ -31,7 +31,7 @@ def trg(t, A, frq, phs=0, ofs=0, duty=0.5):
     """ Triangular wave model function. Std argument order + duty cycle"""
     return A * sg.sawtooth(2*np.pi*frq*t + phs, duty) + ofs
     
-def sqw(t, A, frq, phs, ofs=0, duty=0.5):
+def sqw(t, A, frq, phs=0, ofs=0, duty=0.5):
     """ Square wave model function. Std argument order + duty cycle"""
     return A * sg.square(2*np.pi*frq*t + phs, duty) + ofs
 
@@ -54,10 +54,38 @@ def fder(f, x, pars):
     return np.gradient(f(x, *pars), 1)
 
 def LPF(data, gain=2e-4):
+    """ Naive implementation of a digital Low Pass Filter (first order). """
     fltr = [data[0]]
     for x in data[1:]:
         fltr.append(fltr[-1] + gain*(x - fltr[-1]))
     return np.asarray(fltr)
+
+def butf(signal, order, fc, ftype='lp', sampf=None):
+    """
+    Butterworth {lowpass, highpass, bandpass, bandstop} digital filter
+
+    Parameters
+    ----------
+    signal : array_like
+        Central values of the dependent measured signal over time.
+    order : int
+        Order of the butterworth filter, the higher the slower the response.
+    fc : scalar or tuple
+        Critical frequencies of the filter: High, Low cutoff (-3dB) frequencies.
+    ftype : str, optional
+        Type of filter {'LPF', 'HPF', 'BPF', 'BSF'}. The default is 'lp'.
+    sampf : float, optional
+        Sampling frequency of the system that measured the signal. If not
+        given fc must be normalized to fc/fs. The default is None.
+
+    Returns
+    -------
+    array_like
+        The digitally filtered signal.
+
+    """
+    butw = sg.butter(N=order, Wn=fc, btype=ftype, output='sos', fs=sampf)
+    return sg.sosfilt(butw, signal)
 
 # UTILITIES FOR MANAGING PARAMETER ESTIMATES AND TEST RESULTS
 def chitest(data, unc, model, ddof=0, gauss=False, v=False):
@@ -82,6 +110,7 @@ def errcor(covm):
     return perr, corm
 
 def prncor(corm, model):
+    """ Prints formatted covariance of fit model args to precision %.3f """    
     pnms = getfullargspec(model)[0][1:]  
     for i in range(np.size(corm, 1)):
         for j in range(1 + i, np.size(corm, 1)):
@@ -95,11 +124,20 @@ def prnpar(pars, perr, model, prec=2):
         print(f'{nam} = {par:.{d}f} +- {err:.{d}f}')
         
 def RMS(seq):
+    """ Root Mean Square of a sequence or array_like data. Thanks, Numpy."""
     return np.sqrt(np.mean(np.square(np.abs(seq))))
 
 def RMSE(seq, exp=None):
     if not exp: exp = RMS(seq)
     return np.sqrt(np.mean(np.square(seq - exp)))
+
+def FWHM(x, y, FT=None):
+    """ Evaluates FWHM of peak for response y over dynamic variable x."""
+    if FT: x=np.fft.fftshift(x); y=np.abs(np.fft.fftshift(y))
+    d = y - (np.max(y) / 2.)
+    indexes = np.where(d > 0)[0]
+    # for i in indexes: print(i, x[i])
+    return np.abs(x[indexes[0]] - x[indexes[1]])
 
 # UTILITIES FOR MANAGING FIGURE AXES AND PLOTS
 def grid(ax, xlab = None, ylab = None):
@@ -240,7 +278,7 @@ def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
 def FFT(time, signal, window=None, beta=0, specres=None):
     # Spectral resolution and number of points over which FFT is computed      
     if specres: fres = specres
-    else: fres, frstd = sampling(space=time, v=True)
+    else: fres, frstd = sampling(space=time, dev=True, v=True)
     fftsize = len(time)
     
     if beta: window = lambda M: np.kaiser(M, beta=beta)
@@ -286,7 +324,7 @@ def srange(x, dx, y, dy, x_min=0, x_max=1e9):
     dysup = dy[x > x_min]; sdy = dysup[xsup < x_max];
     return sx, sdx, sy, sdy
     
-def sampling(space, v=False):
+def sampling(space, dev=None, v=False):
     """ Evaluates average sampling interval Dx and its standard deviation. """ 
     Deltas=np.zeros(len(space)-1)
     sort=np.sort(space)
@@ -297,11 +335,15 @@ def sampling(space, v=False):
     if v:
         print(f"Delta t average = {Dxavg:.2e} s" )
         print(f"Delta t stdev = {Dxstd:.2e}")
-    return Dxavg, Dxstd
+    if dev: return Dxavg, Dxstd
+    return Dxavg
 
-def std_unc(measure):
+def std_unc(measure, ADC=None):
+    """ Associates default uncertainty to measured data array."""
     V = np.asarray(measure)
-    return np.diff(V)/2/np.sqrt(12)
+    if ADC: return np.ones_like(measure)
+    unc = np.diff(V)/2/np.sqrt(12)
+    return np.append(unc, np.mean(unc))
 
 # Estrazione e stampa a schermo delle medie delle misure di x
 def digitddp():

@@ -5,12 +5,13 @@ Created on Sat Nov  2 17:19:42 2019
 @author: berna
 Computes Fast Fourier Transforms and fits periodic signals.
 """
-from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor, std_unc,
-                 prnpar, prncor, outlier, pltfitres, tick, logy, FFT, plotfft)
+from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor,
+                 std_unc, prnpar, prncor, outlier, pltfitres, tick, logy,
+                 FFT, plotfft, FWHM)
 from sys import exit
 
 ''' Variables that control the script '''
-fit = True # attempt to fit the data
+fit = False # attempt to fit the data
 log = True # log-scale axis/es
 dB = False # plots response y-axis in deciBels
 tix = False # manually choose spacing between axis ticks
@@ -40,9 +41,10 @@ if tix:
     if DSO: tick(ax, ymaj=0.1)
 
 # FFT Computation with numpy window functions
-freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.kaiser, beta=4)
+freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.bartlett, beta=None)
+fwhm = FWHM(freq, tran, FT=True); print("FWHM = %.2f Hz" %fwhm)
 # FFT and signal plot
-fig, (ax1, ax2) = plotfft(freq, tran, signal=(x,dx,y,dy), norm=True,
+fig, (ax1, ax2) = plotfft(freq, tran, signal=(x,dx,y,dy), norm=False,
                           dB=False, re_im=False)
 ax2.set_xlim(0, 700)
 if log: logy(ax2, 16)
