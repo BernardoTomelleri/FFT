@@ -21,6 +21,20 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{FFT}
+\BIBentryALTinterwordspacing
+J.~W. Cooley and J.~W. Tukey, ``An algorithm for the machine calculation of
+  complex fourier series,'' \emph{Mathematics of Computation}, vol.~19, no.~90,
+  pp. 297--301, 1965. [Online]. Available:
+  \url{http://www.jstor.org/stable/2003354}
+\BIBentrySTDinterwordspacing
+
+\bibitem{arduino}
+\BIBentryALTinterwordspacing
+I.~D.~I. Ivrea \emph{et~al.} Arduino: Open-source electronic prototyping
+  platform. Ivrea, Italy. [Online]. Available: \url{https://www.arduino.cc/}
+\BIBentrySTDinterwordspacing
+
 \bibitem{scipy}
 P.~{Virtanen}, R.~{Gommers}, T.~E. {Oliphant}, M.~{Haberland}, T.~{Reddy},
   D.~{Cournapeau}, E.~{Burovski}, P.~{Peterson}, W.~{Weckesser}, J.~{Bright},

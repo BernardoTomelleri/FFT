@@ -4,7 +4,7 @@
 \input{math}
 
 \geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
-\title{Esercizio obbligatorio sulla FFT}
+\title{Esercizio facoltativo* sulla FFT}
 \author{B.~Tomelleri \thanksdf}
 
 \begin{document}
@@ -26,7 +26,6 @@ al crescere di $V$ e questo risulta in accordo con l'andamento dei dati
 sperimentali.
 \\\\
 PACS 01.40.-d – Education.\\
-PACS 01.50.Pa – Laboratory experiments and apparatus.
 \end{mdframed}
 
 
@@ -34,35 +33,38 @@ PACS 01.50.Pa – Laboratory experiments and apparatus.
 %                         Introduzione
 %================================================================
 \section{Introduzione}
-
+Si è rivisitato nel dominio delle frequenze lo studio di sistemi elettronici
+e meccanici, finora analizzati solamente nel dominio del tempo, attraverso l'uso
+di due strumenti fondamentali: la trasformata di Fourier Discreta (DFT) e la
+detezione sincrona o Lock In Detection/Amplification (LIA).
 %================================================================
 %                         Cenni teorici
 %================================================================
 \subsection{Cenni Teorici}
-
+La Trasformata di Fourier Discreta (o DFT) estende la trasformata di Fourier
+analitica a sistemi con variabile dinamica discreta. In particolare
+approfitteremo della velocità dell'algoritmo Cooley-Tukey \cite{FFT} o FFT
+per la nostra analisi.
 %================================================================
 %                Metodo e apparato sperimentale
 %================================================================
 \section{Metodo e apparato sperimentale}
-Onde evitare sostanziali aumenti di temperatura dei componenti, oltre ad
-eventuali danni a questi stessi, si imprimono correnti impulsate sul circuito. 
-%e le conseguenti variazioni di resistenza nei componenti 
-La durata degli impulsi \`e inferiore ai 200 $\si{\us}$, che corrisponde ad
-un'energia impressa inferiore a 1 $\si{\milli\J}$ (dunque ad un aumento
-della temperatura del semiconduttore inferiore a 0.5 $\si{\K}$).
-
+Non si è monitorata la temperatura dei componenti dei circuiti studiati,
+tutti i collegamenti tra i componenti sono stati realizzati con cavi
+terminanti in connettori a banana. L'uso di \verb+Arduino+\cite{arduino}
+come sistema di acquisizione dati non permette di apprezzare le perturbazioni
+dovute alla temperatura o ai collegamenti dei componenti.
 %================================
 %           Apparato
 %================================
 \subsection{Apparato}
-L'apparato sperimentale \`e costituito da un circuito, realizzato su basetta 
-sperimentale (\emph{breadboard}), il cui scopo \`e generare le correnti
-impulsate appena descritte attraverso il diodo $D1$ e la resistenza $R1$.
-La misura della differenza di potenziale agli estremi della $R_1$ permette
-di stimare la corrente che circola sul diodo.
-Per poter esplorare una larga banda di correnti di lavoro
-si \`e variata opportunamente la resistenza in serie al diodo, scegliendo tra
-le seguenti:
+L'apparato sperimentale \`e costituito da diversi circuiti che operano a
+frequenze caratteristiche, realizzati con componenti pre-assemblati. Per
+monitorare la risposta dei circuiti si utilizzano i canali di un oscilloscopio
+analogico ($50$ MHz) e uno digitale ($200$ MHz), mentre per l'acquisizione dei
+segnali di d.d.p. compresi tra $0$ e $5$ V si fa uso dei convertitori ADC di
+\verb+Arduino UNO+.
+
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{lll}
@@ -84,11 +86,6 @@ le seguenti:
 \end{center}
 \end{table}
 
-Per una descrizione del metodo di misurazione delle resistenze si rimanda 
-all'\nameref{app: A}.
-D'altra parte, per fornire una tensione regolabile e sufficientemente stabile
-durante un impulso, nel circuito si impiega il condensatore $C1$, la cui
-tensione, carica e scarica sono controllate dalla maglia destra del circuito.
 Nel circuito si distingue inoltre la maglia che si occupa di collegare, sotto
 istruzione di un microcontrollore, il condensatore alla serie $R1-D1$
 attraverso un MOS-FET.\\

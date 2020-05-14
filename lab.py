@@ -80,7 +80,7 @@ def butf(signal, order, fc, ftype='lp', sampf=None):
 
     Returns
     -------
-    array_like
+    ndarray
         The digitally filtered signal.
 
     """
@@ -102,6 +102,7 @@ def chitest(data, unc, model, ddof=0, gauss=False, v=False):
     return chisq, ndof, resn
 
 def errcor(covm):
+    """ Computes parameter error and correlation matrix from covariance. """
     perr = np.sqrt(covm.diagonal())
     corm = np.asarray(covm)
     for i in range(np.size(corm, 0)):
@@ -124,21 +125,29 @@ def prnpar(pars, perr, model, prec=2):
         print(f'{nam} = {par:.{d}f} +- {err:.{d}f}')
         
 def RMS(seq):
-    """ Root Mean Square of a sequence or array_like data. Thanks, Numpy."""
+    """ Evaluates Root Mean Square of data sequence through Numpy module. """
     return np.sqrt(np.mean(np.square(np.abs(seq))))
 
 def RMSE(seq, exp=None):
+    """ Associated Root Mean Square Error, expected value = RMS(seq) """
     if not exp: exp = RMS(seq)
     return np.sqrt(np.mean(np.square(seq - exp)))
 
 def FWHM(x, y, FT=None):
-    """ Evaluates FWHM of peak for response y over dynamic variable x."""
+    """ Evaluates FWHM of fundamental peak for y over dynamic variable x."""
     if FT: x=np.fft.fftshift(x); y=np.abs(np.fft.fftshift(y))
     d = y - (np.max(y) / 2.)
     indexes = np.where(d > 0)[0]
     # for i in indexes: print(i, x[i])
     return np.abs(x[indexes[0]] - x[indexes[1]])
 
+def optm(x, y, minm=None, absv=None):
+    """ Evaluates minima or maxima (default) of y as a function of x. """
+    x = np.asarray(x); y = np.asarray(y)
+    if minm: yopt = np.min(np.abs(y)) if absv else np.min(y)
+    yopt = np.max(np.abs(y)) if absv else np.max(y)
+    xopt = np.where(y == yopt)[0]
+    return xopt, yopt
 # UTILITIES FOR MANAGING FIGURE AXES AND PLOTS
 def grid(ax, xlab = None, ylab = None):
     """ Adds standard grid and labels for measured data plots to ax. """
@@ -161,12 +170,14 @@ def tick(ax, xmaj = None, xmin = None, ymaj = None, ymin = None):
     return ax
 
 def logx(ax, tix=None):
+    """ Log-scales x-axis, can add tix logarithmically spaced ticks to ax. """
     ax.set_xscale('log')
     if tix:
         ax.xaxis.set_major_locator(plt.LogLocator(numticks=tix))
         ax.xaxis.set_minor_locator(plt.LogLocator(subs=np.arange(2, 10)*.1,
                                                   numticks = tix))
 def logy(ax, tix=None):
+    """ Log-scales y-axis, can add tix logarithmically spaced ticks to ax. """
     ax.set_yscale('log')
     if tix:
         ax.yaxis.set_major_locator(plt.LogLocator(numticks=tix))
@@ -203,10 +214,10 @@ def propfit(xmes, dx, ymes, dy, model, p0=None, thr=5, max_iter=20):
 
     Returns
     -------
-    dy: array_like
+    dy: ndarray
         The propagated uncertainty of ymes after the iterated fit proces,
         the same dy passed as argument if propagation was not necessary.
-    popt : array
+    popt : ndarray
         Optimal values for the parameters of model that mimimize chi square
         test, found by fitting with propagated uncertainties.
     pcov : 2darray
@@ -254,8 +265,6 @@ def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
     #     'dB' : True, # plots response y-axis in deciBels
     #     'tick' : True, # manually choose spacing between axis ticks
     #     'tex' : True, # LaTeX typesetting maths and descriptions
-    #     'real_imag' : False, # Whether to plot (Re, Im) or (Mag, Phs) of FFT
-    #     'angle' : False, # Whether to plot phase of FFT or V(t)
     #     })
     fig, (ax1, ax2) = plt.subplots(2,1, True, gridspec_kw={
     'wspace':0.05, 'hspace':0.05, 'height_ratios': [3, 1]})
@@ -276,6 +285,30 @@ def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
 # UTILITIES FOR FOURIER TRANSFORMS OF DATA ARRAYS
     
 def FFT(time, signal, window=None, beta=0, specres=None):
+    """
+    Computes Discrete Fourier Transform of signal and its frequency space.
+
+    Parameters
+    ----------
+    time : array_like
+        Time interval over which the signal is sampled.
+    signal : array_like
+        The ADC sampled signal to be transformed with fft.
+    window : function, optional
+        Numpy window function with which to filter fft. The default is None.
+    beta : int, optional
+        Kaiser window's beta parameter. The default is 0, rect filter.
+    specres : float, optional
+        Sample spacing of the system that acquired signal. The default is None.
+
+    Returns
+    -------
+    freq : ndarray
+        Discrete sample frequency spectrum.
+    tran : complex ndarray
+        One-dimensional discrete Fourier Transform of the signal.
+
+    """
     # Spectral resolution and number of points over which FFT is computed      
     if specres: fres = specres
     else: fres, frstd = sampling(space=time, dev=True, v=True)

@@ -7,7 +7,7 @@ Computes Fast Fourier Transforms and fits periodic signals.
 """
 from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor,
                  std_unc, prnpar, prncor, outlier, pltfitres, tick, logy,
-                 FFT, plotfft, FWHM)
+                 FFT, plotfft, FWHM, optm)
 from sys import exit
 
 ''' Variables that control the script '''
@@ -42,6 +42,8 @@ if tix:
 
 # FFT Computation with numpy window functions
 freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.bartlett, beta=None)
+fmax, fftmax = optm(freq, tran, absv=True)
+print("Fundamental frequency = %.2f peak magnitude = %.2f" %(fmax, fftmax))
 fwhm = FWHM(freq, tran, FT=True); print("FWHM = %.2f Hz" %fwhm)
 # FFT and signal plot
 fig, (ax1, ax2) = plotfft(freq, tran, signal=(x,dx,y,dy), norm=False,
