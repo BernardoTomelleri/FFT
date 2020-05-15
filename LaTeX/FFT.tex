@@ -28,7 +28,6 @@ sperimentali.
 PACS 01.40.-d – Education.\\
 \end{mdframed}
 
-
 %================================================================
 %                         Introduzione
 %================================================================
@@ -37,6 +36,7 @@ Si è rivisitato nel dominio delle frequenze lo studio di sistemi elettronici
 e meccanici, finora analizzati solamente nel dominio del tempo, attraverso l'uso
 di due strumenti fondamentali: la trasformata di Fourier Discreta (DFT) e la
 detezione sincrona o Lock In Detection/Amplification (LIA).
+
 %================================================================
 %                         Cenni teorici
 %================================================================
@@ -45,6 +45,71 @@ La Trasformata di Fourier Discreta (o DFT) estende la trasformata di Fourier
 analitica a sistemi con variabile dinamica discreta. In particolare
 approfitteremo della velocità dell'algoritmo Cooley-Tukey \cite{FFT} o FFT
 per la nostra analisi.
+
+\subsubsection{Circuiti forzati e smorzati RLC}
+In un circuito costituito da almeno una resistenza, un induttore ed un
+condensatore (nel nostro caso collegati in serie) è possibile individuare una
+frequenza caratteristica $f_0 = \frac{\omega_0}{2\pi}$, detta propria o di
+risonanza, per cui il sistema è percorso da una corrente elettrica oscillante
+nel tempo.
+Infatti, quando il sistema è perturbato da una tensione alla frequenza
+$f_0 := \frac{1}{2\pi \sqrt{LC}}$ 
+le impedenze del condensatore e dell'induttore si annullano a vicenda, dunque
+l'impedenza del circuito si trova al proprio valor minimo, cioè la sola
+componente resistiva $R$ rimasta. Possiamo quindi descrivere il trasporto di
+carica nel circuito con l'equazione di un oscillatore smorzato:
+\begin{equation}\label{eq: RLC}
+	\frac{\partial^2 Q}{\partial t^2} + \frac{R}{L}\frac{\partial Q}{\partial t}
+	+ \omega_0^2 Q = 0   
+\end{equation}
+La cui soluzione, in termini della frequenza di oscillazione smorzata o
+pseudo-frequenza angolare $\omega$, dello pseudo periodo $T$ e del tempo
+caratteristico di smorzamento $\tau$:
+\begin{align*}
+	\omega &= \sqrt{\omega_0^2 - \frac{1}{\tau^2}} =
+	\sqrt{\frac{1}{LC} - \frac{1}{\tau^2}} \\
+	T &= \frac{2\pi}{\omega} \\
+	\tau &= \frac{2L}{R}
+\end{align*}
+si può scrivere come:
+\begin{align}\label{aln: Q(t)}
+	Q(t) &= A e^{-t/\tau} \cos{(\omega t + \phi)} \\
+	A &= \sqrt{c_1 c_2} \\
+	\tan{\phi} &= j\frac{c_1 + c_2}{c_1 - c_2}
+\end{align}
+dove i coefficienti $c_1$ e $c_2$ dipendono dalle condizioni iniziali del
+sistema. Secondo il nostro modello, la d.d.p. sulle armature del condensatore
+è determinata dalla relazione costitutiva di $C$ e le condizioni iniziali
+sono fissate dalla carica presente sulle armature $Q_0$ e dall'intensità
+di corrente $I_0$ che circola nel circuito all'inizio dell'oscillazione:
+\begin{align}\label{aln: Vc(t)}
+	V_C(t) &= \frac{Q(t)}{C} = \frac{A}{C}e^{-\frac{t}{\tau}}\cos(\omega t + \phi)\\
+	Q(t = 0) &= A\cos{\phi} := Q_0 \implies A = Q_0 \sqrt{1 + \tan^2{\phi}} \\
+	I(t) &= \frac{\partial Q}{\partial t} = A e^{-t/\tau} \left[
+	\frac{\cos{(\omega t + \phi)}}{\tau} + \omega\sin{(\omega t + \phi)} \right] \\
+	I(t = 0) &= A \left[ \frac{\cos{\phi}}{\tau} + \omega\sin{\phi} \right] 
+	\implies \phi = \arctan{\left( \frac{1}{\omega}\left[
+	\frac{I_0}{Q_0} - \frac{1}{\tau}\right] \right) }
+\end{align}
+
+\subsubsection{Quality Factor}
+Per descrivere la dissipazione media di energia da parte di sistemi oscillanti
+nel tempo si è introdotta la quantità adimensionale \emph{Quality factor}:
+\begin{equation}
+	Q_f := 2\pi \frac{E_{\text{stored}}}{E_{\text{lost/cycle}}}
+\end{equation}
+
+Per un circuito RLC il trasferimento reciproco di energia elettrica e
+magnetica, immagazzinate nel condensatore e nell'induttore rispettivamente,
+è massimo sotto l'effetto di una forzante alla stessa $f_0$ di risonanza.
+Supponendo che il circuito sia perturbato da un segnale sinusoidale
+monocromatico, il metodo simbolico ci permette di legare la larghezza di riga
+della risposta in frequenza del circuito al tempo caratteristico di
+smorzamento, dunque al fattore di qualità dell'oscillazione.
+La larghezza (di riga) a metà altezza
+\begin{equation}
+	\Delta \omega_{\text{FWHM}}	
+\end{equation}
 %================================================================
 %                Metodo e apparato sperimentale
 %================================================================
@@ -53,18 +118,30 @@ Non si è monitorata la temperatura dei componenti dei circuiti studiati,
 tutti i collegamenti tra i componenti sono stati realizzati con cavi
 terminanti in connettori a banana. L'uso di \verb+Arduino+\cite{arduino}
 come sistema di acquisizione dati non permette di apprezzare le perturbazioni
-dovute alla temperatura o ai collegamenti dei componenti.
+dovute alla temperatura o ai collegamenti dei componenti nelle nostre
+condizioni di lavoro.
 %================================
 %           Apparato
 %================================
 \subsection{Apparato}
-L'apparato sperimentale \`e costituito da diversi circuiti che operano a
-frequenze caratteristiche, realizzati con componenti pre-assemblati. Per
+L'apparato sperimentale consiste di diversi circuiti elettrici,
+realizzati con componenti pre-assemblati in laboratorio. Per
 monitorare la risposta dei circuiti si utilizzano i canali di un oscilloscopio
 analogico ($50$ MHz) e uno digitale ($200$ MHz), mentre per l'acquisizione dei
-segnali di d.d.p. compresi tra $0$ e $5$ V si fa uso dei convertitori ADC di
-\verb+Arduino UNO+.
+segnali di d.d.p. compresi tra $0$ e $5$ V si fa uso del convertitore ADC
+del MCU \verb+Arduino UNO+.
 
+\subsubsection{Circuiti RLC}
+Nel nostro caso l'induttore è costituito da due avvolgimenti concentrici
+e coassiali, ciascuno dotato di 1500 spire, che montati in serie hanno un
+fattore di auto-induzione $L \sim 0.5 \; \si{\henry}$ e i condensatori hanno
+capacità dai valori nominali: $C = \left\{0.1,\; 0.22,\; 0.47\right\} \pm
+10\% \; \si{\micro\farad}$. La componente resistiva $R$ del circuito è data
+dalle resistenze interne del generatore di tensione ($r_G = 50 \; \si{\ohm}$
+nominali) e dell'induttore, che indichiamo con: $r \approx 40 \;\si{\ohm}$.
+Le $3000$ spire totali di filo di rame negli avvolgimenti infatti
+influiscono apprezzabilmente e in maniera non banale sul trasferimento
+di energia all'interno del circuito.
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{lll}
@@ -86,133 +163,6 @@ segnali di d.d.p. compresi tra $0$ e $5$ V si fa uso dei convertitori ADC di
 \end{center}
 \end{table}
 
-Nel circuito si distingue inoltre la maglia che si occupa di collegare, sotto
-istruzione di un microcontrollore, il condensatore alla serie $R1-D1$
-attraverso un MOS-FET.\\
-Il circuito \`e alimentato da 2 tensioni continue, fornite da un alimentatore
-stabilizzato switching e da un Buck Boost Converter.
-%,alle maglie di "switch" e di "carica/scarica" rispettivamente
-Un segnale fornito su $T2$ provoca la carica del condensatore mentre su $T3$
-la sua scarica. Un segnale (invertito) su $T1$ innesca l'impulso di corrente
-sul diodo.\\
-La tensione di C$1$ \`e misurata attraverso un partitore di tensione collegato 
-ad \verb+OUT3+ ed alla scheda di controllo, mentre la d.d.p. tra i punti
-\verb+OUT1+ e \verb+OUT2+ \`e misurata direttamente.\\
-Come MCU per la gestione dell'apparato si \`e scelta la scheda 
-\verb+Teensy 3.2+\cite{teensy}. Questa si occupa del controllo dei segnali e 
-delle letture analogiche. In particolare \verb+Teensy+ permette la lettura
-analogica sincronizzata differenziale veloce, essendo dotato di due ADC,
-entrambi con una risoluzione reale di 12 bit. La lettura differenziale \`e
-fondamentale per acquisire coppie di dati per le tensioni ai capi del diodo
-e della resistenza.
-
-\begin{figure}[!htb]
-\centering 
-	\includegraphics[scale=0.5]{./measure.png}
-\caption{Schema circuitale del sistema di lettura (verso\texttt{Teensy})
-\label{sch:rdng}}
-\end{figure}
-
-\begin{figure}[h!t]
-\centering 
-	\includegraphics[scale=0.5]{./gestione.png}
-\caption{Circuito globale per la gestione del diodo \label{sch:gest}}
-\end{figure}
-
-%===============================
-%         Calibrazione
-%================================
-\subsection{Calibrazione}\label{sec: cal}
-
-La calibrazione dei canali \verb+ADC0+ e \verb+ADC1+ \`e stata effettuata
-basandosi sulle letture differenziali, rispettivamente fra i pin \verb+A10+
-e \verb+A11+; fra \verb+A12+ e \verb+A13+. E’ stata calibrata la lettura
-di ciascuna delle due coppie separatamente.
-
-I pin volti alla lettura della tensione maggiore sono stati collegati al 
-centrale di un potenziometro, a sua volta collegato ad un generatore di 
-potenziale con tensione in ingresso pari a $3.3\si{\V}$. Gli altri due pin
-sono stati invece collegati a massa.
-
-Variando la resistenza e, conseguentemente, la differenza di potenziale in 
-ingresso, \`e stato possibile calcolare media, deviazione standard campione
-e deviazione standard dalla media relative a ciascuna tensione per 
-un gruppo di 10000 misure effettuate con \verb+Teensy+ (si veda il 
-\href{https://github.com/LucaCiucci/relaz_seme/blob/master/sketches/teensy_calib/teensy_calib.ino}{relativo sketch}).
-Il centrale del potenziometro e la massa sono state, inoltre, collegate ad un
-multimetro digitale, in modo da poter associare la tensione misurata in
-Volt alla corrispondente lettura digitalizzata dal MCU. Abbiamo assunto come
-incertezze sulle misure i valori dichiarati nelle specifiche del multimetro,
-mentre come errori sulle letture digitali abbiamo preso le deviazioni standard
-dalla media.
-
-Dopodich\'e le misure relative a ciascuna coppia di boccole sono state poste 
-all’interno di un grafico con i dati raccolti da \verb+Teensy+ sulle ascisse
-e i valori misurati col multimetro sulle ordinate. Dunque si \`e effettuato un
-fit lineare attraverso la legge:
-\begin{equation}
-y(x; m, q)  = m x + q
-\end{equation}
-
-lasciando liberi entrambi i parametri $m$ e $q$. Riportiamo sotto le miglior
-stime dei parametri determinati dai fit relativi ad \verb+ADC0+ ed \verb+ADC1+ 
-e le rispettive covarianze:
-\begin{align*}
-&\qquad \texttt{ADC0}	&&\qquad  \texttt{ADC1} \\
-m_0 &= 0.7968 \pm  0.0033  \; \mathrm{mV/digit} 
-& m_1  &= 0.7954 \pm 0.0026  \; \mathrm{mV/digit} \\
-q_0 &= - 0.18 \pm 0.34  \; \si{\mV} 	
-&q_1 &= 3.84  \pm 0.26  \; \si{\mV} \\
-\corr{m_0} {q_0} &= - 0.15      &\corr{m_1}{q_1} &= - 0.09 \\
-\chi^2/\text{ndof} &= 145/15	&\chi^2/\text{ndof} &= 96/15 \\ 
-\text{abs\_sigma} &= \rm False	&\text{abs\_sigma} &= \rm False
-\end{align*}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}{.5\textwidth}
-	\def\svgwidth{\columnwidth}
-	\includesvg{cal0}
-\label{fig: cal0}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-	\def\svgwidth{\columnwidth}
-	\includesvg{cal1}
-\label{fig: cal1}
-\end{subfigure}
-\end{figure}
-
-I coefficienti cos\`i ricavati ci permetteranno di fornire una buona stima 
-dei valori centrali relativi alla misura in Volt delle letture analogiche 
-(digit). Il $\chi^2$ risulta essere sovrastimato in quanto il MCU non ci 
-fornisce una risposta perfettamente lineare ai segnali in ingresso. Dalle 
-specifiche di \verb+Teensy 3.2+, sappiamo che lo scostamento dall'andamento
-lineare pu\`o essere quantificato col $7 \%$ della lettura in digit.\\
-Per maggiori informazioni riguardo alle stime delle incertezze nelle 
-conversioni si rimanda direttamente al 
-\href{https://github.com/LucaCiucci/relaz_seme/blob/master/Cartella_fit/funzioni.py}
-{relativo script}.
-
-%================================
-%       Acquisizione dati
-%================================
-\subsection{Acquisizione dati}
-Per ciascun valore scelto della resistenza $R1$ si \`e acquisita una presa 
-dati automatizzata tramite una 
-\href{https://github.com/LucaCiucci/relaz_seme/blob/master/sketches/teensy_differenziale_definitivo/teensy_differenziale_definitivo.ino}
-{routine} programmata in \verb+Teensy+: il condensatore viene caricato ad una
-tensione prefissata; quando il MCU misura questo valore prestabilito,
-invia il segnale su $T1$ che avvia l'acquisizione sincronizzata e si attende
-un tempo 50 $\si{\us}$ per permettere al MOS-FET di entrare in conduzione
-($R2$ \`e stata scelta di $1 \si{\kohm}$, dunque c'\`e un apprezzabile ritardo
-tra segnale e impulso) e di scartare eventuali segnali spuri.
-A questo punto si inizia a memorizzare una serie da 100 coppie di letture
--sincronizzate- (a meno di sfasamenti nell'ordine delle centinaia di
-nanosecondi), si ferma l'impulso e si trasmettono i dati al computer.
-Se la tensione al punto \verb+OUT2+ ha raggiunto valori maggiori di $3.3\si{\V}$
-l'acquisizione si ferma per non danneggiare \verb+Teensy+, altrimenti si
-ricomincia caricando il condensatore ad una tensione pi\`u alta.
-
 %================================================================
 %                   Analisi dati e Risultati
 %================================================================
@@ -232,17 +182,7 @@ A}. E’ opportuno sottolineare che, all’interno della stessa appendice,
 $\sigma_x^2$ rappresenta la varianza delle letture e non le incertezze ad esse
 associate.
 
-
-Risulta evidente, osservando i punti campionati con la resistenza da
-$R1 = 220 \; \si{\kohm}$, la presenza di un rumore di natura non statistica
-molto maggiore delle incertezze sulle misure. 
-Questo si deve probabilmente all'influenza del circuito di lettura
-stesso sulle piccole correnti in gioco, che avevamo supposto trascurabile
-nel nostro modello. Non potendo dunque attribuire degli errori significativi
-per questa presa dati, essa non \`e stata considerata nella procedura di
-fit eseguita successivamente, in quanto i relativi punti avrebbero avuto un
-peso sovrastimato in confronto agli altri, introducendo cos\`i un bias
-nei risultati finali.
+\subsection{Oscillatore a reazione con BJT}
 
 Si riportano i valori ottimali dei parametri stimati dal fit e le relative
 covarianze: 
