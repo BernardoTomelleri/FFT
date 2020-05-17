@@ -1,0 +1,27 @@
+\begin{center}
+\begin{circuitikz}[american,voltage dir=EF]
+\draw (0, 0)
+	to [short] (-3, 0)
+	to [sqV, v^=$V_G$] (-3, 2)
+	to[R=$r_{G}$] (-3 ,3)
+	to [short] (-3, 3.5)
+	to[Do] (0, 3.5)
+	to[C=$C$, a= $V_C$, *-*] (0, 0)
+	node[eground]{};
+\draw (0, 3.5)
+	to [L, l_=$L$] (2.5, 3.5)
+	to [R, l_= $r$] (4, 3.5)
+	to [short] (4, 0)
+	to [short, *-*] (0, 0);
+\draw (0, 3.5)
+	to [short, *-*] (0, 4.5)
+	to [short] (0, 6)
+	to [battery1 = $V_{\rm CC}$] (2, 6)
+	to [R, l=$R_A$] (2, 4.5)
+	to [R, l_=$R_B$, *-] (0, 4.5);
+\draw (2, 4.5)
+	to [short, -*] (4, 4.5)
+	to [short, f_=$V_{C'}$,] (4, 6)
+	node[oscopeshape] {};	
+\end{circuitikz}
+\end{center}

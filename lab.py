@@ -104,7 +104,7 @@ def chitest(data, unc, model, ddof=0, gauss=False, v=False):
 def errcor(covm):
     """ Computes parameter error and correlation matrix from covariance. """
     perr = np.sqrt(covm.diagonal())
-    corm = np.asarray(covm)
+    corm = np.array(covm, copy=True)
     for i in range(np.size(corm, 0)):
         for j in range(np.size(corm, 1)):
             corm[i][j] /= perr[i]*perr[j]
@@ -143,11 +143,12 @@ def FWHM(x, y, FT=None):
 
 def optm(x, y, minm=None, absv=None):
     """ Evaluates minima or maxima (default) of y as a function of x. """
-    x = np.asarray(x); y = np.asarray(y)
-    if minm: yopt = np.min(np.abs(y)) if absv else np.min(y)
-    yopt = np.max(np.abs(y)) if absv else np.max(y)
+    x = np.asarray(x); y = np.abs(y) if absv else np.asarray(y) 
+    yopt = np.min(y) if minm else np.max(y)
     xopt = np.where(y == yopt)[0]
-    return xopt, yopt
+    xopt = xopt[0]
+    return x[xopt], yopt
+
 # UTILITIES FOR MANAGING FIGURE AXES AND PLOTS
 def grid(ax, xlab = None, ylab = None):
     """ Adds standard grid and labels for measured data plots to ax. """

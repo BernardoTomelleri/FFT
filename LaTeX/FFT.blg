@@ -12,46 +12,48 @@ Database file #1: refs.bib
 -- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--missing publisher in numpy
 
 Done.
-You've used 3 entries,
+You've used 4 entries,
             4316 wiz_defined-function locations,
-            870 strings with 8762 characters,
-and the built_in function-call counts, 3358 in all, are:
-= -- 236
-> -- 166
+            877 strings with 8856 characters,
+and the built_in function-call counts, 3752 in all, are:
+= -- 264
+> -- 170
 < -- 12
-+ -- 84
-- -- 39
-* -- 167
-:= -- 449
-add.period$ -- 7
-call.type$ -- 3
++ -- 86
+- -- 40
+* -- 185
+:= -- 519
+add.period$ -- 8
+call.type$ -- 4
 change.case$ -- 3
 chr.to.int$ -- 24
-cite$ -- 3
-duplicate$ -- 236
-empty$ -- 229
-format.name$ -- 42
-if$ -- 778
+cite$ -- 5
+duplicate$ -- 266
+empty$ -- 278
+format.name$ -- 43
+if$ -- 869
 int.to.chr$ -- 0
-int.to.str$ -- 3
-missing$ -- 57
-newline$ -- 36
-num.names$ -- 3
-pop$ -- 159
+int.to.str$ -- 4
+missing$ -- 63
+newline$ -- 41
+num.names$ -- 4
+pop$ -- 178
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 248
+skip$ -- 281
 stack$ -- 0
 substring$ -- 90
-swap$ -- 202
+swap$ -- 219
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 3
-warning$ -- 0
-while$ -- 8
-width$ -- 4
-write$ -- 55
+type$ -- 4
+warning$ -- 1
+while$ -- 9
+width$ -- 5
+write$ -- 65
+(There was 1 warning)

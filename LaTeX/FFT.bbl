@@ -47,4 +47,10 @@ P.~{Virtanen}, R.~{Gommers}, T.~E. {Oliphant}, M.~{Haberland}, T.~{Reddy},
   for Scientific Computing in Python},'' \emph{arXiv e-prints}, p.
   arXiv:1907.10121, Jul 2019.
 
+\bibitem{numpy}
+\BIBentryALTinterwordspacing
+T.~E. Oliphant, \emph{A guide to {NumPy}}, 01 2006--. [Online]. Available:
+  \url{http://www.numpy.org/}
+\BIBentrySTDinterwordspacing
+
 \end{thebibliography}

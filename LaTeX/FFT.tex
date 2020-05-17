@@ -11,24 +11,6 @@
 \maketitle
 
 %================================================================
-%                            Riassunto
-%================================================================
-\begin{mdframed}
-\textbf{Riassunto:} --- Si \`e studiato il comportamento di un diodo in silicio
-PN, ricostruendone sperimentalmente la curva caratteristica $V-I$, al fine di
-mettere in risalto la sua componente resistiva. A questo scopo \`e stata
-esplorata un'ampia zona della curva, in particolar modo per alti valori di
-$I$, dove questa caratteristica \`e maggiormente apprezzabile. Proponiamo dunque
-un'estensione della legge di Shockley, tramite l'aggiunta di un termine
-resistivo, in grado di descrivere l'elemento -ohmico- della giunzione.
-La nuova curva caratteristica prevede un andamento sempre pi\`u lineare di $I$
-al crescere di $V$ e questo risulta in accordo con l'andamento dei dati
-sperimentali.
-\\\\
-PACS 01.40.-d – Education.\\
-\end{mdframed}
-
-%================================================================
 %                         Introduzione
 %================================================================
 \section{Introduzione}
@@ -40,13 +22,13 @@ detezione sincrona o Lock In Detection/Amplification (LIA).
 %================================================================
 %                         Cenni teorici
 %================================================================
-\subsection{Cenni Teorici}
+\section{Cenni Teorici}
 La Trasformata di Fourier Discreta (o DFT) estende la trasformata di Fourier
 analitica a sistemi con variabile dinamica discreta. In particolare
 approfitteremo della velocità dell'algoritmo Cooley-Tukey \cite{FFT} o FFT
 per la nostra analisi.
 
-\subsubsection{Circuiti forzati e smorzati RLC}
+\subsection{Circuiti forzati e smorzati RLC}
 In un circuito costituito da almeno una resistenza, un induttore ed un
 condensatore (nel nostro caso collegati in serie) è possibile individuare una
 frequenza caratteristica $f_0 = \frac{\omega_0}{2\pi}$, detta propria o di
@@ -92,24 +74,64 @@ di corrente $I_0$ che circola nel circuito all'inizio dell'oscillazione:
 	\frac{I_0}{Q_0} - \frac{1}{\tau}\right] \right) }
 \end{align}
 
-\subsubsection{Quality Factor}
+\subsection{Quality Factor}
 Per descrivere la dissipazione media di energia da parte di sistemi oscillanti
 nel tempo si è introdotta la quantità adimensionale \emph{Quality factor}:
-\begin{equation}
+\begin{equation}\label{eq: Qf}
 	Q_f := 2\pi \frac{E_{\text{stored}}}{E_{\text{lost/cycle}}}
 \end{equation}
 
-Per un circuito RLC il trasferimento reciproco di energia elettrica e
-magnetica, immagazzinate nel condensatore e nell'induttore rispettivamente,
+Per un circuito RLC il trasferimento reciproco di energia elettrostatica e
+magnetostatica, immagazzinate nel condensatore e nell'induttore rispettivamente,
 è massimo sotto l'effetto di una forzante alla stessa $f_0$ di risonanza.
+Possiamo esprimere l'energia interna all'induttore come $U_M = \frac{1}{2}LI^2$
+e quella accumulata dal condensatore come $U_E = \frac{1}{2C}Q^2$.
+Assumendo che all'inizio dell'oscillazione $t = 0 := t_0$ tutta l'energia del
+circuito sia contenuta all'interno dell'induttore, possiamo identificare
+$E_{\rm stored}$ con $U_M$ e caratterizzare l'energia dissipata in ogni
+periodo sfruttando la relazione di Joule per gli effetti termico-dissipativi:
+\begin{align}
+	E_{\text{stored}} =& U_{M_0} = \frac{1}{2} LI_0^2 \\
+	E_{\text{lost/cycle}} =& \langle P_{\rm Joule} \rangle_t \cdot T = 
+	\frac{1}{2} RI_0^2 \cdot T\\
+	R :=& r + r_G 
+\end{align}
 Supponendo che il circuito sia perturbato da un segnale sinusoidale
 monocromatico, il metodo simbolico ci permette di legare la larghezza di riga
 della risposta in frequenza del circuito al tempo caratteristico di
 smorzamento, dunque al fattore di qualità dell'oscillazione.
-La larghezza (di riga) a metà altezza
-\begin{equation}
-	\Delta \omega_{\text{FWHM}}	
+Nell'approssimazione di oscillazione sottosmorzata $\omega_0 \gg \frac{1}{\tau}
+\implies \omega = \sqrt{\omega_0^2 - \frac{1}{\tau^2}} \approx \omega_0$
+possiamo approssimare la larghezza a metà altezza della curva di risonanza con 
+\begin{equation}\label{eq: FWHM}
+	\Delta \omega_{\text{FWHM}}	\approx \sqrt{3} RC \omega_0^2 = 
+	\sqrt{3} \frac{R}{L} = \frac{2 \sqrt{3}}{\tau} 
 \end{equation}
+Per cui ci si aspetta che la larghezza della campana di risonanza sia
+proporzionale alla severità dello smorzamento/perdita di energia
+dell'oscillazione.
+In altre parole, per un circuito RLC il fattore di qualità atteso è:
+\begin{equation}\label{eq: QfFWHM}
+	Q_f \approx 2\pi \frac{\frac{1}{2}L I_0^2}{\frac{1}{2}R I_0^2 \cdot T_0}
+	= \omega_0 \frac{L}{R} = \omega_0 \frac{\tau}{2} 
+	= \sqrt{3} \frac{\omega_0}{\Delta \omega_{\text{FWHM}}} 
+\end{equation}
+
+\subsection{Oscillatore a reazione con BJT}
+Il secondo tipo di sistema oscillante studiato è un circuito dotato di
+un amplificatore invertente, un transistor a giunzione bipolare (BJT) montato
+ad emettitore comune (emitter-follower), ed un anello di feedback.
+Secondo il criterio di stabilità di Barkhausen, affinché un circuito
+elettrico lineare possa sostenere la propria auto-oscillazione è necessaria
+la presenza di un feedback positivo, i.e. lo sfasamento totale dovuto
+all'anello di feedback dev'essere un multiplo di $2\pi$. Nel nostro caso la
+condizione è soddisfatta interponendo una rete di sfasamento, costituita da
+3 filtri RC passa-alto passivi, che inverte nuovamente segno
+$\Delta \phi = \pi$
+al segnale in uscita dall'amplificatore. Vale la pena ricordare un
+modo equivalente per ottenere un sistema auto-oscillante, in cui lo stesso
+sfasamento è dato dalla serie di un induttore ed un condensatore,
+quello che va sotto il nome di oscillatore di Colpitts.
 %================================================================
 %                Metodo e apparato sperimentale
 %================================================================
@@ -142,27 +164,23 @@ nominali) e dell'induttore, che indichiamo con: $r \approx 40 \;\si{\ohm}$.
 Le $3000$ spire totali di filo di rame negli avvolgimenti infatti
 influiscono apprezzabilmente e in maniera non banale sul trasferimento
 di energia all'interno del circuito.
-\begin{table}[H]
-\begin{center}
-\begin{tabular}{lll}
-	\toprule
-	$R1$ nom. [$\si{\ohm}$] & $R1$ mis. [$\si{\ohm}$] \\ 
-	\midrule
-	\midrule
-	$0.22 \pm 3 \% $         	& $0.226 \pm 0.008$ \\
-	$2.2 \pm 5 \% $          	& $2.212 \pm 0.008$ \\
-	$22 \pm 5 \% $           	& $21.86 \pm 0.010$ \\ 
-	$220 \pm 5 \% $          	& $216.22 \pm 0.07$ \\
-	$2.2\; \si{k} \pm 5 \% $       & $2202.1 \pm 0.4$ \\
-	$22\; \si{k} \pm 5 \% $       & ($21.7 \pm 0.3)10^3$ \\
-	$0.22\; \si{M} \pm 5 \% $      & ($217 \pm 3)10^3$ \\
-	\bottomrule
-\end{tabular}
-\caption{I valori delle resistenze poste in serie al diodo, riportate in
-	valore nominale e misurate con multimetro digitale. \label{tab: res}}
-\end{center}
-\end{table}
 
+\begin{figure}[!htp]
+	\centering 
+		\includegraphics[width=14cm]{RLCschm}
+	\caption{Diagramma del circuito RLC studiato\label{schm: RLC}}
+\end{figure}
+
+\subsubsection{Oscillatore a reazione con BJT}
+L'anello di feedback soddisfa il criterio di stabilità di Barkhausen,
+lo sfasamento totale
+
+\begin{figure}[!htp]
+	\centering 
+		\includegraphics[width=14cm]{BJTschm}
+	\caption{Schema circuitale dell'oscillatore a reazione con BJT
+	studiato\label{schm: BJT}}
+\end{figure}
 %================================================================
 %                   Analisi dati e Risultati
 %================================================================
@@ -177,13 +195,11 @@ Dunque, dalla caduta di tensione ai capi della resistenza $R1$ possiamo
 determinare la corrente di lavoro del diodo grazie alla legge di Ohm. 
 Si \`e quindi effettuato un filtraggio volto all'eliminazione degli outliers e 
 dei punti meno significativi, assumendoli quali variabili indipendenti e di 
-natura gaussiana. Per una discussione dettagliata si rimanda all'\nameref{app: 
-A}. E’ opportuno sottolineare che, all’interno della stessa appendice, 
-$\sigma_x^2$ rappresenta la varianza delle letture e non le incertezze ad esse
-associate.
+natura gaussiana. 
 
 \subsection{Oscillatore a reazione con BJT}
 
+\iffalse
 Si riportano i valori ottimali dei parametri stimati dal fit e le relative
 covarianze: 
 \begin{align*}
@@ -204,10 +220,31 @@ Infine si mostrano i dati acquisiti con sovrapposta la funzione di best-fit
 nei grafici \ref{fig: sck_lin}, in scala lineare, e \ref{fig: sck_log}
 in scala semilogaritmica. 
 
-Per gli script si rimanda alla 
-\href{https://github.com/LucaCiucci/relaz_seme/tree/master/Cartella_fit}
-{cartella}, dove \verb+run.py+ esegue la corretta sequenza e \verb+config.py+
-definisce i parametri fondamentali.
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{lll}
+	\toprule
+	$R1$ nom. [$\si{\ohm}$] & $R1$ mis. [$\si{\ohm}$] \\ 
+	\midrule
+	\midrule
+	$0.22 \pm 3 \% $         	& $0.226 \pm 0.008$ \\
+	$2.2 \pm 5 \% $          	& $2.212 \pm 0.008$ \\
+	$22 \pm 5 \% $           	& $21.86 \pm 0.010$ \\ 
+	$220 \pm 5 \% $          	& $216.22 \pm 0.07$ \\
+	$2.2\; \si{k} \pm 5 \% $       & $2202.1 \pm 0.4$ \\
+	$22\; \si{k} \pm 5 \% $       & ($21.7 \pm 0.3)10^3$ \\
+	$0.22\; \si{M} \pm 5 \% $      & ($217 \pm 3)10^3$ \\
+	\bottomrule
+\end{tabular}
+\caption{I valori delle resistenze poste in serie al diodo, riportate in
+	valore nominale e misurate con multimetro digitale. \label{tab: res}}
+\end{center}
+\end{table}
+\fi
+Per l'implementazione si rimanda allo
+\href{https://github.com/BernardoTomellier/FFT/tree/master/fft_plot.py}
+{script}, dove \verb+lab.py+ fornisce le funzioni di appoggio e
+\verb+data.py+ definisce i parametri fondamentali in ingresso.
 
 \begin{figure}[!ht]
 \centering
@@ -229,6 +266,7 @@ parassita del diodo, che possiamo modellare come $Cjo = 1-4 \si{\pico\farad}$
 in parallelo al diodo. Quando il fronte d'onda sale rapidamente, parte dell'onda
 quadra viene lasciata passare dal condensatore, aggiungendo qualche $\si{\nano\V}$
 al picco finale.
+\iffalse
 \begin{figure}[H]
 	\centering 
 		\includegraphics[width=16cm, height= 11cm]
@@ -246,160 +284,26 @@ al picco finale.
 	i dati della serie $220\si{\kohm}$. E' stato disegnato un punto ogni 10
 	per comodit\`a di visualizzazione. \label{fig: sck_log}}
 \end{figure}
+\fi
 
+\subsection{Nota sull'implementazione}
+Per determinare i parametri ottimali e le rispettive covarianze si \`e
+implementato in \verb+Python+ un algoritmo di fit basato sui minimi quadrati
+mediante la funzione \emph{curve\_fit} della libreria 
+\texttt{SciPy}\cite{scipy}. Il modulo \texttt{signal} della stessa libreria
+è stato usato per l'implementazione dei filtri numerici e delle finestre,
+mentre l'implementazione dell'algoritmo per il calcolo della FFT è lo stesso
+definito dalla libreria \texttt{NumPy}\cite{numpy}
+Per tutti i fit su campionamenti digitali di \verb+Arduino+ si \`e imposto
+$\rm{abs\_sigma} =$ True, avendo preso come incertezza associata il valore
+convenzionale $\sigma = 1$ digit, per cui effettivamente si sta eseguendo
+un fit dei minimi quadrati. Per tutti gli altri campionamenti, in cui la
+sorgente principale di incertezza abbia natura non statistica o non meglio
+determinata si è posto $\rm{abs\_sigma} =$ False. 
 %================================================================
 %                          Conclusioni
 %================================================================
 \section{Conclusioni}
-
-%================================================================
-%                        Appendice B
-%================================================================
-\section{Appendice A: Filtraggio Dati}\label{app: A}
-%================================
-%         Introduzione
-%================================
-\subsection{Introduzione}
-All'interno dell'acquisizione \`e stata raccolta un'ingente quantit\`a di dati,
-suddivisibili in base alla resistenza scelta e dunque facenti riferimento
-a zone differenti della curva. A seguito della calibrazione, ci si \`e quindi
-posto il problema di effettuare l'eliminazione degli outliers in modo
-indipendente dalla scelta del modello per il fit. Le serie effettuate
-variando la resistenza, inoltre, si sovrappongono in alcune zone del
-grafico. Dunque \`e stato necessario eliminare i dati che, non aggiungendo
-informazioni utili, andavano a "sporcare" il grafico. Il sistema di filtraggio
-di dati implementato nell'eseguibile si compone di 2 fasi:
-la prima consiste nell'eliminazione degli outliers, la seconda dei dati non
-significativi.
-%================================
-%         Procedimento
-%================================
-\subsection{Procedimento}
-Supponiamo di avere una serie di dati $(x, y)$ e assumiamo che siano
-indipendenti tra loro. Quest'ipotesi non \`e vera in generale, ma
-\`e tanto pi\`u lecita quanto pi\`u la correlazione tra le varianze delle
-misure su $x$ e $y$ \`e indipendente dai valori assunti dalle $x$ e $y$ stesse
-e quanto pi\`u sono numerosi i dati racchiusi entro una deviazione standard
-lungo $x$ per ciascun elemento: in questo caso, infatti, la correlazione
-viene inclusa nella varianza lungo $y$.
-Supponiamo inoltre che siano note a priori le $\sigma_x ^2 \coloneqq \var{x}$
-e che la loro distribuzione di probabilit\`a sia normale (le distribuzioni
-delle componenti sono approssimativamente gaussiane per il convertitore
-di \verb+Teensy+, perlomeno utilizzando la risoluzione a 12 bit) secondo una 
-matrice
-di covarianza diagonale nella base $\left\{x, y\right\}$.
-In ogni modo, i nostri dati $x$ e $y$ risultano indipendenti e
-approssimativamente normali. Dunque le assunzioni risultano giustificate. 
-Conseguentemente la densit\`a di probabilit\`a che un punto misurato in $x$ si trovi
-a tale ascissa $x_i$, si ricava integrando lungo $y$ a $x$ fissata:
-\[
-	\ud P = \frac{1}{\sigma_{x_i} \sqrt{2\pi}}
-	e^{-\frac{1}{2}{\frac{(x - x_i)^2}{\sigma_{x_i}^2}}} \ud x
-.\] 
-Dunque, ripetendo pi\`u volte la stessa misura, si otterr\`a la probabilit\`a:
-\[
-	P\left(\mid x - x_i \mid \leq \frac{\eps}{2} \right) = \eps G_{x_i} 
-.\]
-dove \[
-	G_{x_i} \coloneqq \frac{1}{\sigma_{x_i} \sqrt{2\pi}}
-	e^{-\frac{1}{2}{\frac{(x - x_i)^2}{\sigma_{x_i}^2}}}
-.\] 
-e $\eps > 0$ e $\eps \longrightarrow 0$. Scegliendo allora solo quelle misure $x$ per
-cui vale $\mid x - x_i \mid \leq \frac{\eps}{2}$, queste saranno in numero
-tendente a:
-\[
-	N_i \coloneqq N_{\text{tot}} \frac{G_{x_i}}{\sum_j G_{x_j}} =
-		N_{\text{tot}} w_i
-.\] 
-che definisce implicitamente i pesi $w_i$ con cui si mediano le distribuzioni
-di probabilit\`a gaussiane $G_{x_i}$.
-Allora, posto:
-\[
-	G_{y_i} \coloneqq \frac{1}{\sigma_{y_i} \sqrt{2\pi}}
-	e^{-\frac{1}{2}{\frac{(\mu_y - y_i)^2}{\sigma_{y_i}^2}}}
-.\] 
-Per il principio di massima verosimiglianza siamo quindi interessati a
-massimizzare la quantit\`a:
-\[
-	\like = \prod_{i=1}^{n} \prod_{j=1}^{N_i} G_{y_i} = 
-	\prod_{i=1}^{n} G_{y_i}^{N_i}
-.\] 
-Per la monotonia del logaritmo il problema equivale a massimizzare: 
-\[
-	\ln{\like} = \sum_{i=1}^{n}\ln{G_{y_i}}^{N_{\text{tot}}w_i} = 
-	\frac{N_{\text{tot}}} {\sum_{j=1}^{n} G_{x_j}} 
-	\sum_{i=1}^{n} G_{x_i} \ln{G_{y_i}}
-.\] 
-Per cui, a meno di costanti risulta:
-\begin{equation}\label{eq: likeconst}
-	\ln{\like} - \text{const.} \propto \sum_{i=1}^{n} -G_{x_i} \ln{\sigma_y}
-	- \frac{1}{2} G_{x_i} \left( \frac{y_i - \mu_y}{\sigma_y} \right)^2
-\end{equation}
-Imponendo la condizione di stazionariet\`a rispetto a $\mu_y$ si ottiene dunque:
-\begin{equation}\label{eq: muy}
-	\mu_y = \sum_{i=1}^{n} y_i w_i 
-\end{equation} 
-Una volta sostituito in \eqref{eq: likeconst} quanto appena trovato per $\mu_y$
-e imponendo la stessa condizione di stazionariet\`a rispetto a $\sigma_y$ si ha:
-\begin{equation}\label{eq: sigmay}
-	\sigma_y^2 = \sum_{i=1}^{n} (y_i - \mu_y)^2 w_i
-\end{equation}
-Infine \`e possibile ricavare la varianza di $\mu_y$ dalla definizione di
-valore di aspettazione, riconducendola pi\`u volte a integrali di gaussiane
-di altezze e ampiezze diverse:
-\begin{align} \label{aln: varmuy}
-	\var{\mu_y} &= \sum_{i=1}^{n} w_i^2 \sigma_y^2 + 
-	\left(\frac{y_i}{\sum_{j=1}^{n} G_{x_j}} \right)^2 \frac{
-	e^{-\frac{(x-x_i)^2}{3 \sigma_{x_i}^2}} +  
-	\sqrt{3} \left( e^{-\frac{(x-x_i)^2}{\sigma_{x_i}^2}} -
-	\sqrt{2} e^{-3 \frac{(x-x_i)^2}{4 \sigma_{x_i}^2}} \right)
-	} {2 \sqrt{3}\pi \sigma_{x_i}^2} 
-\end{align}
-Riassumendo:\\
-Nella \eqref{eq: muy} prendiamo una media dei campionamenti intorno ad un'
-ascissa $x$ in esame, pesata sulla distanza che gli $x_i$ hanno da questa; 
-intuitivamente lo interpretiamo come se stessimo applicando un 
-\emph{blur a kernel gaussiano} ai punti acquisiti.
-Effettivamente quello che stiamo facendo non \`e molto diverso da KDE monovariante,
-dove per\`o scaliamo secondo il valore delle $y$.
-Lo stesso ragionamento vale per $\sigma_y^2$, si ha una stima della varianza
-dei dati la variare di $y$, pesata sulla distanza dai valori studiati. Dunque
-$\mu_y \pm \sigma_y$ ci d\`a una descrizione della distribuzione dei nostri dati.
-
-%================================
-%           Var(muy)
-%================================
-\subsection{$\var{\mu_y}$}
-Mentre $\sigma_y$ rappresenta la distribuzione dei dati intorno al valor medio 
-$\mu_y$, $\var{\mu_y}$ ci indica l’incertezza sulla miglior stima di $y$.
-Questo \`e utile per determinare la convergenza della stima in funzione dei
-dati acquisiti. Infatti tanto pi\`u \`e elevata la densit\`a dei dati,
-rispetto alla deviazione standard $\sigma_x$, tanto pi\`u la stima del valore
-centrale risulta precisa.
-Graficamente la banda di confidenza \`e pi\`u ristretta dove si concentrano
-i dati.
-Viceversa, la stessa tende ad allargarsi dove i dati sono sparsi, i.e. a
-distanze paragonabili a $\sigma_x$. Numericamente, si vede dalla seconda somma
-nell'espressione \eqref{aln: varmuy} che la stima del valore centrale \`e
-statisticamente significativa solo quando si media su un intervallo campionato
-con almeno qualche punto ogni deviazione $\sigma_x$: altrimenti $\sigma_y \to 0$
-indicando cos\`i assenza di dati, mentre $\var{\mu_y}$ tende a $+\infty$ come
-$\sim e^{x^2}$, indice della stessa insufficienza di dati al fine di stabilire
-con precisione significativa il valore di $\mu_y$.
-\begin{figure}[!htb]
-	\centering 
- 		\includegraphics[scale=0.55]{./varmuy.png}
- 	\caption{La media $\mu_y$ \`e rappresentata dalla linea blu, mentre
-	l'area in rosso indica il valore di $\var{\mu_y}$ al variare dei
-	dati (in nero) lungo $x$. \label{fig: varmuy}}
-\end{figure}
-Nel caso opposto, in cui i dati sono "densi" (in confronto alle $\sigma_x$)
-la seconda somma, per quanto computazionalmente intensiva, numericamente
-sembrerebbe piccola in confronto alla prima: in realt\`a non lo \`e, ma
-soprattutto questa non pu\`o essere trascurata, poich\'e \`e proprio la
-quantit\`a che descrive la dipendenza dalla densit\`a stessa e dunque la
-caratteristica convergenza/divergenza della precisione sulla stima centrale
-fornita.
 
 %================================
 %        Filtro outliers
@@ -407,47 +311,10 @@ fornita.
 \subsection{Filtro outliers}
 La parte pi\`u semplice nel filtraggio dati consiste nello scartare tutti quei
 punti che distano da $\mu_y$ pi\`u di una soglia arbitraria $k$ di deviazioni
-standard $\sigma_y$ (nel nostro caso \`e stato scelto $k = 2$, non critico,
-trovato dopo una serie di prove). A differenza del classico metodo basato
-sulla distanza dalla curva/modello di best fit, per il nostro criterio essa
-\`e ininfluente. Questo risulta particolarmente utile in simili situazioni di
-verifica del modello in quanto una selezione basata su un preliminare fit
-risulterebbe influenzata dalla scelta della funzione in questione e
-eliminerebbe tutti i dati che non risultano compatibili con essa.
-
-%================================
-%  Filtro dati non significativi
-%================================
-\subsection{Filtro dati non significativi}
-Supponiamo di avere 2 set di dati fatti con diverse resistenze, il primo $(A)$
-con una resistenza bassa, il secondo $(B)$ con una alta: Il primo set
-esplorer\`a la regione ad alta corrente, mentre il secondo la regione di basse
-correnti.
-In generale i dati del primo si sovrapporranno anche nelle zone basse esplorate
-dal secondo, per\`o senza aggiungere sostanziali informazioni rispetto a quanto
-farebbe il secondo.
-Esponiamo dunque il criterio sviluppato per ridurre l'influenza di questi
-punti meno significativi sulla ricerca dei parametri di best-fit e sulla
-rappresentazione finale dei dati.\\
-Per capire se in un certo punto i dati di $A$ sono significativi, calcoliamo
-la misura di significativit\`a che abbiamo sviluppato in \eqref{aln: varmuy}$:
-\var{\mu_y}$ di $A$ e di $B$. Perci\`o se $\var{\mu_y}$ di $A$ \`e maggiore di 
-$q\var{\mu_y}$ di $B$, con $q$ arbitrario (nell'esperienza \`e stato scelto
-$q = 3$), questo indica che i dati di $A$
-ci stanno dando "poca" informazione rispetto a quelli di $B$. A questo punto
-\`e sufficiente controllare tutti i punti scorrendo su tutte le combinazioni
-di set per eliminare i dati non significativi, che rendono meno
-immediata l'interpretazione del grafico. Questo \`e ben visibile in scala
-logaritmica sulle $y$, dove i punti con grandi incertezze o varianze tendono
-a disperdersi rapidamente.
-L’algoritmo \`e computazionalmente intensivo e richiede una corretta gestione
-della memoria per evitare bolle di allocazione. Dunque \`e stato implementato
-in \verb'C++' per praticit\`a e richiamato all’interno degli script (per dettagli si 
-rimanda ai 
-\href{https://github.com/LucaCiucci/relaz_seme/tree/master/Cartella_fit/filter_src}{sorgenti}).
-Nelle figure di esempio sono mostrati i dati selezionati dall’algoritmo
-(in nero) ed i dati scartati (in arancio). 
-
+standard $\sigma_y$ (nel nostro caso \`e stato scelto $k = 3$).
+Si rimanda ai 
+\href{https://github.com/BernardoTomelleri/FFT/tree/master}{sorgenti}.
+\iffalse
 \begin{figure}[!htbp]
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -460,27 +327,10 @@ Nelle figure di esempio sono mostrati i dati selezionati dall’algoritmo
  		\includegraphics[scale=0.5]{./filtered.png}
  	\caption{\label{fig: filtered}}
 \end{subfigure}
-\caption{Grafici in scala semilogaritmica prima (\ref{fig: nofilter}) e dopo 
-(\ref{fig: filtered}) del filtraggio dati. I dati scartati sono stati
-evidenziati in arancio. Per praticit\`a \`e stato rappresentato un centesimo
-dei dati raccolti}
+\caption{Grafici in scala semilogaritmica prima (\ref{fig: nofilter}) e dopo} 
 \end{figure}
-\`E infine mostrato il confronto dei grafici delle $\var{\mu_y}$
-tra due set successivi.
-\begin{figure}[!h]
-	\centering 
- 		\includegraphics[scale=0.65]{comparison.png}
- 	\caption{Confronto dei grafici delle $\var{\mu_y}$ su due set di
-	dati consecutivi. \label{fig: comparison}}
-\end{figure}
+\fi
 
-\subsection{Nota sull'implementazione}
-Per determinare i parametri ottimali e le rispettive covarianze si \`e
-implementato in \verb+Python+ un algoritmo di fit basato sui minimi quadrati
-mediante la funzione \emph{curve\_fit} della libreria \texttt{Scipy}\cite{scipy}
-Per tutti i fit su campionamenti digitali di \verb+Teensy+ si \`e imposto
-$\rm{abs\_sigma} =$ False, in quanto la sorgente principale d'incertezza
-sulle misure risulta non statistica/non determinata.
 
 %================================================================
 %                            END
