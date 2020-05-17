@@ -26,6 +26,6 @@ if DSO:
 x = V1
 dx = np.full(len(x), (V1[1]-V1[2])/2)
 y = V2 - np.mean(V2) if AC else V2
-dy = np.full(len(y), (V2[1]-V2[2])/20)
+dy = np.full(len(y), (V2[1]-V2[2])/5) if DSO else np.ones_like(V2)
 # Estrazione di un sottointervallo di dati
 sx, sdx, sy, sdy = srange(x, dx, y, dy, x_min, x_max)

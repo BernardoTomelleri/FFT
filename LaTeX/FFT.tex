@@ -88,8 +88,8 @@ Possiamo esprimere l'energia interna all'induttore come $U_M = \frac{1}{2}LI^2$
 e quella accumulata dal condensatore come $U_E = \frac{1}{2C}Q^2$.
 Assumendo che all'inizio dell'oscillazione $t = 0 := t_0$ tutta l'energia del
 circuito sia contenuta all'interno dell'induttore, possiamo identificare
-$E_{\rm stored}$ con $U_M$ e caratterizzare l'energia dissipata in ogni
-periodo sfruttando la relazione di Joule per gli effetti termico-dissipativi:
+$E_{\rm stored}$ con $U_M(t_0) := U_{M_0}$ e caratterizzare l'energia dissipata
+in ogni periodo con la relazione di Joule per gli effetti termico-dissipativi:
 \begin{align}
 	E_{\text{stored}} =& U_{M_0} = \frac{1}{2} LI_0^2 \\
 	E_{\text{lost/cycle}} =& \langle P_{\rm Joule} \rangle_t \cdot T = 
@@ -130,8 +130,8 @@ condizione è soddisfatta interponendo una rete di sfasamento, costituita da
 $\Delta \phi = \pi$
 al segnale in uscita dall'amplificatore. Vale la pena ricordare un
 modo equivalente per ottenere un sistema auto-oscillante, in cui lo stesso
-sfasamento è dato dalla serie di un induttore ed un condensatore,
-quello che va sotto il nome di oscillatore di Colpitts.
+sfasamento (seppur opposto in segno) è dato dalla serie di un induttore ed
+un condensatore quello che va sotto il nome di oscillatore di Colpitts.
 %================================================================
 %                Metodo e apparato sperimentale
 %================================================================
@@ -172,8 +172,10 @@ di energia all'interno del circuito.
 \end{figure}
 
 \subsubsection{Oscillatore a reazione con BJT}
-L'anello di feedback soddisfa il criterio di stabilità di Barkhausen,
-lo sfasamento totale
+Il potenziometro $R_p$ permette di variare la corrente di base $I_b$ 
+del transistor, mentre per regolare la corrente di collettore $I_c$ si variano
+le resistenze $R_c$ tra i valori nominali di $1 - 2.2 \pm 10 \% \; 
+\si{\kilo\ohm}$. 
 
 \begin{figure}[!htp]
 	\centering 
@@ -185,18 +187,32 @@ lo sfasamento totale
 %                   Analisi dati e Risultati
 %================================================================
 \section{Analisi dati e Risultati}
-Per poter condurre un'analisi sui dati raccolti \`e stato innanzitutto
-necessario convertire le letture digitalizzate nelle corrispondenti
-grandezze fisiche, le coppie tensione-corrente relative al diodo.
 Inizialmente si sono convertite le acquisizioni e le incertezze associate in
-d.d.p. tramite i fattori di conversione per entrambi gli ADC,
-determinati come descritto nel paragrafo \ref{sec: cal}.
-Dunque, dalla caduta di tensione ai capi della resistenza $R1$ possiamo
-determinare la corrente di lavoro del diodo grazie alla legge di Ohm. 
-Si \`e quindi effettuato un filtraggio volto all'eliminazione degli outliers e 
-dei punti meno significativi, assumendoli quali variabili indipendenti e di 
-natura gaussiana. 
+d.d.p. tramite i fattori di conversione per l'ADC di \verb+Arduino+ per
+$V_{\rm ref} = 5 \si{\V}$ standard TTL e $V_{\rm ref} = 1.1 \si{\V}$
+interno, determinati con un semplice fit lineare.
+\begin{align*}
+	V_{\rm ref} &= 1.1\; \rm V	&V_{\rm ref} &= 5\; \rm V \\
+	m_1 &= 1.040 \pm  0.006  \; \mathrm{mV/digit} 
+	& m_5  &= 4.70 \pm 0.06  \; \mathrm{mV/digit} \\
+	q_1 &= 1.5 \pm 1.6  \; \si{\mV} 	
+	&q_5 &= 16  \pm 8  \; \si{\mV} \\
+	\corr{m_1} {q_1} &= - 0.28      &\corr{m_5}{q_5} &= - 0.24 \\
+	\chi^2/\text{ndof} &= 2.6/11	&\chi^2/\text{ndof} &= 0.7/11 \\ 
+	\text{abs\_sigma} &= \rm True	&\text{abs\_sigma} &= \rm True
+\end{align*}
 
+\begin{figure}[!htb]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{cal1.1}
+	\label{fig: cal1.1}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{cal5}
+	\label{fig: cal1}
+	\end{subfigure}
+\end{figure}
 \subsection{Oscillatore a reazione con BJT}
 
 \iffalse
@@ -241,10 +257,6 @@ in scala semilogaritmica.
 \end{center}
 \end{table}
 \fi
-Per l'implementazione si rimanda allo
-\href{https://github.com/BernardoTomellier/FFT/tree/master/fft_plot.py}
-{script}, dove \verb+lab.py+ fornisce le funzioni di appoggio e
-\verb+data.py+ definisce i parametri fondamentali in ingresso.
 
 \begin{figure}[!ht]
 \centering
@@ -252,7 +264,7 @@ Per l'implementazione si rimanda allo
 \label{fig: phs1_41}
 \end{figure}
 Si noti come, alla fine del segnale oscillante\footnote{alla fine del
-semiperiodo positivo dell'onda quadra in uscita dal generatore di funzioni}
+semiperiodo negativo dell'onda quadra in uscita dal generatore di funzioni}
 si riesce ad apprezzare un picco positivo di circa $100$ digit $\approx 97$ mV,
 questo coincide esattamente con il fronte di salita dell'onda quadra in
 ingresso al circuito RLC.
@@ -290,16 +302,22 @@ al picco finale.
 Per determinare i parametri ottimali e le rispettive covarianze si \`e
 implementato in \verb+Python+ un algoritmo di fit basato sui minimi quadrati
 mediante la funzione \emph{curve\_fit} della libreria 
-\texttt{SciPy}\cite{scipy}. Il modulo \texttt{signal} della stessa libreria
-è stato usato per l'implementazione dei filtri numerici e delle finestre,
-mentre l'implementazione dell'algoritmo per il calcolo della FFT è lo stesso
-definito dalla libreria \texttt{NumPy}\cite{numpy}
+\texttt{SciPy}\cite{scipy}.
 Per tutti i fit su campionamenti digitali di \verb+Arduino+ si \`e imposto
 $\rm{abs\_sigma} =$ True, avendo preso come incertezza associata il valore
 convenzionale $\sigma = 1$ digit, per cui effettivamente si sta eseguendo
 un fit dei minimi quadrati. Per tutti gli altri campionamenti, in cui la
 sorgente principale di incertezza abbia natura non statistica o non meglio
 determinata si è posto $\rm{abs\_sigma} =$ False. 
+Il modulo \texttt{signal} della stessa libreria è stato usato per
+la realizzazione dei filtri numerici e delle finestre, mentre
+l'implementazione dell'algoritmo per il calcolo della FFT è lo stesso
+definito dalla libreria \texttt{NumPy}\cite{numpy}.
+Si rimanda ai
+\href{https://github.com/BernardoTomelleri/FFT/tree/master}{sorgenti}
+per ulteriori informazioni sugli script utilizzati, dove \verb+lab.py+ funge
+da libreria di funzioni di appoggio e \verb+data.py+ definisce i parametri
+fondamentali in ingresso per l'analisi dei dati.
 %================================================================
 %                          Conclusioni
 %================================================================
@@ -312,8 +330,6 @@ determinata si è posto $\rm{abs\_sigma} =$ False.
 La parte pi\`u semplice nel filtraggio dati consiste nello scartare tutti quei
 punti che distano da $\mu_y$ pi\`u di una soglia arbitraria $k$ di deviazioni
 standard $\sigma_y$ (nel nostro caso \`e stato scelto $k = 3$).
-Si rimanda ai 
-\href{https://github.com/BernardoTomelleri/FFT/tree/master}{sorgenti}.
 \iffalse
 \begin{figure}[!htbp]
 \centering

@@ -19,7 +19,7 @@ log = False # log-scale axis/es
 dB = False # plots response y-axis in deciBels
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-DAQ = False # Use a real sampled singal or simulate it internally 
+DAQ = True # Use a real sampled singal or simulate it internally 
 
 x_min = 0.; x_max = 1
 t = np.linspace(x_min, x_max, 100_000)
@@ -35,7 +35,7 @@ else: DSO = False
 fs = len(t)/x_max
 noise = np.random.normal(loc=0, scale=20, size=len(t))
 print('Gaussian Noise: avg = %.2f std = %.2f' %(np.mean(noise), np.std(noise)))
-Vsig+=noise
+if not DAQ: Vsig+=noise
 Vsin = sine(t, *ref); Vcos = cosn(t, *ref)
 
 Vsin = np.multiply(Vsin, Vsig); Vcos = np.multiply(Vcos, Vsig)

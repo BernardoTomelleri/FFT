@@ -269,7 +269,7 @@ def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
     #     })
     fig, (ax1, ax2) = plt.subplots(2,1, True, gridspec_kw={
     'wspace':0.05, 'hspace':0.05, 'height_ratios': [3, 1]})
-    space = np.linspace(np.min(xmes-dx), np.max(xmes+dx), 2000)
+    space = np.linspace(np.min(xmes-dx), np.max(xmes+dx), 5000)
     chisq, ndof, resn = chitest(ymes, dy, model(xmes, *pars), ddof=len(pars))
     ax1 = grid(ax1)
     ax1.errorbar(xmes, ymes, dy, dx, 'ko', ms=1.5, elinewidth=1., capsize=1.5,
