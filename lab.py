@@ -138,7 +138,7 @@ def FWHM(x, y, FT=None):
     if FT: x=np.fft.fftshift(x); y=np.abs(np.fft.fftshift(y))
     d = y - (np.max(y) / 2.)
     indexes = np.where(d > 0)[0]
-    # for i in indexes: print(i, x[i])
+    for i in indexes: print(i, x[i])
     return np.abs(x[indexes[0]] - x[indexes[1]])
 
 def optm(x, y, minm=None, absv=None):

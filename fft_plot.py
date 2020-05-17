@@ -7,16 +7,16 @@ Computes Fast Fourier Transforms and fits periodic signals.
 """
 from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor,
                  std_unc, prnpar, prncor, outlier, pltfitres, tick, logy,
-                 FFT, plotfft, FWHM, optm, cosn)
+                 FFT, plotfft, FWHM, optm, cosn, dosc)
 from sys import exit
 
 ''' Variables that control the script '''
-fit = True # attempt to fit the data
-log = True # log-scale axis/es
-dB = False # plots response y-axis in deciBels
+fit = True # attempt to fit the data to function
+lock = False # Lock-in amplify data before FFT
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-lock = False # Lock-in amplify data before FFT
+log = True # log-scale axis/es
+dB = False # plots response y-axis in deciBels
 function = sine
 
 if lock: from lockin import t as x, Xmag as y, DSO; fit = False
@@ -33,7 +33,7 @@ ax.errorbar(x, y, dy, dx, 'ko', ms=1.2, elinewidth=0.8, capsize= 1.1,
         ls='',label='data', zorder=5)
 ax.plot(x, y, 'gray', ls='-', lw=0.8, alpha = 0.8)
 if fit:
-    init = (0.7, 168, 0., np.mean(sy)) if DSO else (400, 720, 0., np.mean(sy))
+    init = (0.7, 168, 0., np.mean(sy)) if DSO else (400, 720, 0., np.mean(sy), 0.02)
     ax.plot(xx, function(xx, *init), 'k--', lw=0.8, zorder=10, alpha =0.6,
                 label='initial fit')
 legend = ax.legend(loc ='best')
@@ -42,14 +42,14 @@ if tix:
     if DSO: tick(ax, ymaj=0.1)
 
 # FFT Computation with numpy window functions
-freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.bartlett, beta=None)
-fmax, fftmax = optm(freq, tran, absv=True)
+freq, tran, fres, frstd = FFT(time=sx, signal=sy, window=np.bartlett, beta=None)
+fmax, fftmax = optm(np.fft.fftshift(freq), np.fft.fftshift(tran), absv=True)
 print("Fundamental frequency = %.2f peak magnitude = %.2f" %(fmax, fftmax))
 fwhm = FWHM(freq, tran, FT=True); print("FWHM = %.2f Hz" %fwhm)
 # FFT and signal plot
-fig, (ax1, ax2) = plotfft(freq, tran, signal=(x,dx,y,dy), norm=True,
+fig, (ax1, ax2) = plotfft(freq, tran, signal=(sx,sdx,sy,sdy), norm=True,
                           dB=False, re_im=False)
-ax2.set_xlim(0, 700)
+ax2.set_xlim(0, 1000)
 if log: logy(ax2, 16)
 elif tix:
     tick(ax2, xmaj=100, ymaj=1e3)
