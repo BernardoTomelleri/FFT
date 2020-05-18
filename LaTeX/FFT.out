@@ -8,7 +8,8 @@
 \BOOKMARK [3][-]{subsubsection.3.1.1}{Circuiti RLC}{subsection.3.1}% 8
 \BOOKMARK [3][-]{subsubsection.3.1.2}{Oscillatore a reazione con BJT}{subsection.3.1}% 9
 \BOOKMARK [1][-]{section.4}{Analisi dati e Risultati}{}% 10
-\BOOKMARK [2][-]{subsection.4.1}{Oscillatore a reazione con BJT}{section.4}% 11
-\BOOKMARK [2][-]{subsection.4.2}{Nota sull'implementazione}{section.4}% 12
-\BOOKMARK [1][-]{section.5}{Conclusioni}{}% 13
-\BOOKMARK [2][-]{subsection.5.1}{Filtro outliers}{section.5}% 14
+\BOOKMARK [2][-]{subsection.4.1}{Circuiti RLC}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.2}{Oscillatore a reazione con BJT}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.3}{Nota sull'implementazione}{section.4}% 13
+\BOOKMARK [1][-]{section.5}{Conclusioni}{}% 14
+\BOOKMARK [2][-]{subsection.5.1}{Filtro outliers}{section.5}% 15

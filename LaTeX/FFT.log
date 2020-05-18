@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.4)  17 MAY 2020 18:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.4)  18 MAY 2020 03:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1292,7 +1292,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `fvm' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-<./figs/RLCschm.png, id=97, 1361.085pt x 566.86781pt>
+<./figs/RLCschm.png, id=101, 1361.085pt x 566.86781pt>
 File: ./figs/RLCschm.png Graphic file (type png)
 <use ./figs/RLCschm.png>
 Package pdftex.def Info: ./figs/RLCschm.png  used on input line 170.
@@ -1300,13 +1300,13 @@ Package pdftex.def Info: ./figs/RLCschm.png  used on input line 170.
 
 
 pdfTeX warning: pdflatex (file ./figs/BJTschm.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<./figs/BJTschm.pdf, id=98, 285.6833pt x 130.51964pt>
+<./figs/BJTschm.pdf, id=102, 285.6833pt x 130.51964pt>
 File: ./figs/BJTschm.pdf Graphic file (type pdf)
 <use ./figs/BJTschm.pdf>
 Package pdftex.def Info: ./figs/BJTschm.pdf  used on input line 182.
 (pdftex.def)             Requested size: 398.33858pt x 182.00328pt.
 [3 <./figs/RLCschm.png>]
-<./figs/cal1.1.pdf, id=106, 462.52798pt x 341.8371pt>
+<./figs/cal1.1.pdf, id=110, 462.52798pt x 341.8371pt>
 File: ./figs/cal1.1.pdf Graphic file (type pdf)
 <use ./figs/cal1.1.pdf>
 Package pdftex.def Info: ./figs/cal1.1.pdf  used on input line 208.
@@ -1316,7 +1316,7 @@ Overfull \hbox (14.22636pt too wide) in paragraph at lines 208--210
 [][]
  []
 
-<./figs/cal5.pdf, id=107, 462.52798pt x 341.8371pt>
+<./figs/cal5.pdf, id=111, 462.52798pt x 341.8371pt>
 File: ./figs/cal5.pdf Graphic file (type pdf)
 <use ./figs/cal5.pdf>
 Package pdftex.def Info: ./figs/cal5.pdf  used on input line 212.
@@ -1326,47 +1326,133 @@ Overfull \hbox (14.22636pt too wide) in paragraph at lines 212--214
 [][]
  []
 
-<./figs/phs1_41.pdf, id=108, 462.52798pt x 341.8371pt>
-File: ./figs/phs1_41.pdf Graphic file (type pdf)
-<use ./figs/phs1_41.pdf>
-Package pdftex.def Info: ./figs/phs1_41.pdf  used on input line 263.
+<./figs/RLC0.1b3.pdf, id=112, 462.52798pt x 341.8371pt>
+File: ./figs/RLC0.1b3.pdf Graphic file (type pdf)
+<use ./figs/RLC0.1b3.pdf>
+Package pdftex.def Info: ./figs/RLC0.1b3.pdf  used on input line 221.
 (pdftex.def)             Requested size: 462.52684pt x 341.83624pt.
 
-Overfull \hbox (7.28273pt too wide) in paragraph at lines 263--265
+Overfull \hbox (7.28273pt too wide) in paragraph at lines 221--223
  [][] 
+ []
+
+<./figs/RLC0.1b3_net.pdf, id=113, 462.52798pt x 341.8371pt>
+File: ./figs/RLC0.1b3_net.pdf Graphic file (type pdf)
+<use ./figs/RLC0.1b3_net.pdf>
+Package pdftex.def Info: ./figs/RLC0.1b3_net.pdf  used on input line 250.
+(pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
+<./figs/RLC0.47b3.pdf, id=114, 462.52798pt x 341.8371pt>
+File: ./figs/RLC0.47b3.pdf Graphic file (type pdf)
+<use ./figs/RLC0.47b3.pdf>
+Package pdftex.def Info: ./figs/RLC0.47b3.pdf  used on input line 251.
+(pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
+<./figs/RLC0.22b3.pdf, id=115, 462.52798pt x 341.8371pt>
+File: ./figs/RLC0.22b3.pdf Graphic file (type pdf)
+<use ./figs/RLC0.22b3.pdf>
+Package pdftex.def Info: ./figs/RLC0.22b3.pdf  used on input line 252.
+(pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 250--253
+[][]
+ []
+
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 250--253
+[]
+ []
+
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 250--253
+[] 
+ []
+
+<./figs/RLC0.1b3_traf.pdf, id=116, 462.52798pt x 341.8371pt>
+File: ./figs/RLC0.1b3_traf.pdf Graphic file (type pdf)
+<use ./figs/RLC0.1b3_traf.pdf>
+Package pdftex.def Info: ./figs/RLC0.1b3_traf.pdf  used on input line 255.
+(pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
+<./figs/RLC0.22b3_traf.pdf, id=117, 462.52798pt x 341.8371pt>
+File: ./figs/RLC0.22b3_traf.pdf Graphic file (type pdf)
+<use ./figs/RLC0.22b3_traf.pdf>
+Package pdftex.def Info: ./figs/RLC0.22b3_traf.pdf  used on input line 256.
+(pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
+<./figs/RLC0.47b5_all.pdf, id=118, 462.52798pt x 341.8371pt>
+File: ./figs/RLC0.47b5_all.pdf Graphic file (type pdf)
+<use ./figs/RLC0.47b5_all.pdf>
+Package pdftex.def Info: ./figs/RLC0.47b5_all.pdf  used on input line 257.
+(pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 255--258
+[][]
+ []
+
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 255--258
+[]
+ []
+
+
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 255--258
+[] 
  []
 
 [4 <./figs/BJTschm.pdf> <./figs/cal1.1.pdf> <./figs/cal5.pdf
 
 pdfTeX warning: pdflatex (file ./figs/cal5.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] (./FFT.bbl [5 <./figs/phs1_41.pdf>]) [6]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 357.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 357.
+>]
+<./figs/phs1_41.pdf, id=176, 462.52798pt x 341.8371pt>
+File: ./figs/phs1_41.pdf Graphic file (type pdf)
+<use ./figs/phs1_41.pdf>
+Package pdftex.def Info: ./figs/phs1_41.pdf  used on input line 306.
+(pdftex.def)             Requested size: 462.52684pt x 341.83624pt.
+
+Overfull \hbox (7.28273pt too wide) in paragraph at lines 306--308
+ [][] 
+ []
+
+[5 <./figs/RLC0.1b3.pdf>] [6 <./figs/RLC0.1b3_net.pdf> <./figs/RLC0.47b3.pdf
+
+pdfTeX warning: pdflatex (file ./figs/RLC0.47b3.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> <./figs/RLC0.22b3.pdf
+
+pdfTeX warning: pdflatex (file ./figs/RLC0.22b3.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> <./figs/RLC0.1b3_traf.pdf
+
+pdfTeX warning: pdflatex (file ./figs/RLC0.1b3_traf.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> <./figs/RLC0.22b3_traf.pdf
+
+pdfTeX warning: pdflatex (file ./figs/RLC0.22b3_traf.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+> <./figs/RLC0.47b5_all.pdf
+
+pdfTeX warning: pdflatex (file ./figs/RLC0.47b5_all.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+>] (./FFT.bbl [7 <./figs/phs1_41.pdf>]) [8]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 366.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 366.
  (./FFT.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 357.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 357.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 366.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 366.
 Package rerunfilecheck Info: File `FFT.out' has not changed.
-(rerunfilecheck)             Checksum: 850E9C53A17FE9FC4E32208BA7F80AD2;926.
+(rerunfilecheck)             Checksum: DC18D75E14E7522E9904D47A92F5A622;988.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 3.35835pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 357.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 366.
  ) 
 Here is how much of TeX's memory you used:
- 54423 strings out of 481239
- 1337329 string characters out of 5920378
- 2059843 words of memory out of 5000000
- 68528 multiletter control sequences out of 15000+600000
- 646541 words of font info for 387 fonts, out of 8000000 for 9000
+ 54499 strings out of 481239
+ 1338829 string characters out of 5920378
+ 2059842 words of memory out of 5000000
+ 68580 multiletter control sequences out of 15000+600000
+ 647103 words of font info for 395 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 76i,23n,121p,958b,883s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/fpl/fplrc8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on FFT.pdf (6 pages, 543550 bytes).
+ 76i,23n,121p,958b,1024s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/fpl/fplrc8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
+Output written on FFT.pdf (8 pages, 901356 bytes).
 PDF statistics:
- 247 PDF objects out of 1000 (max. 8388607)
- 203 compressed objects within 3 object streams
- 43 named destinations out of 1000 (max. 500000)
- 93334 words of extra memory for PDF output out of 106986 (max. 10000000)
+ 425 PDF objects out of 1000 (max. 8388607)
+ 335 compressed objects within 4 object streams
+ 49 named destinations out of 1000 (max. 500000)
+ 93377 words of extra memory for PDF output out of 106986 (max. 10000000)
 

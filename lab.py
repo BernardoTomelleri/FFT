@@ -25,7 +25,7 @@ def cosn(t, A, frq, phs=0, ofs=0):
 
 def dosc(t, A, frq, phs, ofs, tau):
     """ Dampened oscillation model function. Std argument order + tau"""
-    return np.exp(-t/tau)*sine(t, A, frq, phs) + ofs
+    return np.exp(-t/tau)*cosn(t, A, frq, phs) + ofs
 
 def trg(t, A, frq, phs=0, ofs=0, duty=0.5):
     """ Triangular wave model function. Std argument order + duty cycle"""
@@ -138,8 +138,9 @@ def FWHM(x, y, FT=None):
     if FT: x=np.fft.fftshift(x); y=np.abs(np.fft.fftshift(y))
     d = y - (np.max(y) / 2.)
     indexes = np.where(d > 0)[0]
-    for i in indexes: print(i, x[i])
-    return np.abs(x[indexes[0]] - x[indexes[1]])
+    if FT: indexes = [i for i in indexes if x[i] > 0]
+    if len(indexes) >= 2:   
+        return np.abs(x[indexes[-1]] - x[indexes[0]])
 
 def optm(x, y, minm=None, absv=None):
     """ Evaluates minima or maxima (default) of y as a function of x. """
@@ -256,7 +257,7 @@ def outlier(xmes, dx, ymes, dy, model, pars, thr=5, out=False):
     
     return xmes[isin], dx[isin], ymes[isin], dy[isin]
 
-def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
+def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, out=None):
 # Variables that control the script 
     # kwargs.setdefault(
     #     {
@@ -269,7 +270,8 @@ def pltfitres(xmes, dx, ymes, dy=None, model=None, pars=None, **kwargs):
     #     })
     fig, (ax1, ax2) = plt.subplots(2,1, True, gridspec_kw={
     'wspace':0.05, 'hspace':0.05, 'height_ratios': [3, 1]})
-    space = np.linspace(np.min(xmes-dx), np.max(xmes+dx), 5000)
+    space = np.linspace(np.min(0.9*xmes), np.max(1.1*xmes), 5000)
+    if out  is not None: space = np.linspace(np.min(0.9*out), np.max(1.1*out), 5000)
     chisq, ndof, resn = chitest(ymes, dy, model(xmes, *pars), ddof=len(pars))
     ax1 = grid(ax1)
     ax1.errorbar(xmes, ymes, dy, dx, 'ko', ms=1.5, elinewidth=1., capsize=1.5,
@@ -330,12 +332,12 @@ def plotfft(freq, tran, signal=None, norm=False, dB=False, re_im=False, mod_ph=F
                                                                'hspace':0.05})
     else: fig, (ax2, ax1) = plt.subplots(2, 1, gridspec_kw={'wspace':0.25,
                                                             'hspace':0.25}) 
-    ax1 = grid(ax1, xlab = 'Frequency $f$ [Hz]')
-    ax1.plot(freq, fft, c='k', lw='0.9')
+    ax1 = grid(ax1, xlab = 'Frequency $f$ [kHz]')
+    ax1.plot(freq, fft, c='k', lw='0.9', marker='o', ms=2.5)
     ax1.set_ylabel('$\widetilde{V}(f)$ Magnitude [%s]' %('dB' if dB else 'arb. un.'))
     if re_im: ax1.set_ylabel('Fourier Transform [Re]')    
 
-    ax2 = grid(ax2, 'Time $t$ [s]', '$V(t)$ [digit]')
+    ax2 = grid(ax2, 'Time $t$ [ms]', '$V(t)$ [mV]')
     if mod_ph or re_im: 
         fft = tran.imag if re_im else np.angle(tran)
         ax2.plot(freq, fft, c='k', lw='0.9')
@@ -344,8 +346,8 @@ def plotfft(freq, tran, signal=None, norm=False, dB=False, re_im=False, mod_ph=F
         if re_im: ax2.set_ylabel('Fourier Transform [Im]')    
     else:
         xmes, dx, ymes, dy = signal
-        ax2.errorbar(xmes, ymes, dy, dx, 'ko', ms=1.2, elinewidth=0.8,
-                     capsize= 1.1, ls='',label='data', zorder=5)
+        ax2.errorbar(xmes*1e3, ymes, dy, dx*1e3, 'ko', ms=1.2, elinewidth=0.8,
+                     capsize= 1.1, ls='-', lw=0.7, label='data', zorder=5)
     if signal: ax1, ax2 = [ax2, ax1]
     return fig, (ax1, ax2)
     

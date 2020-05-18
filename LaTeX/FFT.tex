@@ -213,6 +213,69 @@ interno, determinati con un semplice fit lineare.
 	\label{fig: cal1}
 	\end{subfigure}
 \end{figure}
+
+\subsection{Circuiti RLC}
+
+\begin{figure}[!htb]
+\centering
+	\includegraphics{RLC0.1b3}
+\label{fig: RLC0.1b3}
+\end{figure}
+Alla fine del segnale oscillante\footnote{alla fine del
+semiperiodo negativo dell'onda quadra in uscita dal generatore di funzioni}
+si riesce ad apprezzare un picco positivo di circa $100$ digit $\approx 104$ mV,
+questo coincide esattamente con il fronte di salita dell'onda quadra in
+ingresso al circuito RLC.
+Quando l'onda passa da LOW a HIGH, la corrente che scorre negli avvolgimenti
+dell'induttore passa da un intensità di circa $-100$ a $100 \si{\micro\A}$.
+Dunque, secondo la legge degli induttori la bobina genera una tensione
+proporzionale alla variazione dell'intensità di corrente:
+$\Delta V(t) = L \frac{\ud I}{\ud t}$
+il picco finale allora si deve alla stessa tensione che dà inizio
+all'oscillazione, però di segno opposto; però ora il circuito non inizia
+ad oscillare perché il diodo è in conduzione.
+Un secondo possibile contributo al picco di tensione alla
+fine del segnale oscillante è dato dalla capacità parassita
+della giunzione PN, che possiamo  modellare come un condensatore
+in parallelo al diodo. Quando il fronte d'onda sale rapidamente, parte
+dell'onda quadra viene "lasciata passare" dal condensatore, ma da 
+una simulazione con LTSpice ed una capacità (zero bias) nominale per
+il diodo a giunzione \texttt{1N194}: $Cjo = 4 \si{\pico\farad}$
+il contributo al picco finale risulta dell'ordine di qualche $\si{\nano\V}$.
+Dunque l'effetto dell'accoppiamento capacitivo risulta decisamente trascurabile
+rispetto alla risoluzione del sistema di acquisizione.
+\begin{figure}[!htb]
+\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{RLC0.1b3_net} 
+		\includegraphics[width=8.5cm]{RLC0.47b3} 
+		\includegraphics[width=8.5cm]{RLC0.22b3} 
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{RLC0.1b3_traf}
+		\includegraphics[width=8.5cm]{RLC0.22b3_traf}
+		\includegraphics[width=8.5cm]{RLC0.47b5_all}
+	\end{subfigure}%
+\label{fig: RLCall}
+\end{figure}
+
+\begin{table}[!htb]
+\begin{center}
+\begin{tabular}{llllll}
+	\toprule
+	$C\; [\si{\micro\F}]$  &$f_0 [\si{\Hz}]$ & $\tau [\si{\ms}]$
+	& $Q_f$ & $L [\si{\henry}]$ & $R [\si{\ohm}]$ \\ 
+	\midrule
+	\midrule
+	$0.1 \pm 10 \% $ & $659.732 \pm 0.020$ & $12.522 \pm 0.019$ & $28$ \\
+	$0.22 \pm 10 \% $ &$431.687 \pm 0.034$ & $ 16.551 \pm 0.028$ & $23$ \\
+	$0.47 \pm 10 \% $ & $325.409 \pm 0.011$ & $21.982 \pm 0.033$ & $18$ \\ 
+	\bottomrule
+\end{tabular}
+\caption{I valori delle resistenze poste in serie al diodo, riportate in
+	valore nominale e misurate con multimetro digitale. \label{tab: res}}
+\end{center}
+\end{table}
 \subsection{Oscillatore a reazione con BJT}
 
 \iffalse
@@ -236,26 +299,6 @@ Infine si mostrano i dati acquisiti con sovrapposta la funzione di best-fit
 nei grafici \ref{fig: sck_lin}, in scala lineare, e \ref{fig: sck_log}
 in scala semilogaritmica. 
 
-\begin{table}[H]
-\begin{center}
-\begin{tabular}{lll}
-	\toprule
-	$R1$ nom. [$\si{\ohm}$] & $R1$ mis. [$\si{\ohm}$] \\ 
-	\midrule
-	\midrule
-	$0.22 \pm 3 \% $         	& $0.226 \pm 0.008$ \\
-	$2.2 \pm 5 \% $          	& $2.212 \pm 0.008$ \\
-	$22 \pm 5 \% $           	& $21.86 \pm 0.010$ \\ 
-	$220 \pm 5 \% $          	& $216.22 \pm 0.07$ \\
-	$2.2\; \si{k} \pm 5 \% $       & $2202.1 \pm 0.4$ \\
-	$22\; \si{k} \pm 5 \% $       & ($21.7 \pm 0.3)10^3$ \\
-	$0.22\; \si{M} \pm 5 \% $      & ($217 \pm 3)10^3$ \\
-	\bottomrule
-\end{tabular}
-\caption{I valori delle resistenze poste in serie al diodo, riportate in
-	valore nominale e misurate con multimetro digitale. \label{tab: res}}
-\end{center}
-\end{table}
 \fi
 
 \begin{figure}[!ht]
@@ -263,40 +306,6 @@ in scala semilogaritmica.
 	\includegraphics{phs1_41.pdf}
 \label{fig: phs1_41}
 \end{figure}
-Si noti come, alla fine del segnale oscillante\footnote{alla fine del
-semiperiodo negativo dell'onda quadra in uscita dal generatore di funzioni}
-si riesce ad apprezzare un picco positivo di circa $100$ digit $\approx 97$ mV,
-questo coincide esattamente con il fronte di salita dell'onda quadra in
-ingresso al circuito RLC.
-Questo si deve alla somma di due effetti: Quando l'onda passa da LOW a
-HIGH, la corrente che scorre nella maglia RLC passa da circa $-100$ a
-$100 \si{\micro\A}$. Dunque la bobina da $L=0.5 \si{\H}$ fornisce una tensione
-$DV(t) = L \frac{\ud I}{\ud t}$ secondo la legge degli induttori.
-Un secondo possibile contributo al picco di tensione alla
-fine del segnale oscillante è dovuto all'accoppiamento capacitivo/capacità
-parassita del diodo, che possiamo modellare come $Cjo = 1-4 \si{\pico\farad}$
-in parallelo al diodo. Quando il fronte d'onda sale rapidamente, parte dell'onda
-quadra viene lasciata passare dal condensatore, aggiungendo qualche $\si{\nano\V}$
-al picco finale.
-\iffalse
-\begin{figure}[H]
-	\centering 
-		\includegraphics[width=16cm, height= 11cm]
-		{100skip_linear}
-	\caption{Dati acquisiti e funzione di best-fit \eqref{eq: model}. E' 
-	stato rappresentato un punto ogni 100 per comodit\`a di visualizzazione.
-	\label{fig: sck_lin}}
-\end{figure}
-
-\begin{figure}[!htp]
-	\centering 
-		\includegraphics[width=16cm, height= 9.9cm]{10skip_semilog}
-	\caption{Dati acquisiti e funzione di best fit \eqref{eq: model} in 
-	scala semilogaritmica. A scopo illustrativo sono stati rappresentati anche
-	i dati della serie $220\si{\kohm}$. E' stato disegnato un punto ogni 10
-	per comodit\`a di visualizzazione. \label{fig: sck_log}}
-\end{figure}
-\fi
 
 \subsection{Nota sull'implementazione}
 Per determinare i parametri ottimali e le rispettive covarianze si \`e

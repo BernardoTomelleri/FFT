@@ -5,16 +5,17 @@ Created on Sat May  9 17:57:56 2020
 @author: berni
 Reads in input from data files and defines its source for subsequent analysis
 """
-from lab import np, srange
-DSO = True # Sampling from Digital Oscilloscope
+from lab import np, srange, std_unc
+DSO = False # Sampling from Digital Oscilloscope
 AC = True # Cut constant DC offset from zero (AC coupling)
 
+m1 = 1.040; m5 = 4.70
 # Extrazione dei vettori di dati grezzi
 Dir = './RLC_data/'
 V1, V2 = np.loadtxt(Dir +'long0.1uF_b3' +'.txt', unpack=True)#,
                     #skiprows=2*256, max_rows=250)
 V1*=1e-6
-x_min = 0; x_max = x_min + 0.047
+x_min = 20e-6; x_max = x_min + 0.047
 
 if DSO:
     Dir ='phase_shift/DSO/' 
@@ -24,8 +25,9 @@ if DSO:
     
 # Trasformazione dei dati nelle grandezze da analizzare
 x = V1
-dx = np.full(len(x), (V1[1]-V1[2])/2)
+dx = std_unc(x) if DSO else np.full(len(x), 4e-6)
 y = V2 - np.mean(V2) if AC else V2
-dy = np.full(len(y), (V2[1]-V2[2])/5) if DSO else np.ones_like(V2)
+dy = np.full(len(y), (V2[1] - V2[0])/4) if DSO else np.ones_like(V2)
+if not DSO: y*=m1; dy*=m1
 # Estrazione di un sottointervallo di dati
 sx, sdx, sy, sdy = srange(x, dx, y, dy, x_min, x_max)
