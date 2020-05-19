@@ -147,12 +147,28 @@ condizioni di lavoro.
 %================================
 \subsection{Apparato}
 L'apparato sperimentale consiste di diversi circuiti elettrici,
-realizzati con componenti pre-assemblati in laboratorio. Per
-monitorare la risposta dei circuiti si utilizzano i canali di un oscilloscopio
+realizzati con componenti pre-assemblati in laboratorio ed un generatore di
+funzioni (GFG-8200A).
+Per monitorare la risposta dei circuiti si utilizzano i canali di un oscilloscopio
 analogico ($50$ MHz) e uno digitale ($200$ MHz), mentre per l'acquisizione dei
 segnali di d.d.p. compresi tra $0$ e $5$ V si fa uso del convertitore ADC
 del MCU \verb+Arduino UNO+.
 
+\subsubsection{Circuito RC}
+Si è costruito un circuito integratore RC o filtro passa-basso (LPF),
+prendendo il valore nominale come riferimento per la capacità e misurando
+con un multimetro digitale la resistenza in serie, le caratteristiche del
+circuito risultano:
+\begin{align*}
+R &= 6.72 \pm 0.05 \; \si{\kilo\ohm}\\
+C &= 2.2 \pm 10\% \; \si{\micro\F}\\
+f_{\rm T} &= \frac{1}{2 \pi R C} = 11 \pm 1 \; \si{\hertz}
+\end{align*}
+\begin{figure}[!htb]
+	\centering
+	\input{RC}
+	\caption{Schema circuitale dell'integratore RC \label{fig: RC}}
+\end{figure}
 \subsubsection{Circuiti RLC}
 Nel nostro caso l'induttore è costituito da due avvolgimenti concentrici
 e coassiali, ciascuno dotato di 1500 spire, che montati in serie hanno un
@@ -214,13 +230,32 @@ interno, determinati con un semplice fit lineare.
 	\end{subfigure}
 \end{figure}
 
-\subsection{Circuiti RLC}
+\subsection{Circuito RC e generatore di Funzioni}
 
+\begin{figure}[!htb]
+\centering
+	\begin{subfigure}{.5\textwidth}
+	\includegraphics[width=8.5cm]{RCsin50}
+	\includegraphics[width=8.5cm]{DSOsqw200}
+	\includegraphics[width=8.5cm]{RCtrg100}
+\label{fig: RCin}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	\includegraphics[width=8.5cm]{DSOsin200}
+	\includegraphics[width=8.5cm]{RCfin50}
+	\includegraphics[width=8.5cm]{RCpar100}
+\label{fig: Rcint}
+	\end{subfigure}%
+\label{fig: RCall}
+\end{figure}
+
+\subsection{Circuiti RLC}
 \begin{figure}[!htb]
 \centering
 	\includegraphics{RLC0.1b3}
 \label{fig: RLC0.1b3}
 \end{figure}
+
 Alla fine del segnale oscillante\footnote{alla fine del
 semiperiodo negativo dell'onda quadra in uscita dal generatore di funzioni}
 si riesce ad apprezzare un picco positivo di circa $100$ digit $\approx 104$ mV,
@@ -261,50 +296,44 @@ rispetto alla risoluzione del sistema di acquisizione.
 
 \begin{table}[!htb]
 \begin{center}
-\begin{tabular}{llllll}
+\begin{tabular}{cc||cccc}
 	\toprule
-	$C\; [\si{\micro\F}]$  &$f_0 [\si{\Hz}]$ & $\tau [\si{\ms}]$
-	& $Q_f$ & $L [\si{\henry}]$ & $R [\si{\ohm}]$ \\ 
+	Nucleo & $C\; \pm 10 \% [\si{\micro\F}]$ & $f_0 [\si{\Hz}]$ & $\tau [\si{\ms}]$ 
+	& $L \pm 10 \% [\si{\henry}]$ & $Q_f$ \\
 	\midrule
 	\midrule
-	$0.1 \pm 10 \% $ & $659.732 \pm 0.020$ & $12.522 \pm 0.019$ & $28$ \\
-	$0.22 \pm 10 \% $ &$431.687 \pm 0.034$ & $ 16.551 \pm 0.028$ & $23$ \\
-	$0.47 \pm 10 \% $ & $325.409 \pm 0.011$ & $21.982 \pm 0.033$ & $18$ \\ 
+	 & $0.1$ & $659.73 \pm 0.02$ & $12.52 \pm 0.02$ & $0.53$ & $28$ \\
+	Aria & $0.22$ &$431.69 \pm 0.03$ & $ 16.55 \pm 0.03$ & $0.52$ & $23$ \\
+	 & $0.47$ & $325.41 \pm 0.01$ & $21.98 \pm 0.03$ & $0.51$ & $18$ \\ 
+	\midrule
+	 & $0.1$ & $790.25 \pm 0.07$ & $5.19 \pm 0.01$ & $0.41$ & $13$\\
+	Alluminio & $0.22$ & $517.60 \pm 0.09$ & $6.54 \pm 0.02$ & $0.43$ & $10 $ \\
+	 & $0.47$ & $353.51 \pm 0.06$ & $7.88 \pm 0.02$ & $0.44$ & $8$ \\
 	\bottomrule
 \end{tabular}
-\caption{I valori delle resistenze poste in serie al diodo, riportate in
-	valore nominale e misurate con multimetro digitale. \label{tab: res}}
+\caption{Risultati trovati, dall'analisi di spettro e nel dominio del tempo,
+degli effetti sulla qualità dell'oscillazione dovuti a nuclei di materiale
+diverso nel cuore dell'induttore. \label{tab: RLC}}
 \end{center}
 \end{table}
+
 \subsection{Oscillatore a reazione con BJT}
 
-\iffalse
-Si riportano i valori ottimali dei parametri stimati dal fit e le relative
-covarianze: 
-\begin{align*}
-R_{\text{diodo}} &= 46.112\iffalse 18 \fi \pm 0.007\iffalse 2 \fi \; \si{\mohm} 
-&\sigma_{I_0, \eta V_T} &= 0.97  \\
-\eta V_T &= 47.579\iffalse 86 \fi \pm 0.003\iffalse 3 \fi \; \si{\mV} 	
-&\sigma_{I_0, R_d} &= -0.62 \\
-I_0 &= 4.518\iffalse 0 \fi \pm 0.004\iffalse 3 \fi \; \si{\nA}
-&\sigma_{I_0, \text{ofst}} &= -0.49 \\
-\text{offset} &=\; - 2.204\iffalse 3 \fi \pm 0.007 \iffalse 3 \fi \; \si{\uA}
-&\sigma_{\eta V_T, R_d} &= -0.70  \\ 
-\chi^2/\text{ndof} &= 72207/251066
-&\sigma_{\eta V_T, \text{ofst}} &= -0.43\\
-\text{abs\_sigma} &= \rm False
-&\sigma_{R_d, \text{ofst}} &= 0.22
-\end{align*}
-Infine si mostrano i dati acquisiti con sovrapposta la funzione di best-fit
-nei grafici \ref{fig: sck_lin}, in scala lineare, e \ref{fig: sck_log}
-in scala semilogaritmica. 
-
-\fi
-
-\begin{figure}[!ht]
+\begin{figure}[!htb]
 \centering
-	\includegraphics{phs1_41.pdf}
-\label{fig: phs1_41}
+	\begin{subfigure}{.5\textwidth}
+	\includegraphics[width=8.5cm]{DSObjt44}
+	\includegraphics[width=8.5cm]{DSObjt201}
+	\includegraphics[width=8.5cm]{DSObjt206}
+\label{fig: BJTin}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	\includegraphics[width=8.5cm]{DSObjt44hamm}
+	\includegraphics[width=8.5cm]{DSObjt201blak}
+	\includegraphics[width=8.5cm]{DSObjt206bart}
+\label{fig: BJTwin}
+	\end{subfigure}%
+\label{fig: BJTall}
 \end{figure}
 
 \subsection{Nota sull'implementazione}
@@ -327,35 +356,14 @@ Si rimanda ai
 per ulteriori informazioni sugli script utilizzati, dove \verb+lab.py+ funge
 da libreria di funzioni di appoggio e \verb+data.py+ definisce i parametri
 fondamentali in ingresso per l'analisi dei dati.
+\subsubsection{Filtro outliers}
+La parte pi\`u semplice nel filtraggio dati consiste nello scartare tutti quei
+punti che distano da $\mu_y$ pi\`u di una soglia arbitraria $k$ di deviazioni
+standard $\sigma_y$ (nel nostro caso \`e stato scelto $k = 5$).
 %================================================================
 %                          Conclusioni
 %================================================================
 \section{Conclusioni}
-
-%================================
-%        Filtro outliers
-%================================
-\subsection{Filtro outliers}
-La parte pi\`u semplice nel filtraggio dati consiste nello scartare tutti quei
-punti che distano da $\mu_y$ pi\`u di una soglia arbitraria $k$ di deviazioni
-standard $\sigma_y$ (nel nostro caso \`e stato scelto $k = 3$).
-\iffalse
-\begin{figure}[!htbp]
-\centering
-\begin{subfigure}{.5\textwidth}
-	\centering 
- 		\includegraphics[scale=0.5]{./nofilter.png}
-		\caption{\label{fig: nofilter}}	
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-	\centering 
- 		\includegraphics[scale=0.5]{./filtered.png}
- 	\caption{\label{fig: filtered}}
-\end{subfigure}
-\caption{Grafici in scala semilogaritmica prima (\ref{fig: nofilter}) e dopo} 
-\end{figure}
-\fi
-
 
 %================================================================
 %                            END

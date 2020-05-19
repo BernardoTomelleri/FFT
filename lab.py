@@ -319,25 +319,26 @@ def FFT(time, signal, window=None, beta=0, specres=None):
     
     if beta: window = lambda M: np.kaiser(M, beta=beta)
     elif window == np.kaiser: window = lambda M: np.kaiser(M, beta=0)
-    tran = np.fft.fftshift(np.fft.fft(signal*window(len(signal)), fftsize))
-    freq = np.fft.fftshift(np.fft.fftfreq(fftsize, d=fres))
+    tran = np.fft.rfft(signal*window(len(signal)), fftsize)
+    freq = np.fft.rfftfreq(fftsize, d=fres)
     if not specres: return freq, tran, fres, frstd
     return freq, tran
 
 def plotfft(freq, tran, signal=None, norm=False, dB=False, re_im=False, mod_ph=False):
-    fft = tran.real if re_im else 20*np.log10(np.abs(tran)) if dB else np.abs(tran)
+    fft = tran.real if re_im  else np.abs(tran)
     if norm: fft/=np.max(fft)
+    if dB: fft = 20*np.log10(np.abs(fft))
     if mod_ph or re_im:
         fig, (ax1, ax2) = plt.subplots(2,1, True, gridspec_kw={'wspace':0.05,
                                                                'hspace':0.05})
     else: fig, (ax2, ax1) = plt.subplots(2, 1, gridspec_kw={'wspace':0.25,
                                                             'hspace':0.25}) 
-    ax1 = grid(ax1, xlab = 'Frequency $f$ [kHz]')
-    ax1.plot(freq, fft, c='k', lw='0.9', marker='o', ms=2.5)
+    ax1 = grid(ax1, xlab = 'Frequency $f$ [Hz]')
+    ax1.plot(freq, fft, c='k', lw='0.9')
     ax1.set_ylabel('$\widetilde{V}(f)$ Magnitude [%s]' %('dB' if dB else 'arb. un.'))
     if re_im: ax1.set_ylabel('Fourier Transform [Re]')    
 
-    ax2 = grid(ax2, 'Time $t$ [ms]', '$V(t)$ [mV]')
+    ax2 = grid(ax2, 'Time $t$ [s]', '$V(t)$ [V]')
     if mod_ph or re_im: 
         fft = tran.imag if re_im else np.angle(tran)
         ax2.plot(freq, fft, c='k', lw='0.9')
@@ -346,7 +347,7 @@ def plotfft(freq, tran, signal=None, norm=False, dB=False, re_im=False, mod_ph=F
         if re_im: ax2.set_ylabel('Fourier Transform [Im]')    
     else:
         xmes, dx, ymes, dy = signal
-        ax2.errorbar(xmes*1e3, ymes, dy, dx*1e3, 'ko', ms=1.2, elinewidth=0.8,
+        ax2.errorbar(xmes, ymes, dy, dx, 'ko', ms=1.2, elinewidth=0.8,
                      capsize= 1.1, ls='-', lw=0.7, label='data', zorder=5)
     if signal: ax1, ax2 = [ax2, ax1]
     return fig, (ax1, ax2)

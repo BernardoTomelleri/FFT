@@ -1,0 +1,374 @@
+\documentclass{article}[a4paper, oneside, 11pt]
+\synctex=1
+\input{preamble}
+\input{math}
+
+\geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
+\title{Esercizio facoltativo* sulla FFT}
+\author{B.~Tomelleri \thanksdf}
+
+\begin{document}
+\maketitle
+
+%================================================================
+%                         Introduzione
+%================================================================
+\section{Introduzione}
+Si è rivisitato nel dominio delle frequenze lo studio di sistemi elettronici
+e meccanici, finora analizzati solamente nel dominio del tempo, attraverso l'uso
+di due strumenti fondamentali: la trasformata di Fourier Discreta (DFT) e la
+detezione sincrona o Lock In Detection/Amplification (LIA).
+
+%================================================================
+%                         Cenni teorici
+%================================================================
+\section{Cenni Teorici}
+La Trasformata di Fourier Discreta (o DFT) estende la trasformata di Fourier
+analitica a sistemi con variabile dinamica discreta. In particolare
+approfitteremo della velocità dell'algoritmo Cooley-Tukey \cite{FFT} o FFT
+per la nostra analisi.
+
+\subsection{Circuiti forzati e smorzati RLC}
+In un circuito costituito da almeno una resistenza, un induttore ed un
+condensatore (nel nostro caso collegati in serie) è possibile individuare una
+frequenza caratteristica $f_0 = \frac{\omega_0}{2\pi}$, detta propria o di
+risonanza, per cui il sistema è percorso da una corrente elettrica oscillante
+nel tempo.
+Infatti, quando il sistema è perturbato da una tensione alla frequenza
+$f_0 := \frac{1}{2\pi \sqrt{LC}}$ 
+le impedenze del condensatore e dell'induttore si annullano a vicenda, dunque
+l'impedenza del circuito si trova al proprio valor minimo, cioè la sola
+componente resistiva $R$ rimasta. Possiamo quindi descrivere il trasporto di
+carica nel circuito con l'equazione di un oscillatore smorzato:
+\begin{equation}\label{eq: RLC}
+	\frac{\partial^2 Q}{\partial t^2} + \frac{R}{L}\frac{\partial Q}{\partial t}
+	+ \omega_0^2 Q = 0   
+\end{equation}
+La cui soluzione, in termini della frequenza di oscillazione smorzata o
+pseudo-frequenza angolare $\omega$, dello pseudo periodo $T$ e del tempo
+caratteristico di smorzamento $\tau$:
+\begin{align*}
+	\omega &= \sqrt{\omega_0^2 - \frac{1}{\tau^2}} =
+	\sqrt{\frac{1}{LC} - \frac{1}{\tau^2}} \\
+	T &= \frac{2\pi}{\omega} \\
+	\tau &= \frac{2L}{R}
+\end{align*}
+si può scrivere come:
+\begin{align}\label{aln: Q(t)}
+	Q(t) &= A e^{-t/\tau} \cos{(\omega t + \phi)} \\
+	A &= \sqrt{c_1 c_2} \\
+	\tan{\phi} &= j\frac{c_1 + c_2}{c_1 - c_2}
+\end{align}
+dove i coefficienti $c_1$ e $c_2$ dipendono dalle condizioni iniziali del
+sistema. Secondo il nostro modello, la d.d.p. sulle armature del condensatore
+è determinata dalla relazione costitutiva di $C$ e le condizioni iniziali
+sono fissate dalla carica presente sulle armature $Q_0$ e dall'intensità
+di corrente $I_0$ che circola nel circuito all'inizio dell'oscillazione:
+\begin{align}\label{aln: Vc(t)}
+	V_C(t) &= \frac{Q(t)}{C} = \frac{A}{C}e^{-\frac{t}{\tau}}\cos(\omega t + \phi)\\
+	Q(t = 0) &= A\cos{\phi} := Q_0 \implies A = Q_0 \sqrt{1 + \tan^2{\phi}} \\
+	I(t) &= \frac{\partial Q}{\partial t} = A e^{-t/\tau} \left[
+	\frac{\cos{(\omega t + \phi)}}{\tau} + \omega\sin{(\omega t + \phi)} \right] \\
+	I(t = 0) &= A \left[ \frac{\cos{\phi}}{\tau} + \omega\sin{\phi} \right] 
+	\implies \phi = \arctan{\left( \frac{1}{\omega}\left[
+	\frac{I_0}{Q_0} - \frac{1}{\tau}\right] \right) }
+\end{align}
+
+\subsection{Quality Factor}
+Per descrivere la dissipazione media di energia da parte di sistemi oscillanti
+nel tempo si è introdotta la quantità adimensionale \emph{Quality factor}:
+\begin{equation}\label{eq: Qf}
+	Q_f := 2\pi \frac{E_{\text{stored}}}{E_{\text{lost/cycle}}}
+\end{equation}
+
+Per un circuito RLC il trasferimento reciproco di energia elettrostatica e
+magnetostatica, immagazzinate nel condensatore e nell'induttore rispettivamente,
+è massimo sotto l'effetto di una forzante alla stessa $f_0$ di risonanza.
+Possiamo esprimere l'energia interna all'induttore come $U_M = \frac{1}{2}LI^2$
+e quella accumulata dal condensatore come $U_E = \frac{1}{2C}Q^2$.
+Assumendo che all'inizio dell'oscillazione $t = 0 := t_0$ tutta l'energia del
+circuito sia contenuta all'interno dell'induttore, possiamo identificare
+$E_{\rm stored}$ con $U_M(t_0) := U_{M_0}$ e caratterizzare l'energia dissipata
+in ogni periodo con la relazione di Joule per gli effetti termico-dissipativi:
+\begin{align}
+	E_{\text{stored}} =& U_{M_0} = \frac{1}{2} LI_0^2 \\
+	E_{\text{lost/cycle}} =& \langle P_{\rm Joule} \rangle_t \cdot T = 
+	\frac{1}{2} RI_0^2 \cdot T\\
+	R :=& r + r_G 
+\end{align}
+Supponendo che il circuito sia perturbato da un segnale sinusoidale
+monocromatico, il metodo simbolico ci permette di legare la larghezza di riga
+della risposta in frequenza del circuito al tempo caratteristico di
+smorzamento, dunque al fattore di qualità dell'oscillazione.
+Nell'approssimazione di oscillazione sottosmorzata $\omega_0 \gg \frac{1}{\tau}
+\implies \omega = \sqrt{\omega_0^2 - \frac{1}{\tau^2}} \approx \omega_0$
+possiamo approssimare la larghezza a metà altezza della curva di risonanza con 
+\begin{equation}\label{eq: FWHM}
+	\Delta \omega_{\text{FWHM}}	\approx \sqrt{3} RC \omega_0^2 = 
+	\sqrt{3} \frac{R}{L} = \frac{2 \sqrt{3}}{\tau} 
+\end{equation}
+Per cui ci si aspetta che la larghezza della campana di risonanza sia
+proporzionale alla severità dello smorzamento/perdita di energia
+dell'oscillazione.
+In altre parole, per un circuito RLC il fattore di qualità atteso è:
+\begin{equation}\label{eq: QfFWHM}
+	Q_f \approx 2\pi \frac{\frac{1}{2}L I_0^2}{\frac{1}{2}R I_0^2 \cdot T_0}
+	= \omega_0 \frac{L}{R} = \omega_0 \frac{\tau}{2} 
+	= \sqrt{3} \frac{\omega_0}{\Delta \omega_{\text{FWHM}}} 
+\end{equation}
+
+\subsection{Oscillatore a reazione con BJT}
+Il secondo tipo di sistema oscillante studiato è un circuito dotato di
+un amplificatore invertente, un transistor a giunzione bipolare (BJT) montato
+ad emettitore comune (emitter-follower), ed un anello di feedback.
+Secondo il criterio di stabilità di Barkhausen, affinché un circuito
+elettrico lineare possa sostenere la propria auto-oscillazione è necessaria
+la presenza di un feedback positivo, i.e. lo sfasamento totale dovuto
+all'anello di feedback dev'essere un multiplo di $2\pi$. Nel nostro caso la
+condizione è soddisfatta interponendo una rete di sfasamento, costituita da
+3 filtri RC passa-alto passivi, che inverte nuovamente segno
+$\Delta \phi = \pi$
+al segnale in uscita dall'amplificatore. Vale la pena ricordare un
+modo equivalente per ottenere un sistema auto-oscillante, in cui lo stesso
+sfasamento (seppur opposto in segno) è dato dalla serie di un induttore ed
+un condensatore quello che va sotto il nome di oscillatore di Colpitts.
+%================================================================
+%                Metodo e apparato sperimentale
+%================================================================
+\section{Metodo e apparato sperimentale}
+Non si è monitorata la temperatura dei componenti dei circuiti studiati,
+tutti i collegamenti tra i componenti sono stati realizzati con cavi
+terminanti in connettori a banana. L'uso di \verb+Arduino+\cite{arduino}
+come sistema di acquisizione dati non permette di apprezzare le perturbazioni
+dovute alla temperatura o ai collegamenti dei componenti nelle nostre
+condizioni di lavoro.
+%================================
+%           Apparato
+%================================
+\subsection{Apparato}
+L'apparato sperimentale consiste di diversi circuiti elettrici,
+realizzati con componenti pre-assemblati in laboratorio ed un generatore di
+funzioni (GFG-8200A).
+Per monitorare la risposta dei circuiti si utilizzano i canali di un oscilloscopio
+analogico ($50$ MHz) e uno digitale ($200$ MHz), mentre per l'acquisizione dei
+segnali di d.d.p. compresi tra $0$ e $5$ V si fa uso del convertitore ADC
+del MCU \verb+Arduino UNO+.
+
+\subsubsection{Circuito RC}
+Si è costruito un circuito integratore RC o filtro passa-basso (LPF),
+prendendo il valore nominale come riferimento per la capacità e misurando
+con un multimetro digitale la resistenza in serie, le caratteristiche del
+circuito risultano:
+\begin{align*}
+R &= 6.72 \pm 0.05 \; \si{\kilo\ohm}\\
+C &= 2.2 \pm 10\% \; \si{\micro\F}\\
+f_{\rm T} &= \frac{1}{2 \pi R C} = 11 \pm 1 \; \si{\hertz}
+\end{align*}
+\begin{figure}[!htb]
+	\centering
+	\input{RC}
+	\caption{Schema circuitale dell'integratore RC \label{fig: RC}}
+\end{figure}
+\subsubsection{Circuiti RLC}
+Nel nostro caso l'induttore è costituito da due avvolgimenti concentrici
+e coassiali, ciascuno dotato di 1500 spire, che montati in serie hanno un
+fattore di auto-induzione $L \sim 0.5 \; \si{\henry}$ e i condensatori hanno
+capacità dai valori nominali: $C = \left\{0.1,\; 0.22,\; 0.47\right\} \pm
+10\% \; \si{\micro\farad}$. La componente resistiva $R$ del circuito è data
+dalle resistenze interne del generatore di tensione ($r_G = 50 \; \si{\ohm}$
+nominali) e dell'induttore, che indichiamo con: $r \approx 40 \;\si{\ohm}$.
+Le $3000$ spire totali di filo di rame negli avvolgimenti infatti
+influiscono apprezzabilmente e in maniera non banale sul trasferimento
+di energia all'interno del circuito.
+
+\begin{figure}[!htp]
+	\centering 
+		\includegraphics[width=14cm]{RLCschm}
+	\caption{Diagramma del circuito RLC studiato\label{schm: RLC}}
+\end{figure}
+
+\subsubsection{Oscillatore a reazione con BJT}
+Il potenziometro $R_p$ permette di variare la corrente di base $I_b$ 
+del transistor, mentre per regolare la corrente di collettore $I_c$ si variano
+le resistenze $R_c$ tra i valori nominali di $1 - 2.2 \pm 10 \% \; 
+\si{\kilo\ohm}$. 
+
+\begin{figure}[!htp]
+	\centering 
+		\includegraphics[width=14cm]{BJTschm}
+	\caption{Schema circuitale dell'oscillatore a reazione con BJT
+	studiato\label{schm: BJT}}
+\end{figure}
+%================================================================
+%                   Analisi dati e Risultati
+%================================================================
+\section{Analisi dati e Risultati}
+Inizialmente si sono convertite le acquisizioni e le incertezze associate in
+d.d.p. tramite i fattori di conversione per l'ADC di \verb+Arduino+ per
+$V_{\rm ref} = 5 \si{\V}$ standard TTL e $V_{\rm ref} = 1.1 \si{\V}$
+interno, determinati con un semplice fit lineare.
+\begin{align*}
+	V_{\rm ref} &= 1.1\; \rm V	&V_{\rm ref} &= 5\; \rm V \\
+	m_1 &= 1.040 \pm  0.006  \; \mathrm{mV/digit} 
+	& m_5  &= 4.70 \pm 0.06  \; \mathrm{mV/digit} \\
+	q_1 &= 1.5 \pm 1.6  \; \si{\mV} 	
+	&q_5 &= 16  \pm 8  \; \si{\mV} \\
+	\corr{m_1} {q_1} &= - 0.28      &\corr{m_5}{q_5} &= - 0.24 \\
+	\chi^2/\text{ndof} &= 2.6/11	&\chi^2/\text{ndof} &= 0.7/11 \\ 
+	\text{abs\_sigma} &= \rm True	&\text{abs\_sigma} &= \rm True
+\end{align*}
+
+\begin{figure}[!htb]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{cal1.1}
+	\label{fig: cal1.1}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{cal5}
+	\label{fig: cal1}
+	\end{subfigure}
+\end{figure}
+
+\subsection{Circuito RC e generatore di Funzioni}
+
+\begin{figure}[!htb]
+\centering
+	\begin{subfigure}{.5\textwidth}
+	\includegraphics[width=8.5cm]{RCsin50}
+	\includegraphics[width=8.5cm]{DSOsqw200}
+	\includegraphics[width=8.5cm]{RCtrg100}
+\label{fig: RCin}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	\includegraphics[width=8.5cm]{DSOsin200}
+	\includegraphics[width=8.5cm]{RCfin50}
+	\includegraphics[width=8.5cm]{RCpar100}
+\label{fig: Rcint}
+	\end{subfigure}%
+\label{fig: RCall}
+\end{figure}
+
+\subsection{Circuiti RLC}
+\begin{figure}[!htb]
+\centering
+	\includegraphics{RLC0.1b3}
+\label{fig: RLC0.1b3}
+\end{figure}
+
+Alla fine del segnale oscillante\footnote{alla fine del
+semiperiodo negativo dell'onda quadra in uscita dal generatore di funzioni}
+si riesce ad apprezzare un picco positivo di circa $100$ digit $\approx 104$ mV,
+questo coincide esattamente con il fronte di salita dell'onda quadra in
+ingresso al circuito RLC.
+Quando l'onda passa da LOW a HIGH, la corrente che scorre negli avvolgimenti
+dell'induttore passa da un intensità di circa $-100$ a $100 \si{\micro\A}$.
+Dunque, secondo la legge degli induttori la bobina genera una tensione
+proporzionale alla variazione dell'intensità di corrente:
+$\Delta V(t) = L \frac{\ud I}{\ud t}$
+il picco finale allora si deve alla stessa tensione che dà inizio
+all'oscillazione, però di segno opposto; però ora il circuito non inizia
+ad oscillare perché il diodo è in conduzione.
+Un secondo possibile contributo al picco di tensione alla
+fine del segnale oscillante è dato dalla capacità parassita
+della giunzione PN, che possiamo  modellare come un condensatore
+in parallelo al diodo. Quando il fronte d'onda sale rapidamente, parte
+dell'onda quadra viene "lasciata passare" dal condensatore, ma da 
+una simulazione con LTSpice ed una capacità (zero bias) nominale per
+il diodo a giunzione \texttt{1N194}: $Cjo = 4 \si{\pico\farad}$
+il contributo al picco finale risulta dell'ordine di qualche $\si{\nano\V}$.
+Dunque l'effetto dell'accoppiamento capacitivo risulta decisamente trascurabile
+rispetto alla risoluzione del sistema di acquisizione.
+\begin{figure}[!htb]
+\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{RLC0.1b3_net} 
+		\includegraphics[width=8.5cm]{RLC0.47b3} 
+		\includegraphics[width=8.5cm]{RLC0.22b3} 
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{RLC0.1b3_traf}
+		\includegraphics[width=8.5cm]{RLC0.22b3_traf}
+		\includegraphics[width=8.5cm]{RLC0.47b5_all}
+	\end{subfigure}%
+\label{fig: RLCall}
+\end{figure}
+
+\begin{table}[!htb]
+\begin{center}
+\begin{tabular}{cc||cccc}
+	\toprule
+	Nucleo & $C\; \pm 10 \% [\si{\micro\F}]$ & $f_0 [\si{\Hz}]$ & $\tau [\si{\ms}]$ 
+	& $L \pm 10 \% [\si{\henry}]$ & $Q_f$ \\
+	\midrule
+	\midrule
+	 & $0.1$ & $659.73 \pm 0.02$ & $12.52 \pm 0.02$ & $0.53$ & $28$ \\
+	Aria & $0.22$ &$431.69 \pm 0.03$ & $ 16.55 \pm 0.03$ & $0.52$ & $23$ \\
+	 & $0.47$ & $325.41 \pm 0.01$ & $21.98 \pm 0.03$ & $0.51$ & $18$ \\ 
+	\midrule
+	 & $0.1$ & $790.25 \pm 0.07$ & $5.19 \pm 0.01$ & $0.41$ & $13$\\
+	Alluminio & $0.22$ & $517.60 \pm 0.09$ & $6.54 \pm 0.02$ & $0.43$ & $10 $ \\
+	 & $0.47$ & $353.51 \pm 0.06$ & $7.88 \pm 0.02$ & $0.44$ & $8$ \\
+	\bottomrule
+\end{tabular}
+\caption{Risultati trovati, dall'analisi di spettro e nel dominio del tempo,
+degli effetti sulla qualità dell'oscillazione dovuti a nuclei di materiale
+diverso nel cuore dell'induttore. \label{tab: RLC}}
+\end{center}
+\end{table}
+
+\subsection{Oscillatore a reazione con BJT}
+
+\begin{figure}[!htb]
+\centering
+	\begin{subfigure}{.5\textwidth}
+	\includegraphics[width=8.5cm]{DSObjt44}
+	\includegraphics[width=8.5cm]{DSObjt201}
+	\includegraphics[width=8.5cm]{DSObjt206}
+\label{fig: BJTin}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	\includegraphics[width=8.5cm]{DSObjt44hamm}
+	\includegraphics[width=8.5cm]{DSObjt201blak}
+	\includegraphics[width=8.5cm]{DSObjt206bart}
+\label{fig: BJTwin}
+	\end{subfigure}%
+\label{fig: BJTall}
+\end{figure}
+
+\subsection{Nota sull'implementazione}
+Per determinare i parametri ottimali e le rispettive covarianze si \`e
+implementato in \verb+Python+ un algoritmo di fit basato sui minimi quadrati
+mediante la funzione \emph{curve\_fit} della libreria 
+\texttt{SciPy}\cite{scipy}.
+Per tutti i fit su campionamenti digitali di \verb+Arduino+ si \`e imposto
+$\rm{abs\_sigma} =$ True, avendo preso come incertezza associata il valore
+convenzionale $\sigma = 1$ digit, per cui effettivamente si sta eseguendo
+un fit dei minimi quadrati. Per tutti gli altri campionamenti, in cui la
+sorgente principale di incertezza abbia natura non statistica o non meglio
+determinata si è posto $\rm{abs\_sigma} =$ False. 
+Il modulo \texttt{signal} della stessa libreria è stato usato per
+la realizzazione dei filtri numerici e delle finestre, mentre
+l'implementazione dell'algoritmo per il calcolo della FFT è lo stesso
+definito dalla libreria \texttt{NumPy}\cite{numpy}.
+Si rimanda ai
+\href{https://github.com/BernardoTomelleri/FFT/tree/master}{sorgenti}
+per ulteriori informazioni sugli script utilizzati, dove \verb+lab.py+ funge
+da libreria di funzioni di appoggio e \verb+data.py+ definisce i parametri
+fondamentali in ingresso per l'analisi dei dati.
+\subsubsection{Filtro outliers}
+La parte pi\`u semplice nel filtraggio dati consiste nello scartare tutti quei
+punti che distano da $\mu_y$ pi\`u di una soglia arbitraria $k$ di deviazioni
+standard $\sigma_y$ (nel nostro caso \`e stato scelto $k = 5$).
+%================================================================
+%                          Conclusioni
+%================================================================
+\section{Conclusioni}
+
+%================================================================
+%                            END
+%================================================================
+\medskip
+\bibliographystyle{IEEEtrandoi}
+\bibliography{refs}
+\end{document}

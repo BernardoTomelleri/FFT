@@ -1,0 +1,17 @@
+\begin{circuitikz}[american,voltage dir=EF]
+\draw (0,0)
+	to[sqV, v=$V_{\rm in}$] (0,1.5) % The current source
+	to [R = $r_{\rm G}$] (0,3)
+	to[R = $R$, *-*] (3,3)
+	to[C= $C$, -*] (3,0)
+	to[short] (0,0);
+\draw (0,3)
+	to[short, f>^=$\text{CH1}_{\rm osc} \;V_{\rm G}$] (0,4.5)
+	node[oscopeshape] {};
+\draw (3,0)
+	node[eground]{};
+\draw (3,3)
+to[short, f>_=$\text{CH2}_{\rm osc} \; V_{\text{int}}$] (3,4.5)
+	node[oscopeshape] {};
+\draw[gray, dashed] (-0.7, 0)--(-0.7, 3)--(0.6, 3)--(0.6, 0)--cycle;
+\end{circuitikz}

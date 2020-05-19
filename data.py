@@ -6,22 +6,22 @@ Created on Sat May  9 17:57:56 2020
 Reads in input from data files and defines its source for subsequent analysis
 """
 from lab import np, srange, std_unc
-DSO = False # Sampling from Digital Oscilloscope
-AC = True # Cut constant DC offset from zero (AC coupling)
+DSO = True # Sampling from Digital Oscilloscope
+AC = False # Cut constant DC offset from zero (AC coupling)
 
 m1 = 1.040; m5 = 4.70
 # Extrazione dei vettori di dati grezzi
-Dir = './RLC_data/'
-V1, V2 = np.loadtxt(Dir +'long0.1uF_b3' +'.txt', unpack=True)#,
+Dir = './RC_int/'
+V1, V2 = np.loadtxt(Dir +'quadra_100' +'.txt', unpack=True)#,
                     #skiprows=2*256, max_rows=250)
 V1*=1e-6
-x_min = 20e-6; x_max = x_min + 0.047
+x_min = 24e-6; x_max = x_min + 1
 
 if DSO:
     Dir ='phase_shift/DSO/' 
-    V1, V2 = np.genfromtxt(Dir +'DSO1_41' +'.csv', float, delimiter=',',
+    V1, V2 = np.genfromtxt(Dir +'1_27' +'.csv', float, delimiter=',',
                      skip_header = 2, usecols=(0, 1), unpack = True)
-    x_min = -0.2; x_max = 2.5
+    x_min = -4.3; x_max = -0.2
     
 # Trasformazione dei dati nelle grandezze da analizzare
 x = V1

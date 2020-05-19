@@ -7,7 +7,7 @@ Computes Fast Fourier Transforms and fits periodic signals.
 """
 from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor,
                  std_unc, prnpar, prncor, outlier, pltfitres, tick, logy,
-                 FFT, plotfft, FWHM, optm, cosn, dosc)
+                 FFT, plotfft, FWHM, optm, cosn, dosc, args)
 from sys import exit
 
 ''' Variables that control the script '''
@@ -15,8 +15,8 @@ fit = False # attempt to fit the data to function
 lock = False # Lock-in amplify data before FFT
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-log = True # log-scale axis/es
-dB = False # plots response y-axis in deciBels
+log = False # log-scale axis/es
+dB = True # plots response y-axis in deciBels
 function = dosc
 
 if lock: from lockin import t as x, Xmag as y, DSO; fit = False
@@ -33,16 +33,16 @@ ax.errorbar(sx, sy, sdy, sdx, 'ko', ms=1.2, elinewidth=0.8, capsize= 1.1,
         ls='',label='data', zorder=5)
 ax.plot(x, y, 'gray', ls='-', lw=0.8, alpha = 0.8)
 if fit:
-    init = (0.7, 168, 0., np.mean(y)) if DSO else (400, 330, 1.5, np.mean(y), 0.015)
+    init = (0.7, 168, 0., np.mean(y)) if DSO else (400, 680, 1.5, np.mean(y), 0.015)
     ax.plot(xx, function(xx, *init), 'k--', lw=0.8, zorder=10, alpha =0.6,
                 label='initial fit')
 legend = ax.legend(loc ='best')
 if tix:
-    tick(ax, xmaj=5e-2, ymaj=20, ymin=5)
+    tick(ax, xmaj=5e2, ymaj=20, ymin=5)
     if DSO: tick(ax, ymaj=0.1)
 
 # FFT Computation with numpy window functions
-freq, tran, fres, frstd = FFT(time=sx, signal=sy, window=np.kaiser, beta=0)
+freq, tran, fres, frstd = FFT(time=sx, signal=sy, window=np.kaiser, beta=None)
 fmax, fftmax = optm(np.fft.fftshift(freq), np.fft.fftshift(tran), absv=True)
 print("Fundamental frequency = %.2f peak magnitude = %.2f" %(fmax, fftmax))
 if AC: 
@@ -51,16 +51,16 @@ if AC:
     Qf = np.sqrt(3)*fmax/fwhm; print(f'Qf = {Qf:.1f}')
 # FFT and signal plot
 fig, (ax1, ax2) = plotfft(freq, tran, signal=(sx, sdx, sy, sdy), norm=True,
-                          dB=False, re_im=False)
-ax2.set_xlim(0, 5000); ax2.set_ylim(1e-6, 1.2)
+                          dB=True, re_im=False)
+ax2.set_xlim(0, 1500); #ax2.set_ylim(1e-6, 1.4)
 if log: logy(ax2, 16)
 elif tix:
-    tick(ax2, xmaj=100, ymaj=1e3)
+    tick(ax2, xmaj=200, ymaj=1e3)
     if dB: tick(ax2, ymaj=20, ymin=5)
 
 if tix: 
-    tick(ax1, xmaj=1e-2, ymaj=20, ymin=5)
-    if DSO: tick(ax1, ymaj=0.2, ymin=5e-2)
+    tick(ax1, xmaj=1e2, ymaj=20, ymin=5)
+    if DSO: tick(ax1, xmaj=0.1, ymaj=0.2, ymin=5e-2)
 
 if not fit: plt.show(); exit()
 #Fit V(t) con sinusoide
@@ -89,7 +89,7 @@ if tix: tick(ax2, xmaj=10, ymaj=5)
 
 # Fit V(t) con rimozione degli outliers
 TT, dTT, VV, dVV, outT, doutT, outV, doutV = outlier(
-    sx, sdx, sy, sdy, function, pars, thr=3, out=True)
+    sx, sdx, sy, sdy, function, pars, thr=5, out=True)
 pars, covm = curve_fit(function, TT, VV, pars, dVV, absolute_sigma = False)
 perr, pcor = errcor(covm)
 print('Parametri del fit:\n', pars)
@@ -118,3 +118,5 @@ if tix:
     tick(ax2, xmaj=10, ymaj=2, ymin=0.5)
     ax2.set_ylim(np.min(normin)-np.std(normin), np.max(normin)+np.std(normin))
 plt.show()
+C = 0.1e-6; L = 1./(C*((2*np.pi*pars[1])**2 + (1./pars[-1])**2)); print(f'Inductance: {L:.2f}')
+r = 2*L/pars[-1]; print(f'Circuit resistance: {r:.2f}')
