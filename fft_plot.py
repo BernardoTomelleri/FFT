@@ -18,7 +18,7 @@ log = False # log-scale axis/es
 dB = True # plots response y-axis in deciBels
 
 from data import x, dx, y, dy, sx, sdx, sy, sdy, DSO, AC
-function = dosc
+function = sine
 # Grafico preliminare dati
 if tex: plt.rc('text', usetex=True); plt.rc('font', family='serif')
 if lock: dx = std_unc(x); dy = std_unc(y)
@@ -30,7 +30,7 @@ ax.errorbar(x, y, dy, dx, 'ko', ms=1.2, elinewidth=0.8, capsize= 1.1,
         ls='',label='data', zorder=5)
 ax.plot(x, y, 'gray', ls='-', lw=0.8, alpha = 0.8)
 if fit:
-    init = (0.7, 168, 0., np.mean(y)) if DSO else (400, 680, 1.5, np.mean(y), 0.015)
+    init = (0.5, 44, 0., np.mean(y)) if DSO else (400, 680, 1.5, np.mean(y), 0.015)
     ax.plot(xx, function(xx, *init), 'k--', lw=0.8, zorder=10, alpha =0.6,
                 label='initial fit')
 legend = ax.legend(loc ='best')
@@ -94,40 +94,40 @@ if fit:
         tick(ax2, xmaj=10, ymaj=2, ymin=0.5)
         ax2.set_ylim(np.min(normin)-np.std(normin), np.max(normin)+np.std(normin))
 
-from lockin import t as x, Vsig as y, Ve, Vpu, DSO;
+if lock: from lockin import t as x, Xmag as y, DAQ, Ve, Vpu, DSO;
 # FFT Computation with numpy window functions
-freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.kaiser, beta=None)
+freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.blackman, beta=None)
 fmax, fftmax = optm(np.fft.fftshift(freq), np.fft.fftshift(tran), absv=True)
 print(f"Fundamental frequency = {fmax:.8f} +- {2*fres/len(sy):.2e} mag = {fftmax:.2f}" )
-if AC: 
+if AC and not lock: 
     fwhm = FWHM(freq, tran, FT=True)
     if fwhm: print("FWHM = %.1f Hz" %fwhm)
     Qf = np.sqrt(3)*fmax/fwhm; print(f'Qf = {Qf:.1f}')
 
 # FFT and signal plot
 dx = std_unc(x)/10; dy = std_unc(y)/10
-fig, (ax1, ax2) = plotfft(freq, tran, signal=(x, dx, y, dy), norm=False,
-                          dB=False, re_im=False)
-ax2.set_xlim(0, 2000); #ax2.set_ylim(1e-6, 1.4)
+fig, (ax1, ax2) = plotfft(freq, tran, signal=(x, dx, y, dy), norm=True,
+                          dB=True, re_im=False)
+ax2.set_xlim(0, 3000); ax2.set_ylim(-100, 1)
 if log: logy(ax2, 16)
 elif tix:
     tick(ax2, xmaj=200, ymaj=1e3)
-    if dB: tick(ax2, ymaj=20, ymin=5)
+if dB: tick(ax2, ymaj=20, ymin=5)
 
 if tix: 
     tick(ax1, xmaj=0.01, ymaj=200, ymin=None)
     if DSO: tick(ax1, xmaj=0.1, ymaj=0.2, ymin=5e-2)
 
-if lock:
-    ax1.plot(x, Ve, lw=1, label='Signal', zorder=10)
-    ax1.plot(x, Vpu, lw=1, label='Pick-up noise', zorder=15)
+# if lock and not DAQ:
+    # ax1.plot(x, Ve, lw=1, label='Signal', zorder=10)
+    # ax1.plot(x, Vpu, lw=1, label='Pick-up noise', zorder=15)
     
 if fit: 
     ax1.plot(xx, function(xx, *pars), c='gray', lw=1.2,
                  label='fit$\chi^2 = %.e/%d$' %(chisq, ndof))
     ax1.errorbar(outT, outV, doutV, doutT, 'gx',  ms=3, elinewidth=1.,
                  capsize=1.5, ls='', label='outliers')
-    C = 0.1e-6; L = 1./(C*((2*np.pi*pars[1])**2 + (1./pars[-1])**2))
+    C = 0.47e-6; L = 1./(C*((2*np.pi*pars[1])**2 + (1./pars[-1])**2))
     r = 2*L/pars[-1]
     print(f'Inductance: {L:.2f}'); print(f'Circuit resistance: {r:.2f}')
 legend = ax1.legend(loc ='best', framealpha = 0.3)

@@ -5,7 +5,9 @@
 
 \geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
 \title{Esercizio facoltativo* sulla FFT}
-\author{B.~Tomelleri \thanksdf}
+\author{M.~Alighieri(\protect\footnotemark[1] )~\and
+M.~Romagnoli(\protect\footnotemark[1] )~\and 
+B.~Tomelleri(\protect\footnotemark[1] )}%
 
 \begin{document}
 \maketitle
@@ -39,11 +41,32 @@ $\propto 1/f^\gamma$ sono mitigate dal metodo di lock-in detection.
 Al livello di implementazione digitale un secondo pregio del LIA risulta meno
 evidente, vista la possibilità di costruire filtri BPF numerici con banda
 regolabile di qualità arbitraria: ma, nel caso reale costruire
-filtri mobili di alta qualità $Q \gg 10$ è tutto fuorché banale, dunque la
+filtri mobili di alta qualità $Q_f \gg 10$ è tutto fuorché banale, dunque la
 possibilità di traslare in frequenza le componenti di un segnale all'interno
 della banda di un buon filtro "fisso" costituisce un enorme vantaggio.
 
-
+\subsection{Circuito RC}
+Ricordando la scomposizione di un segnale periodico in serie di Fourier,
+\begin{equation}
+g(t) = \frac{g_0}{2} + \sum_{k=1}^{n} b_k \cos{(\omega_kt)} + 
+\sum_{k=1}^{n} \sin{\left((c_k)\omega t\right)}
+\end{equation}
+possiamo estendere la descrizione dell'effetto del circuito su perturbazioni
+sinusoidali a segnali periodici qualsiasi con la funzione di trasferimento:
+\begin{equation}
+	T(\omega_k) = \frac{1}{1 + 1/j\omega_k RC} = 
+	\frac{1}{1 + j\frac{\omega_k}{\omega_T}} = \frac{1}{1 + j\frac{f_k}{f_T}}
+\end{equation}
+\begin{align*}\label{eq:fin}
+\begin{cases}
+	\mathrm{Attenuazione} \; A(\omega_k) &=
+	\frac{1}{\sqrt{1 + \left(\omega_k/\omega_T \right)^2}} \\
+	\mathrm{Sfasamento} \; \Delta \phi(\omega_k) &=
+	\arctan{\left(- \omega_k /\omega_T \right)}
+\end{cases}
+\end{align*}
+dove il polo per $\omega_T = 2\pi f_T = 1/RC$ definisce la frequenza di
+caratteristica o di taglio del filtro.
 \subsection{Circuiti forzati e smorzati RLC}
 In un circuito costituito da almeno una resistenza, un induttore ed un
 condensatore (nel nostro caso collegati in serie) è possibile individuare una
@@ -222,7 +245,7 @@ L'apparato sperimentale consiste di diversi circuiti elettrici,
 realizzati con componenti pre-assemblati in laboratorio ed un generatore di
 funzioni (GFG-8200A).
 Per monitorare la risposta dei circuiti si utilizzano i canali di un oscilloscopio
-analogico ($50$ MHz) e uno digitale ($200$ MHz), mentre per l'acquisizione dei
+analogico ($50$ MHz) e uno digitale ($300$ MHz), mentre per l'acquisizione dei
 segnali di d.d.p. compresi tra $0$ e $5$ V si fa uso del convertitore ADC
 del MCU \verb+Arduino UNO+.
 
@@ -313,24 +336,30 @@ interno, determinati con un semplice fit lineare.
 \end{figure}
 
 \subsection{Circuito RC}
+Ricordando il guadagno atteso per un filtro RC passivo, dalla trasformata
+di Fourier si riesce ad apprezzare l'effetto di attenuazione sulle armoniche
+superiori dei segnali integrati.
 \begin{figure}[!htb]
 \centering
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{RCsin50}
-	\caption{$\Delta t = 100 + 20 \pm 4 \si{\us} \; f = 50 \si{\Hz}$}
+	\caption{$\Delta t = 100 + 13 \pm 2 \si{\us} \; f = 50.01 \pm 0.01 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{DSOsqw200}
-	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 200 \si{\Hz}$}
+	\caption{$\Delta t = 2 \pm 100 \si{ppm \, \us}$ (nom.)
+	$\; f = 199.80 \pm 0.01 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCtrg100}
-	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 100 \si{\Hz}$}
+	\caption{$\Delta t = 20 \pm 100 \si{ppm \, \us}$ (nom.)
+	$ \; f = 100.50 \pm 0.02 \si{\Hz}$}
 \label{fig: RCin}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{DSOsin200}
-	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 200 \si{\Hz}$}
+	\caption{$\Delta t = 2 \pm 100 \si{ppm \, \us}$ (nom.)
+	$\; f = 199.68 \pm 0.01 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCfin50}
-	\caption{$\Delta t = 100 + 20 \pm 4 \si{\us} \; f = 50 \si{\Hz}$}
+	\caption{$\Delta t = 100 + 13 \pm 2 \si{\us} \; f = 50.51 \pm 0.02 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCpar100}
-	\caption{$\Delta t = 100 + 20 \pm 4 \si{\us} \; f = 100 \si{\Hz}$}
+	\caption{$\Delta t = 100 + 13 \pm 2 \si{\us} \; f = 99.10 \pm 0.04 \si{\Hz}$}
 \label{fig: Rcint}
 	\end{subfigure}%
 	\caption{Risultati trovati sull'effetto dell'integratore RC sui segnali
@@ -346,9 +375,10 @@ interno, determinati con un semplice fit lineare.
 	\caption{Illustrazione del picco che si trova nei dati campionati
 			in fondo all'oscillazione smorzata del circuito, ovviamente
 			non prevista dal modello di best fit. 
-			$\Delta t = 40 + 22 \pm 3 \; [\si{\us}]$ $C = 0.1 \pm 10\% \;
-			[\si{\micro\F}]$ $L = 0.5 \pm 10 \% \; [\si{\henry}]$ $r = 58 \pm 10\% 
-			\; [\si{\ohm}]$. \label{fig: RLC0.1b4}}
+			$\Delta t = 50 + 13 \pm 3 \; [\si{\us}]$ $f = 715.15 \pm 2 \si{\Hz}$
+			$C = 0.1 \pm 10\% \; [\si{\micro\F}]$ $L = 0.5 \pm 10 \% \;
+			[\si{\henry}]$ $r = 58 \pm 10\%	\; [\si{\ohm}]$.
+			$Q_f = 62$.	\label{fig: RLC0.1b5}}
 \end{figure}
 
 Alla fine del segnale oscillante\footnote{alla fine del
@@ -357,7 +387,7 @@ si riesce ad apprezzare un picco positivo di circa $100$ digit $\approx 104$ mV,
 questo coincide esattamente con il fronte di salita dell'onda quadra in
 ingresso al circuito RLC.
 Quando l'onda passa da LOW a HIGH, la corrente che scorre negli avvolgimenti
-dell'induttore passa da un intensità di circa $-100$ a $100 \si{\micro\A}$.
+dell'induttore passa da un intensità trascurabile a $100 \si{\micro\A}$.
 Dunque, secondo la legge degli induttori la bobina genera una tensione
 proporzionale alla variazione dell'intensità di corrente:
 $\Delta V(t) = L \frac{\ud I}{\ud t}$
@@ -378,25 +408,25 @@ rispetto alla risoluzione del sistema di acquisizione.
 \centering
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{RLC0.1b3_net} 
-	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = 680 \si{\Hz}$
-		$C = 0.1 \pm 10 \% \si{\micro\F}$}
+	\caption{$\Delta t = 30 + 13 \pm 2 \si{\us} \; C = 0.1
+			\pm 10 \% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.22b3} 
-	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
-			$C = 0.22 \pm 10 \% \si{\micro\F}$}
+	\caption{$\Delta t = 30 + 12 \pm 3 \si{\us} \; C = 0.22 
+			\pm 10 \% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.47b3} 
-	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
-			$C = 0.47 \pm 10 \% \si{\micro\F}$}
+	\caption{$\Delta t = 30 + 12 \pm 3 \si{\us} \; C = 0.47
+			\pm 10 \% \si{\micro\F}$}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{RLC0.1b3_traf}
-	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
-			$C = 0.1 \pm 10 \% \si{\micro\F}$}
+	\caption{$\Delta t = 30 + 12 \pm 3 \si{\us} \; C = 0.1
+			\pm 10 \% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.22b3_traf}
-	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
-			$C = 0.22 \pm 10\% \si{\micro\F}$}
+	\caption{$\Delta t = 30 + 12 \pm 3 \si{\us} \; C = 0.22
+			\pm 10\% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.47b5_all}
-	\caption{$\Delta t = 50 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
-			$C = 0.47 \pm 10 \% \si{\micro\F}$}
+	\caption{$\Delta t = 50 + 13 \pm 3 \si{\us} \; C = 0.47
+			\pm 10 \% \si{\micro\F}$}
 	\end{subfigure}%
 	\caption{Risultati sugli effetti dovuti ai diversi nuclei inseriti
 			all'interno dell'induttore sulla larghezza di riga della trasformata
@@ -428,17 +458,38 @@ diverso nel cuore dell'induttore. \label{tab: RLC}}
 \end{center}
 \end{table}
 
-\subsection{Oscillatore a reazione con BJT}
+L'oscillazione RLC è modulata da una forzante a forma di onda quadra a
+$f = 10 \si{\Hz}$ che equivale all'azione di un sistema di chopping
+meccanico\footnote{Ovviamente senza le complicazioni legate alle
+fluttuazioni introdotte dal movimento \emph{jitter} meccanico.}
+tipicamente usato negli esperimenti di fluorescenza. Se la frequenza del
+segnale oscillante avesse una frequenza troppo bassa (a causa del rumore
+$1/f$) per filtrare il rumore da cui è affetta la misura, potremmo usare
+il Lock-in-Detector sincronizzando i segnali di riferimento con l'onda quadra,
+per migliorare il Signal to Noise Ratio (SNR).
 
+\subsection{Oscillatore a reazione con BJT}
+La dipendenza non lineare tra tensione e corrente della curva caratteristica
+di base del transistor porta ad una distorsione asimmetrica del segnale, 
+qualitativamente diversa da un'onda sinusoidale nel dominio del tempo.
+Infatti il contenuto armonico della trasformata di $V_{\text{out}}$ risulta
+caratterizzato da un intervallo di frequenze a cui il circuito può
+oscillare. Un contributo alle armoniche superiori osservate nella FFT
+potrebbe essere dato dalla bassa qualità della rete di sfasamento,
+in effetti la larghezza a metà altezza intorno alla frequenza
+fondamentale risulta $\Delta \omega_{\text{FWHM}} = 0.4 - 0.5$. 
 \begin{figure}[!htb]
 \centering
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{DSObjt44}
-	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 44 \si{\Hz}$}
+	\caption{$\Delta t = 200 \pm 0.01 \% \si{\us} \; f = 43.87
+	\pm 0.04 \si{\Hz} \; I_b = 0.98 \pm 0.04 \si{\uA}$}
 	\includegraphics[width=8.5cm]{DSObjt201}
-	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 201 \si{\Hz}$}
+	\caption{$\Delta t = 100 \pm 0.01 \% \si{\us} \; f = 201.22
+	\pm 0.02 \si{\Hz} \; I_b = 1.20 \pm 0.06 \si{\uA}$}
 	\includegraphics[width=8.5cm]{DSObjt206}
-	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 206 \si{\Hz}$}
+	\caption{$\Delta t = 200 \pm 0.01 \% \si{\us} \; f = 206.65
+	\pm 0.01 \si{\Hz} \; I_b = 1.27 \pm 0.06 \si{\uA}$}
 \label{fig: BJTin}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
@@ -456,6 +507,49 @@ diverso nel cuore dell'induttore. \label{tab: RLC}}
 			Nella colonna sinistra prima, a destra dopo aver applicato
 			le funzioni finestra al segnale. \label{fig: BJTall}}
 \end{figure}
+
+\subsection{Detezione sincrona}
+Intendiamo estrarre un segnale $V(t)$ relativamente piccolo
+in presenza di rumori -forti- e di natura diversa:
+Un rumore di pick-up magnetico a $f_{\text{pu}} = 50 \si{\Hz}$ e ampiezza
+$A_{\text{pu}} = 2$ [arb. un.], una tensione costante a 
+$V_{\text{CC}} = 2.5$ [arb. un.] ed un rumore -bianco-, che possiamo modellare
+con un generatore di numeri pseudo-casuali distribuiti normalmente
+intorno a 0 con deviazione standard $\sigma = 10$ [arb. un.].
+In queste condizioni non è possibile distinguere il piccolo segnale $V(t)$ 
+di ampiezza $A = 0.1$, frequenza $f = 1 \si{\kilo\hertz}$ e fase costante
+$\phi = 0.2 \si{rad}$ dal rumore neanche analizzando lo spettro in frequenza:
+\begin{figure}[!htb]
+\centering
+	\includegraphics{LIA1k}
+	\caption{Nel pannello superiore il segnale rumoroso e sotto la sua
+			trasformata di Fourier, in cui si notano la componente a
+			$50 \si{\Hz}$ del pick-up e la componente DC, ma non il segnale
+			d'interesse a $1 \si{\kilo\hertz}$. \label{fig: LIAnoise}}
+\end{figure}
+Usando la tecnica di detezione omodina è possibile ricostruire fase,
+ampiezza e frequenza di $V(t)$, isolandolo dal rumore asincrono e fuori
+fase rispetto ai riferimenti ed al segnale stesso:
+\begin{figure}[!htb]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{LIAFFT1k}
+		\caption{Nel pannello superiore l'ampiezza di $V(t)$ in uscita dal LIA
+				e sotto la sua trasformata di Fourier.}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=8.5cm]{LIAmag1k}
+		\caption{Ampiezza e fase di V(t) trovate dalla simulazione di un 
+			Lock-In-Detector.}
+	\end{subfigure}
+	\caption{Risultato della simulazione di detezione sincrona di un segnale
+			affetto da rumori di ampiezze superiori di alcuni ordini di
+			grandezza $SNR \approx 10^{-2}$. $\Delta t = 2 \si{\us} \;
+			T_{\text{mis}} = 200 \si{\ms}$. \label{fig: LIAall}}
+\end{figure}
+Adesso una misura del segnale è possibile e, quanto il rivelatore simulato è
+riuscito a dedurre sul nostro segnale non dista più del $20 \%$ rispetto ai
+valori attesi impostati nello script.
 
 \subsection{Nota sull'implementazione}
 Per determinare i parametri ottimali e le rispettive covarianze si \`e
@@ -481,10 +575,21 @@ fondamentali in ingresso per l'analisi dei dati.
 La parte pi\`u semplice nel filtraggio dati consiste nello scartare tutti quei
 punti che distano da $\mu_y$ pi\`u di una soglia arbitraria $k$ di deviazioni
 standard $\sigma_y$ (nel nostro caso \`e stato scelto $k = 5$).
+
 %================================================================
 %                          Conclusioni
 %================================================================
 \section{Conclusioni}
+Sì è visto da un nuovo punto di vista l'effetto di "abbassamento" selettivo
+in frequenza di un filtro passa-basso.
+Si è osservata una correlazione fra larghezza di riga della curva di risonanza
+e lo smorzamento presente in un circuito oscillante RLC.
+Si è riusciti ad apprezzare l'effetto dell risposta non lineare
+dell'amplificatore invertente(BJT a emettitore comune) sullo spettro
+in frequenza dell'auto-oscillazione.
+Si è illustrato uno dei vantaggi del metodo di Lock-in-Detection per 
+la risoluzione di segnali sommersi da rumore di ampiezze maggiori di diversi
+ordini di grandezza.
 
 %================================================================
 %                            END

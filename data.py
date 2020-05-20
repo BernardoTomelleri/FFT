@@ -12,10 +12,10 @@ AC = False # Cut constant DC offset from zero (AC coupling)
 m1 = 1.040; m5 = 4.70
 # Extrazione dei vettori di dati grezzi
 Dir = './RLC_data/'
-V1, V2 = np.loadtxt(Dir +'long0.1uF' +'.txt', unpack=True)#,
+V1, V2 = np.loadtxt(Dir +'long0.47uF_b3_new' +'.txt', unpack=True)#,
                     #skiprows=2*256, max_rows=250)
 V1*=1e-6
-x_min = 24e-6; x_max = x_min + 0.05
+x_min = 20e-6; x_max = x_min + 0.047
 
 if DSO:
     Dir ='phase_shift/DSO/' 

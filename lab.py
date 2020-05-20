@@ -154,10 +154,11 @@ def optm(x, y, minm=None, absv=None):
 def grid(ax, xlab = None, ylab = None):
     """ Adds standard grid and labels for measured data plots to ax. """
     ax.grid(color = 'gray', ls = '--', alpha=0.7)
-    ax.set_xlabel('%s' %(xlab if xlab else 'x [a.u.]'), x=0.9)
+    ax.set_xlabel('%s' %(xlab if xlab else 'x [a.u.]'), 
+                  x=0.9 - len(xlab)/500 if xlab else 0.9)
     ax.set_ylabel('%s' %(ylab if ylab else 'y [a.u.]'))
     ax.minorticks_on()
-    ax.tick_params(direction='in', length=5, width=1., top=True, right=True)
+    ax.tick_params(direction='in', length=4, width=1., top=True, right=True)
     ax.tick_params(which='minor', direction='in', width=1., top=True, right=True)
     return ax
     
@@ -338,7 +339,7 @@ def plotfft(freq, tran, signal=None, norm=False, dB=False, re_im=False, mod_ph=F
     ax1.set_ylabel('$\widetilde{V}(f)$ Magnitude [%s]' %('dB' if dB else 'arb. un.'))
     if re_im: ax1.set_ylabel('Fourier Transform [Re]')    
 
-    ax2 = grid(ax2, 'Time $t$ [s]', '$V(t)$ [V]')
+    ax2 = grid(ax2, 'Time $t$ [s]', '$V(t)$ [arb. un.]')
     if mod_ph or re_im: 
         fft = tran.imag if re_im else np.angle(tran)
         ax2.plot(freq, fft, c='k', lw='0.9')
@@ -347,8 +348,9 @@ def plotfft(freq, tran, signal=None, norm=False, dB=False, re_im=False, mod_ph=F
         if re_im: ax2.set_ylabel('Fourier Transform [Im]')    
     else:
         xmes, dx, ymes, dy = signal
-        ax2.errorbar(xmes, ymes, dy, dx, 'o', ms=1.2, elinewidth=0.8,
-                     capsize= 1.1, ls='', lw=0.7, label='data', zorder=5)
+        ax2.plot(xmes, ymes, 'ko', ms=0.5, ls='-', lw=0.7, label='data')
+        # ax2.errorbar(xmes, ymes, dy, dx, 'ko', ms=1.2, elinewidth=0.8,
+                     # capsize= 1.1, ls='', lw=0.7, label='data', zorder=5)
     if signal: ax1, ax2 = [ax2, ax1]
     return fig, (ax1, ax2)
     
