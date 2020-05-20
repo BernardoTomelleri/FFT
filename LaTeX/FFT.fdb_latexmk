@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex FFT"] 1589849562 "FFT.aux" "FFT.bbl" "FFT" 1589849567
+["bibtex FFT"] 1589934840 "FFT.aux" "FFT.bbl" "FFT" 1589935651
   "./IEEEtrandoi.bst" 1577387200 60815 f4ed9ef17005d390213cd57d581f7b76 ""
-  "FFT.aux" 1589849567 8715 6989c9224a9d171e3103da6bbc874c90 "pdflatex"
+  "FFT.aux" 1589935651 12048 2e5b8b8240b41551e16c6fdf9cf5c43c "pdflatex"
   "refs.bib" 1589628002 2236 998afc55654e2cb8cd2926c3fb6f289a ""
   (generated)
   "FFT.bbl"
   "FFT.blg"
-["pdflatex"] 1589849562 "FFT.tex" "FFT.pdf" "FFT" 1589849567
+["pdflatex"] 1589935648 "FFT.tex" "FFT.pdf" "FFT" 1589935651
   "/etc/texmf/web2c/texmf.cnf" 1588545332 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -330,10 +330,10 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1588546889 4771502 73179107bbd81e70b863f12905f54679 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1588546941 8259341 6e3b17c21cd297d24330192377f9abc9 ""
-  "FFT.aux" 1589849567 8715 6989c9224a9d171e3103da6bbc874c90 "pdflatex"
-  "FFT.bbl" 1589849562 2317 f9e963c32f8a8314b12850cb449e9fa5 "bibtex FFT"
-  "FFT.out" 1589849567 1155 45fae5a73a6a4daaa1377f3fe8c16540 "pdflatex"
-  "FFT.tex" 1589849557 16978 22679dc1a97c97a86e2976d3178cbe85 ""
+  "FFT.aux" 1589935651 12048 2e5b8b8240b41551e16c6fdf9cf5c43c "pdflatex"
+  "FFT.bbl" 1589934840 2317 f9e963c32f8a8314b12850cb449e9fa5 "bibtex FFT"
+  "FFT.out" 1589935651 1198 243184ad3037ba8d90ebd276939a0fbf "pdflatex"
+  "FFT.tex" 1589935648 23951 1d56fd20de222690559ad611672404df ""
   "figs/BJTschm.pdf" 1589675246 13537 923d944e28fad915d107610f79ac656f ""
   "figs/DSObjt201.pdf" 1589848896 258629 7b29766393132f85e01c30ad91b25048 ""
   "figs/DSObjt201blak.pdf" 1589848977 251052 1e77ecb70e42bd89dec0c13fd3cd68b6 ""
@@ -348,9 +348,9 @@
   "figs/RCpar100.pdf" 1589834690 247253 20177457a3e1909b1bae39e44bb771ec ""
   "figs/RCsin50.pdf" 1589833311 295906 6aad944d9b48ad438bd29e9d572623a5 ""
   "figs/RCtrg100.pdf" 1589834069 528183 6aff5819a8a2e1d98118da92435c927f ""
-  "figs/RLC0.1b3.pdf" 1589738862 215562 d05705c43da343caa45ee40bda8602cc ""
   "figs/RLC0.1b3_net.pdf" 1589751495 213304 01977ca82e5a5e4ee4b899c472c0d815 ""
   "figs/RLC0.1b3_traf.pdf" 1589751465 194136 ebbd33f39736d7ce1444051ef94b705e ""
+  "figs/RLC0.1b4.pdf" 1589922868 215159 1fca07da0a1c51d247028ffb38dae5a7 ""
   "figs/RLC0.22b3.pdf" 1589750391 213456 a12bed844c478e01dda0c7d508907df1 ""
   "figs/RLC0.22b3_traf.pdf" 1589750480 193749 341610889f4be059f9ecfcd45ceda81f ""
   "figs/RLC0.47b3.pdf" 1589750981 210781 27c5d96dea77ba9c0cf55f29dd024fc0 ""
@@ -362,7 +362,7 @@
   "preamble.tex" 1587489587 1776 a464af8078891f5375a4aeb7976e2bb3 ""
   (generated)
   "FFT.pdf"
-  "FFT.log"
   "FFT.auxlock"
-  "FFT.out"
   "FFT.aux"
+  "FFT.log"
+  "FFT.out"

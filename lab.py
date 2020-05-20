@@ -347,8 +347,8 @@ def plotfft(freq, tran, signal=None, norm=False, dB=False, re_im=False, mod_ph=F
         if re_im: ax2.set_ylabel('Fourier Transform [Im]')    
     else:
         xmes, dx, ymes, dy = signal
-        ax2.errorbar(xmes, ymes, dy, dx, 'ko', ms=1.2, elinewidth=0.8,
-                     capsize= 1.1, ls='-', lw=0.7, label='data', zorder=5)
+        ax2.errorbar(xmes, ymes, dy, dx, 'o', ms=1.2, elinewidth=0.8,
+                     capsize= 1.1, ls='', lw=0.7, label='data', zorder=5)
     if signal: ax1, ax2 = [ax2, ax1]
     return fig, (ax1, ax2)
     

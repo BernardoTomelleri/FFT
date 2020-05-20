@@ -24,9 +24,25 @@ detezione sincrona o Lock In Detection/Amplification (LIA).
 %================================================================
 \section{Cenni Teorici}
 La Trasformata di Fourier Discreta (o DFT) estende la trasformata di Fourier
-analitica a sistemi con variabile dinamica discreta. In particolare
+tradizionale a sistemi con variabile dinamica discreta. In particolare
 approfitteremo della velocità dell'algoritmo Cooley-Tukey \cite{FFT} o FFT
-per la nostra analisi.
+per calcolare un ciclo della DFT nella nostra analisi.
+
+L'utilità della detezione sincrona risiede nella capacità di isolare
+componenti ad una fissata frequenza e fase di un segnale da -idealmente-
+tutte le fonti di rumore asincrone e fuori fase rispetto alla modulazione
+di riferimento, in ambienti dove $\text{SNR} \ll 1$).
+Poiché l'operazione di media temporale è svolta alla $f_{\text{ref}}$ sia
+le fluttuazioni termiche ad alta frequenza o di \emph{jitter}
+$\propto 1/\sqrt{T_{\text{mis}}}$ che quelle di \emph{flicker}
+$\propto 1/f^\gamma$ sono mitigate dal metodo di lock-in detection.
+Al livello di implementazione digitale un secondo pregio del LIA risulta meno
+evidente, vista la possibilità di costruire filtri BPF numerici con banda
+regolabile di qualità arbitraria: ma, nel caso reale costruire
+filtri mobili di alta qualità $Q \gg 10$ è tutto fuorché banale, dunque la
+possibilità di traslare in frequenza le componenti di un segnale all'interno
+della banda di un buon filtro "fisso" costituisce un enorme vantaggio.
+
 
 \subsection{Circuiti forzati e smorzati RLC}
 In un circuito costituito da almeno una resistenza, un induttore ed un
@@ -93,8 +109,7 @@ in ogni periodo con la relazione di Joule per gli effetti termico-dissipativi:
 \begin{align}
 	E_{\text{stored}} =& U_{M_0} = \frac{1}{2} LI_0^2 \\
 	E_{\text{lost/cycle}} =& \langle P_{\rm Joule} \rangle_t \cdot T = 
-	\frac{1}{2} RI_0^2 \cdot T\\
-	R :=& r + r_G 
+	\frac{1}{2} RI_0^2 \cdot T
 \end{align}
 Supponendo che il circuito sia perturbato da un segnale sinusoidale
 monocromatico, il metodo simbolico ci permette di legare la larghezza di riga
@@ -120,7 +135,7 @@ In altre parole, per un circuito RLC il fattore di qualità atteso è:
 \subsection{Oscillatore a reazione con BJT}
 Il secondo tipo di sistema oscillante studiato è un circuito dotato di
 un amplificatore invertente, un transistor a giunzione bipolare (BJT) montato
-ad emettitore comune (emitter-follower), ed un anello di feedback.
+ad emettitore comune (emitter-follower) ed un anello di feedback.
 Secondo il criterio di stabilità di Barkhausen, affinché un circuito
 elettrico lineare possa sostenere la propria auto-oscillazione è necessaria
 la presenza di un feedback positivo, i.e. lo sfasamento totale dovuto
@@ -131,7 +146,63 @@ $\Delta \phi = \pi$
 al segnale in uscita dall'amplificatore. Vale la pena ricordare un
 modo equivalente per ottenere un sistema auto-oscillante, in cui lo stesso
 sfasamento (seppur opposto in segno) è dato dalla serie di un induttore ed
-un condensatore quello che va sotto il nome di oscillatore di Colpitts.
+un condensatore, quello che va sotto il nome di oscillatore di Colpitts.
+
+\subsection{Detezione sincrona}
+Supponiamo di voler misurare un segnale coerente, i.e. con fase costante
+nel tempo $V(t)$, che per semplicità assumiamo sinusoidale -monocromatico- a
+frequenza $f$, e di generare con oscillatori locali due segnali
+\emph{di riferimento} $V_{\text{ri}} (t)$ e $V_{\text{rq}} (t)$ anch'essi
+coerenti e sinusoidali ad una frequenza nota $f_{\text{ref}}$, ma sfasati tra
+loro di $\Delta \theta = \frac{\pi}{2}$.
+Moltiplicando il segnale di riferimento
+$V_{\text{ri}} (t)$ per quello d'interesse $V(t)$ con un miscelatore (PSD)
+si ottiene un segnale proporzionale al prodotto delle loro ampiezze e con
+due componenti in frequenza, uno alla somma $f + f_{\text{ref}}$ ed uno
+alla differenza $f - f_{\text{ref}}$.
+\begin{align*}
+	V(t) :=& V_{\text{sig}}\sin{(\omega t + \phi)} \\
+	V_{\text{ri}}(t) :=& V_{\text{ref}}\sin{(\omega_{\text{ref}}t + \phi_{\text{ref}})} \\
+	V_{\text{rq}}(t) :=& V_{\text{ref}}\cos{(\omega_{\text{ref}}t + \phi_{\text{ref}})} \\
+	V_{\text{PSD}}(t) :=& V(t) \cdot V_{\text{ri}}(t) =
+	V_{\text{sig}}\sin{(\omega t + \phi)} 
+	V_{\text{ref}}\sin{(\omega_{\text{ref}}t + \phi_{\text{ref}})} = \\
+	=& \frac{1}{2} V_{\text{sig}} V_{\text{ref}} \left(\cos{([\omega - 
+		\omega_{\text{ref}}] + \phi - \phi_{\text{ref}}}) + 
+	\cos{([\omega + \omega_{\text{ref}}] + \phi + \phi_{\text{ref}})} \right) \\
+\end{align*}
+Nel caso in cui anche la frequenza $f$ del segnale di nostro interesse sia
+nota possiamo imporre $f_{\text{ref}} = f$, in questa configurazione "omodina"
+il segnale in uscita dal detector non ha più media nulla, ma ha una componente
+DC a frequenza $0 \; \si{\hertz}$ proporzionale all'ampiezza di $V(t)$.
+Con un filtro passa basso possiamo allora "tagliare" il contributo dovuto
+alla componente restante a $2f$, ovvero mediando sul tempo per 
+$t \gg T = 1/f$, abbiamo una misura di $V_{\text{sig}}$ dipendente dallo
+sfasamento $\Delta \phi = \phi - \phi_{\text{ref}}$: 
+\begin{align}
+	V_{\text{out}} := \langle V_{\text{PSD}} \rangle_t 
+	= \frac{1}{2} V_{\text{sig}} V_{\text{ref}}\cos{(\phi - \phi_{\text{ref}})}
+	\implies V_{\text{sig}}\cos{\Delta \phi} =
+	2 \frac{V_{\text{out}}}{V_{\text{ref}}}
+\end{align}
+Per eliminare la dipendenza da $\Delta \phi$ dalla misura possiamo
+ripetere lo stesso procedimento, però usando il segnale di riferimento
+in quadratura $V_{\text{rq}}(t)$
+\begin{align}
+	V_{\text{outq}} := \langle V(t) \cdot V_{\text{rq}} (t) \rangle_t =
+	\frac{1}{2} V_{\text{sig}} V_{\text{ref}}\sin{\Delta \phi}
+\end{align}
+Un cambio di coordinate da cartesiane a polari ci permette di esprimere in
+maniera elegante il modulo e la fase del segnale da misurare $V(t)$
+\begin{align}
+	X := 2 \frac{V_{\text{out}}}{V_{\text{ref}}}\cos{\Delta \phi} =
+	V_{\text{sig}}\cos{\Delta \phi}; \quad
+	&Y := 2 \frac{V_{\text{out}}}{V_{\text{ref}}}\sin{\Delta \phi} =
+	V_{\text{sig}}\sin{\Delta \phi} \\
+	V_{\text{sig}} =& \sqrt{X^2 + Y^2}\\
+	\phi =& \arctan{\frac{Y}{X}}
+\end{align}
+
 %================================================================
 %                Metodo e apparato sperimentale
 %================================================================
@@ -142,6 +213,7 @@ terminanti in connettori a banana. L'uso di \verb+Arduino+\cite{arduino}
 come sistema di acquisizione dati non permette di apprezzare le perturbazioni
 dovute alla temperatura o ai collegamenti dei componenti nelle nostre
 condizioni di lavoro.
+
 %================================
 %           Apparato
 %================================
@@ -164,10 +236,14 @@ R &= 6.72 \pm 0.05 \; \si{\kilo\ohm}\\
 C &= 2.2 \pm 10\% \; \si{\micro\F}\\
 f_{\rm T} &= \frac{1}{2 \pi R C} = 11 \pm 1 \; \si{\hertz}
 \end{align*}
+Lo stesso circuito è utilizzato per i campionamenti delle forme d'onda in
+uscita dal generatore di funzioni con il primo canale dell'oscilloscopio
+digitale (CH1).
 \begin{figure}[!htb]
 	\centering
 	\input{RC}
-	\caption{Schema circuitale dell'integratore RC \label{fig: RC}}
+	\caption{Schema circuitale dell'integratore RC realizzato in laboratorio.
+	\label{fig: RC}}
 \end{figure}
 \subsubsection{Circuiti RLC}
 Nel nostro caso l'induttore è costituito da due avvolgimenti concentrici
@@ -181,7 +257,7 @@ Le $3000$ spire totali di filo di rame negli avvolgimenti infatti
 influiscono apprezzabilmente e in maniera non banale sul trasferimento
 di energia all'interno del circuito.
 
-\begin{figure}[!htp]
+\begin{figure}[!htb]
 	\centering 
 		\includegraphics[width=14cm]{RLCschm}
 	\caption{Diagramma del circuito RLC studiato\label{schm: RLC}}
@@ -199,6 +275,7 @@ le resistenze $R_c$ tra i valori nominali di $1 - 2.2 \pm 10 \% \;
 	\caption{Schema circuitale dell'oscillatore a reazione con BJT
 	studiato\label{schm: BJT}}
 \end{figure}
+
 %================================================================
 %                   Analisi dati e Risultati
 %================================================================
@@ -222,38 +299,56 @@ interno, determinati con un semplice fit lineare.
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{cal1.1}
-	\label{fig: cal1.1}
+		\caption{Calibrazione ADC per reference = \texttt{INTERNAL} $1.1 \si{\V}$. 
+	\label{fig: cal1.1}}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{cal5}
-	\label{fig: cal1}
+		\caption{Calibrazione ADC per reference = \texttt{DEFAULT} $5 \si{\V}$. 
+	\label{fig: cal5}}
 	\end{subfigure}
+	\caption{Risultato delle misure di calibrazione il pannello superiore mostra
+		dati, retta ottenuta dal best-fit e "curve di confidenza", quello inferiore
+		il grafico dei residui normalizzati.\label{fig: cals}}
 \end{figure}
 
-\subsection{Circuito RC e generatore di Funzioni}
-
+\subsection{Circuito RC}
 \begin{figure}[!htb]
 \centering
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{RCsin50}
+	\caption{$\Delta t = 100 + 20 \pm 4 \si{\us} \; f = 50 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{DSOsqw200}
+	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 200 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCtrg100}
+	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 100 \si{\Hz}$}
 \label{fig: RCin}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{DSOsin200}
+	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 200 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCfin50}
+	\caption{$\Delta t = 100 + 20 \pm 4 \si{\us} \; f = 50 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCpar100}
+	\caption{$\Delta t = 100 + 20 \pm 4 \si{\us} \; f = 100 \si{\Hz}$}
 \label{fig: Rcint}
 	\end{subfigure}%
-\label{fig: RCall}
+	\caption{Risultati trovati sull'effetto dell'integratore RC sui segnali
+			nel tempo e sulla loro trasformata di Fourier. A sinistra le
+			onde in ingresso seno, quadra e triangolare e a destra i corrispondenti 
+		 	segnali filtrati. \label{fig: RCall}}
 \end{figure}
 
 \subsection{Circuiti RLC}
 \begin{figure}[!htb]
 \centering
-	\includegraphics{RLC0.1b3}
-\label{fig: RLC0.1b3}
+	\includegraphics{RLC0.1b4}
+	\caption{Illustrazione del picco che si trova nei dati campionati
+			in fondo all'oscillazione smorzata del circuito, ovviamente
+			non prevista dal modello di best fit. 
+			$\Delta t = 40 + 22 \pm 3 \; [\si{\us}]$ $C = 0.1 \pm 10\% \;
+			[\si{\micro\F}]$ $L = 0.5 \pm 10 \% \; [\si{\henry}]$ $r = 58 \pm 10\% 
+			\; [\si{\ohm}]$. \label{fig: RLC0.1b4}}
 \end{figure}
 
 Alla fine del segnale oscillante\footnote{alla fine del
@@ -283,15 +378,31 @@ rispetto alla risoluzione del sistema di acquisizione.
 \centering
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{RLC0.1b3_net} 
-		\includegraphics[width=8.5cm]{RLC0.47b3} 
+	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = 680 \si{\Hz}$
+		$C = 0.1 \pm 10 \% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.22b3} 
+	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
+			$C = 0.22 \pm 10 \% \si{\micro\F}$}
+		\includegraphics[width=8.5cm]{RLC0.47b3} 
+	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
+			$C = 0.47 \pm 10 \% \si{\micro\F}$}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{RLC0.1b3_traf}
+	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
+			$C = 0.1 \pm 10 \% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.22b3_traf}
+	\caption{$\Delta t = 30 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
+			$C = 0.22 \pm 10\% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.47b5_all}
+	\caption{$\Delta t = 50 + 20 \pm 3 \si{\us} \; f = ? \si{\Hz}$
+			$C = 0.47 \pm 10 \% \si{\micro\F}$}
 	\end{subfigure}%
-\label{fig: RLCall}
+	\caption{Risultati sugli effetti dovuti ai diversi nuclei inseriti
+			all'interno dell'induttore sulla larghezza di riga della trasformata
+			e sul segnale in uscita dall'oscillatore RLC. Nella colonna sinistra
+			lasciato vuoto, a destra con un blocco pieno di alluminio.
+			 \label{fig: RLCall}}
 \end{figure}
 
 \begin{table}[!htb]
@@ -323,17 +434,27 @@ diverso nel cuore dell'induttore. \label{tab: RLC}}
 \centering
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{DSObjt44}
+	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 44 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{DSObjt201}
+	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 201 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{DSObjt206}
+	\caption{$\Delta t = 2 \pm 0.5 \si{\us} \; f = 206 \si{\Hz}$}
 \label{fig: BJTin}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{DSObjt44hamm}
+	\caption{Finestra di Hamming $a_0 = 0.54, \, a_1 = 0.46$.}
 	\includegraphics[width=8.5cm]{DSObjt201blak}
+	\caption{Finestra di Blackman $a_0 = 0.42, \, a_1 = 0.5, \, a_2 = 0.08$}
 	\includegraphics[width=8.5cm]{DSObjt206bart}
+	\caption{Finestra di Bartlett o triangolare.}
 \label{fig: BJTwin}
 	\end{subfigure}%
-\label{fig: BJTall}
+	\caption{Risultati trovati sull'effetto di diverse finestre	sulle
+			perdite di spettro nella trasformata del segnale in uscita
+		 	dall'oscillatore a reazione.
+			Nella colonna sinistra prima, a destra dopo aver applicato
+			le funzioni finestra al segnale. \label{fig: BJTall}}
 \end{figure}
 
 \subsection{Nota sull'implementazione}

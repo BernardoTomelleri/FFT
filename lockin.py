@@ -19,27 +19,28 @@ log = False # log-scale axis/es
 dB = False # plots response y-axis in deciBels
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-DAQ = True # Use a real sampled singal or simulate it internally 
+DAQ = False # Use a real sampled singal or simulate it internally 
 
 x_min = 0.; x_max = 1
 t = np.linspace(x_min, x_max, 100_000)
-if DAQ: ref = args(A=1, frq=167.72, phs=0, ofs=0)
-else: ref = args(100, frq=1e2, phs=0, ofs=0)
-sig = args(A=1, frq=1e2, phs=0.2, ofs=0)
+if DAQ: ref = args(A=1, frq=201.21953597, phs=0, ofs=0)
+else: ref = args(1, frq=1e3, phs=0, ofs=0)
+sig = args(A=1, frq=1e3, phs=0.2, ofs=0)
 cut = round(len(t)*5e-2) # Discarded initial points from LPFed components
 
-Vsig = sine(t, *sig)
-if DAQ: from data import x as t, y as Vsig, DSO
+Vsig = sine(t, *sig); Vpu = sine(t, A=5, frq=50); DC = 2.5
+Ve = np.array(Vsig, copy=True)
+if DAQ: from data import sx as t, sy as Vsig, DSO
 else: DSO = False
-# fs = 1./sampling(t)
+
 fs = len(t)/x_max
-noise = np.random.normal(loc=0, scale=20, size=len(t))
+noise = np.random.normal(loc=0, scale=10, size=len(t))
 print('Gaussian Noise: avg = %.2f std = %.2f' %(np.mean(noise), np.std(noise)))
-if not DAQ: Vsig+=noise
+if not DAQ: Vsig+=(noise + Vpu + DC)
 Vsin = sine(t, *ref); Vcos = cosn(t, *ref)
 
 Vsin = np.multiply(Vsin, Vsig); Vcos = np.multiply(Vcos, Vsig)
-Y = 2*butf(Vcos, 1, fc=2, sampf=fs); X = 2*butf(Vsin, 1, fc=2, sampf=fs)
+Y = 2*butf(Vcos, 1, fc=10, sampf=fs); X = 2*butf(Vsin, 1, fc=10, sampf=fs)
 X /= ref.A; Y /= ref.A; Z = X + 1j*Y
 Xmag = np.sqrt(X**2 + Y**2); Xphs = np.arctan2(Y, X);
 
@@ -53,8 +54,8 @@ ax2.plot(t, Vsin, lw=0.8, label='sin'); ax2.plot(t, Vcos, lw=0.8, label='cos')
 leg_sig = ax2.legend(loc='best', framealpha=0.3)
 
 # Discard initial transient of the digital filter > 1/10 of length
-t = t[cut:]; Vsin = Vsin[cut:]; Vcos = Vcos[cut:]; X = X[cut:]; Y = Y[cut:]
-Xmag = Xmag[cut:]; Xphs = Xphs[cut:]; Z = Z[cut:]
+t = t[cut:]; Vsin = Vsin[cut:]; Vcos = Vcos[cut:]; X = X[cut:]; Y = Y[cut:]; Vsig = Vsig[cut:]
+Xmag = Xmag[cut:]; Xphs = Xphs[cut:]; Z = Z[cut:]; Ve = Ve[cut:]; Vpu = Vpu[cut:]
 avg_mag = np.mean(Xmag); avg_phs = np.mean(Xphs); RMS_mag = RMS(Xmag)
 std_mag = np.std(Xmag); std_phs = np.std(Xphs)
 
