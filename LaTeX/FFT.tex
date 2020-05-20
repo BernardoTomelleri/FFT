@@ -5,9 +5,10 @@
 
 \geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
 \title{Esercizio facoltativo* sulla FFT}
-\author{M.~Alighieri(\protect\footnotemark[1] )~\and
-M.~Romagnoli(\protect\footnotemark[1] )~\and 
-B.~Tomelleri(\protect\footnotemark[1] )}%
+\author{M.~Alighieri(\thanks{Dipartimento di Fisica E.~Fermi,
+		Universit\`a~di~Pisa - Pisa, Italy} )~\and
+		M.~Romagnoli(\protect\footnotemark[1] )~\and 
+		B.~Tomelleri(\protect\footnotemark[1] )}%
 
 \begin{document}
 \maketitle
@@ -38,12 +39,12 @@ Poiché l'operazione di media temporale è svolta alla $f_{\text{ref}}$ sia
 le fluttuazioni termiche ad alta frequenza o di \emph{jitter}
 $\propto 1/\sqrt{T_{\text{mis}}}$ che quelle di \emph{flicker}
 $\propto 1/f^\gamma$ sono mitigate dal metodo di lock-in detection.
-Al livello di implementazione digitale un secondo pregio del LIA risulta meno
-evidente, vista la possibilità di costruire filtri BPF numerici con banda
-regolabile di qualità arbitraria: ma, nel caso reale costruire
-filtri mobili di alta qualità $Q_f \gg 10$ è tutto fuorché banale, dunque la
-possibilità di traslare in frequenza le componenti di un segnale all'interno
-della banda di un buon filtro "fisso" costituisce un enorme vantaggio.
+Dal punto di vista dell'implementazione digitale un secondo pregio del LIA
+risulta meno evidente (vista la possibilità di costruire filtri BPF numerici
+con banda regolabile di qualità arbitraria) però, nel caso reale, costruire
+filtri mobili di alta qualità $Q_f \gg 10$ è tutto fuorché banale: dunque la
+possibilità di -traslare- in frequenza le componenti di un segnale rispetto
+alla banda di un buon filtro "fisso" costituisce un enorme vantaggio.
 
 \subsection{Circuito RC}
 Ricordando la scomposizione di un segnale periodico in serie di Fourier,
@@ -67,6 +68,8 @@ sinusoidali a segnali periodici qualsiasi con la funzione di trasferimento:
 \end{align*}
 dove il polo per $\omega_T = 2\pi f_T = 1/RC$ definisce la frequenza di
 caratteristica o di taglio del filtro.
+\medskip
+
 \subsection{Circuiti forzati e smorzati RLC}
 In un circuito costituito da almeno una resistenza, un induttore ed un
 condensatore (nel nostro caso collegati in serie) è possibile individuare una
@@ -216,7 +219,7 @@ in quadratura $V_{\text{rq}}(t)$
 	\frac{1}{2} V_{\text{sig}} V_{\text{ref}}\sin{\Delta \phi}
 \end{align}
 Un cambio di coordinate da cartesiane a polari ci permette di esprimere in
-maniera elegante il modulo e la fase del segnale da misurare $V(t)$
+maniera elegante il modulo e la fase del segnale da misurare $V(t)$.
 \begin{align}
 	X := 2 \frac{V_{\text{out}}}{V_{\text{ref}}}\cos{\Delta \phi} =
 	V_{\text{sig}}\cos{\Delta \phi}; \quad
@@ -268,6 +271,7 @@ digitale (CH1).
 	\caption{Schema circuitale dell'integratore RC realizzato in laboratorio.
 	\label{fig: RC}}
 \end{figure}
+
 \subsubsection{Circuiti RLC}
 Nel nostro caso l'induttore è costituito da due avvolgimenti concentrici
 e coassiali, ciascuno dotato di 1500 spire, che montati in serie hanno un
@@ -512,13 +516,14 @@ fondamentale risulta $\Delta \omega_{\text{FWHM}} = 0.4 - 0.5$.
 Intendiamo estrarre un segnale $V(t)$ relativamente piccolo
 in presenza di rumori -forti- e di natura diversa:
 Un rumore di pick-up magnetico a $f_{\text{pu}} = 50 \si{\Hz}$ e ampiezza
-$A_{\text{pu}} = 2$ [arb. un.], una tensione costante a 
+$A_{\text{pu}} = 2$ [arb. un.], una tensione costante pari a 
 $V_{\text{CC}} = 2.5$ [arb. un.] ed un rumore -bianco-, che possiamo modellare
 con un generatore di numeri pseudo-casuali distribuiti normalmente
 intorno a 0 con deviazione standard $\sigma = 10$ [arb. un.].
 In queste condizioni non è possibile distinguere il piccolo segnale $V(t)$ 
-di ampiezza $A = 0.1$, frequenza $f = 1 \si{\kilo\hertz}$ e fase costante
-$\phi = 0.2 \si{rad}$ dal rumore neanche analizzando lo spettro in frequenza:
+di ampiezza $V_{\text{sig}} = 0.1$, [arb. un.], frequenza 
+$f = 1 \si{\kilo\hertz}$ e fase costante $\phi = 0.2 \; \si{rad}$
+dal rumore neanche analizzando lo spettro in frequenza:
 \begin{figure}[!htb]
 \centering
 	\includegraphics{LIA1k}
@@ -534,22 +539,27 @@ fase rispetto ai riferimenti ed al segnale stesso:
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{LIAFFT1k}
-		\caption{Nel pannello superiore l'ampiezza di $V(t)$ in uscita dal LIA
-				e sotto la sua trasformata di Fourier.}
+		\caption{Nel pannello superiore l'ampiezza di $V(t)$ in uscita dal LIA \\
+				\; e sotto la sua trasformata di Fourier.}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{LIAmag1k}
-		\caption{Ampiezza e fase di V(t) trovate dalla simulazione di un 
-			Lock-In-Detector.}
+		\caption{Ampiezza e fase di $V(t)$ trovate dal Lock-In-Detector.}
 	\end{subfigure}
 	\caption{Risultato della simulazione di detezione sincrona di un segnale
 			affetto da rumori di ampiezze superiori di alcuni ordini di
-			grandezza $SNR \approx 10^{-2}$. $\Delta t = 2 \si{\us} \;
-			T_{\text{mis}} = 200 \si{\ms}$. \label{fig: LIAall}}
+			grandezza SNR $\approx 10^{-2}$. Per la misura si è scelto un
+			intervallo di campionamento abbastanza breve per ridurre
+			gli effetti di discretizzazione della rappresentazione
+			del segnale nel tempo $\Delta t = 2 \si{\us}$
+			ed un tempo totale di misura $T_{\text{mis}} = 200 \si{\ms}$.
+		\label{fig: LIAall}}
 \end{figure}
 Adesso una misura del segnale è possibile e, quanto il rivelatore simulato è
 riuscito a dedurre sul nostro segnale non dista più del $20 \%$ rispetto ai
-valori attesi impostati nello script.
+valori attesi impostati nello script $V_{\text{mis}} \approx 0.12 \;
+\si{arb. un.} \leadsto V_{\text{sig}}$ $\phi_{\text{mis}} \approx 0.2 \;
+\si{rad} \leadsto \phi$.
 
 \subsection{Nota sull'implementazione}
 Per determinare i parametri ottimali e le rispettive covarianze si \`e
