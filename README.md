@@ -1,6 +1,7 @@
-# Fusofourier
+# Fusofourier II
 Esercizio obbligatorio sulla computazione della trasformata di Fourier di
-segnali periodici campionati digitalmente.
+segnali periodici campionati digitalmente e simulazione di un 
+Lock In Amplifier/Detector in Python.
 
 Per la compilazione la memoria base di LaTeX potrebbe non essere sufficiente:\
 Per gli utenti di TexLive è sufficiente modificare il file di configurazione
