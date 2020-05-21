@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.4)  21 MAY 2020 10:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.4)  21 MAY 2020 14:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1623,15 +1623,15 @@ LaTeX Font Warning: Size substitutions with differences
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 613.
  ) 
 Here is how much of TeX's memory you used:
- 55870 strings out of 481239
- 1364940 string characters out of 5920378
+ 55865 strings out of 481239
+ 1364900 string characters out of 5920378
  2069796 words of memory out of 5000000
  69828 multiletter control sequences out of 15000+600000
- 665275 words of font info for 484 fonts, out of 8000000 for 9000
+ 664994 words of font info for 480 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  76i,23n,121p,958b,1276s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/fpl/fplrc8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on FFT.pdf (12 pages, 7587388 bytes).
+Output written on FFT.pdf (12 pages, 7587370 bytes).
 PDF statistics:
  765 PDF objects out of 1000 (max. 8388607)
  592 compressed objects within 6 object streams

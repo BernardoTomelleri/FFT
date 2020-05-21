@@ -11,7 +11,7 @@ from lab import (np, plt, curve_fit, chitest, sine, propfit, grid, errcor,
 
 ''' Variables that control the script '''
 fit = False # attempt to fit the data to function
-lock = True # Lock-in amplify data before FFT
+lock = False # Lock-in amplify data before FFT
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
 log = False # log-scale axis/es
@@ -96,9 +96,9 @@ if fit:
 
 if lock: from lockin import t as x, Xmag as y, DAQ, Ve, Vpu, DSO;
 # FFT Computation with numpy window functions
-freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.blackman, beta=None)
+freq, tran, fres, frstd = FFT(time=x, signal=y, window=np.kaiser, beta=None)
 fmax, fftmax = optm(np.fft.fftshift(freq), np.fft.fftshift(tran), absv=True)
-print(f"Fundamental frequency = {fmax:.8f} +- {2*fres/len(sy):.2e} mag = {fftmax:.2f}" )
+print(f"Fundamental frequency = {fmax:.2e} +- {2*fres/len(sy):.2e} mag = {fftmax:.2e}" )
 if AC and not lock: 
     fwhm = FWHM(freq, tran, FT=True)
     if fwhm: print("FWHM = %.1f Hz" %fwhm)
@@ -108,13 +108,14 @@ if AC and not lock:
 dx = std_unc(x)/10; dy = std_unc(y)/10
 fig, (ax1, ax2) = plotfft(freq, tran, signal=(x, dx, y, dy), norm=True,
                           dB=True, re_im=False)
-ax2.set_xlim(0, 3000); ax2.set_ylim(-100, 1)
+
 if log: logy(ax2, 16)
 elif tix:
     tick(ax2, xmaj=200, ymaj=1e3)
-if dB: tick(ax2, ymaj=20, ymin=5)
+if dB: tick(ax2, ymaj=20, ymin=5); ax2.set_ylim(-100, 1)
 
-if tix: 
+if tix:
+    ax2.set_xlim(0, 3000)
     tick(ax1, xmaj=0.01, ymaj=200, ymin=None)
     if DSO: tick(ax1, xmaj=0.1, ymaj=0.2, ymin=5e-2)
 

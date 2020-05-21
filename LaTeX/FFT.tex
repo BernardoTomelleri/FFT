@@ -67,8 +67,8 @@ sinusoidali a segnali periodici qualsiasi con la funzione di trasferimento:
 \end{cases}
 \end{align*}
 dove il tempo caratteristico di scarica del condensatore $\tau = RC$ definisce
-la frequenza $\omega_T = 2\pi f_T = 1/RC = \frac{1}{\tau}$ 
-caratteristica o di taglio del filtro.
+la frequenza $\omega_T = 2\pi f_T = 1/RC$ caratteristica o
+\emph{di taglio} del filtro.
 \medskip
 
 \subsection{Circuiti forzati e smorzati RLC}
@@ -479,10 +479,10 @@ di base del transistor porta ad una distorsione asimmetrica del segnale,
 qualitativamente diversa da un'onda sinusoidale nel dominio del tempo.
 Infatti il contenuto armonico della trasformata di $V_{\text{out}}$ risulta
 caratterizzato da un intervallo di frequenze a cui il circuito può
-oscillare. Un contributo alle armoniche superiori osservate nella FFT
-potrebbe essere dato dalla bassa qualità della rete di sfasamento,
-in effetti la larghezza a metà altezza intorno alla frequenza
-fondamentale risulta $\Delta \omega_{\text{FWHM}} = 0.4 - 0.5$. 
+oscillare. Un secondo contributo alle armoniche superiori osservate nella
+FFT potrebbe essere dato dalla bassa qualità della rete di sfasamento,
+nel nostro caso la larghezza a metà altezza intorno alla frequenza
+fondamentale risulta $\Delta \omega_{\text{FWHM}} \approx 0.4 - 0.5 \si{\Hz}$. 
 \begin{figure}[!htb]
 \centering
 	\begin{subfigure}{.5\textwidth}

@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex FFT"] 1590051192 "FFT.aux" "FFT.bbl" "FFT" 1590051430
+["bibtex FFT"] 1590051192 "FFT.aux" "FFT.bbl" "FFT" 1590063739
   "./IEEEtrandoi.bst" 1577387200 60815 f4ed9ef17005d390213cd57d581f7b76 ""
-  "FFT.aux" 1590051429 14406 ea16ddfb3c4f1dae5a7f383260097aca "pdflatex"
+  "FFT.aux" 1590063738 14406 ea16ddfb3c4f1dae5a7f383260097aca "pdflatex"
   "refs.bib" 1589628002 2236 998afc55654e2cb8cd2926c3fb6f289a ""
   (generated)
   "FFT.bbl"
   "FFT.blg"
-["pdflatex"] 1590051425 "FFT.tex" "FFT.pdf" "FFT" 1590051430
+["pdflatex"] 1590063735 "FFT.tex" "FFT.pdf" "FFT" 1590063739
   "/etc/texmf/web2c/texmf.cnf" 1588545332 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -331,10 +331,10 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1588546889 4771502 73179107bbd81e70b863f12905f54679 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1588546941 8259341 6e3b17c21cd297d24330192377f9abc9 ""
-  "FFT.aux" 1590051429 14406 ea16ddfb3c4f1dae5a7f383260097aca "pdflatex"
+  "FFT.aux" 1590063738 14406 ea16ddfb3c4f1dae5a7f383260097aca "pdflatex"
   "FFT.bbl" 1590051193 2317 f9e963c32f8a8314b12850cb449e9fa5 "bibtex FFT"
-  "FFT.out" 1590051429 1327 0c9729ca0083e744317754da4ef625f1 "pdflatex"
-  "FFT.tex" 1590051425 29988 77e6758593bee1c6465417fbdee18242 ""
+  "FFT.out" 1590063738 1327 0c9729ca0083e744317754da4ef625f1 "pdflatex"
+  "FFT.tex" 1590063735 30005 cd263e18f1d3750c02738ee2d088962f ""
   "figs/BJTschm.pdf" 1589675246 13537 923d944e28fad915d107610f79ac656f ""
   "figs/DSObjt201.pdf" 1589848896 258629 7b29766393132f85e01c30ad91b25048 ""
   "figs/DSObjt201blak.pdf" 1589848977 251052 1e77ecb70e42bd89dec0c13fd3cd68b6 ""
@@ -365,8 +365,8 @@
   "math.tex" 1584553197 6838 f0980f58108978b3f6b8d5adab6a0ed2 ""
   "preamble.tex" 1589987966 1980 5bf9fbb6dbdf019a33ee502e910d43f8 ""
   (generated)
-  "FFT.aux"
-  "FFT.out"
   "FFT.auxlock"
-  "FFT.log"
+  "FFT.out"
   "FFT.pdf"
+  "FFT.aux"
+  "FFT.log"

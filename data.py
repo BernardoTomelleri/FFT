@@ -9,6 +9,7 @@ from lab import np, srange, std_unc
 DSO = False # Sampling from Digital Oscilloscope
 AC = False # Cut constant DC offset from zero (AC coupling)
 
+# Fattori di calibrazione Arduino per Vref 1.1V e 5V
 m1 = 1.040; m5 = 4.70
 # Extrazione dei vettori di dati grezzi
 Dir = './RLC_data/'
