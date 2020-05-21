@@ -66,7 +66,8 @@ sinusoidali a segnali periodici qualsiasi con la funzione di trasferimento:
 	\arctan{\left(- \omega_k /\omega_T \right)}
 \end{cases}
 \end{align*}
-dove il polo per $\omega_T = 2\pi f_T = 1/RC$ definisce la frequenza di
+dove il tempo caratteristico di scarica del condensatore $\tau = RC$ definisce
+la frequenza $\omega_T = 2\pi f_T = 1/RC = \frac{1}{\tau}$ 
 caratteristica o di taglio del filtro.
 \medskip
 
@@ -342,7 +343,7 @@ interno, determinati con un semplice fit lineare.
 \subsection{Circuito RC}
 Ricordando il guadagno atteso per un filtro RC passivo, dalla trasformata
 di Fourier si riesce ad apprezzare l'effetto di attenuazione sulle armoniche
-superiori dei segnali integrati.
+superiori dei segnali integrati per $f \gg f_T$.
 \begin{figure}[!htb]
 \centering
 	\begin{subfigure}{.5\textwidth}
@@ -550,9 +551,9 @@ fase rispetto ai riferimenti ed al segnale stesso:
 			affetto da rumori di ampiezze superiori di alcuni ordini di
 			grandezza SNR $\approx 10^{-2}$. Per la misura si è scelto un
 			intervallo di campionamento abbastanza breve per ridurre
-			gli effetti di discretizzazione della rappresentazione
-			del segnale nel tempo $\Delta t = 2 \si{\us}$
-			ed un tempo totale di misura $T_{\text{mis}} = 200 \si{\ms}$.
+			gli effetti dovuti alla rappresentazione discreta del segnale
+			nel tempo, $\Delta t = 2 \si{\us}$ ed un tempo totale di
+			"acquisizione" $T_{\text{mis}} = 200 \si{\ms}$.
 		\label{fig: LIAall}}
 \end{figure}
 Adesso una misura del segnale è possibile e, quanto il rivelatore simulato è
@@ -582,23 +583,25 @@ per ulteriori informazioni sugli script utilizzati, dove \verb+lab.py+ funge
 da libreria di funzioni di appoggio e \verb+data.py+ definisce i parametri
 fondamentali in ingresso per l'analisi dei dati.
 \subsubsection{Filtro outliers}
-La parte pi\`u semplice nel filtraggio dati consiste nello scartare tutti quei
-punti che distano da $\mu_y$ pi\`u di una soglia arbitraria $k$ di deviazioni
-standard $\sigma_y$ (nel nostro caso \`e stato scelto $k = 5$).
+Per rimozione degli outlier si intende lo scartare tutti quei punti che
+distano dal valore atteso per la misura $y$: $E[y] := \mu_y$ pi\`u di una
+soglia arbitraria $k$ di incertezze associate $\Delta y$
+(nel nostro caso \`e stato scelto $k = 5$).
 
 %================================================================
 %                          Conclusioni
 %================================================================
 \section{Conclusioni}
-Sì è visto da un nuovo punto di vista l'effetto di "abbassamento" selettivo
-in frequenza di un filtro passa-basso.
+Sì è visto l'andamento decrescente delle componenti armoniche di un segnale
+all'aumentare della frequenza causato da un filtro passa-basso.
 Si è osservata una correlazione fra larghezza di riga della curva di risonanza
 e lo smorzamento presente in un circuito oscillante RLC.
-Si è riusciti ad apprezzare l'effetto dell risposta non lineare
-dell'amplificatore invertente(BJT a emettitore comune) sullo spettro
-in frequenza dell'auto-oscillazione.
+Si è riusciti ad apprezzare l'effetto della risposta non lineare
+dell'amplificatore invertente (BJT a emettitore comune) sullo spettro
+in frequenza dell'auto-oscillazione e l'uso di diverse finestre per
+rimdediare gli effetti di perdita spettrale.
 Si è illustrato uno dei vantaggi del metodo di Lock-in-Detection per 
-la risoluzione di segnali sommersi da rumore di ampiezze maggiori di diversi
+la risoluzione di segnali sommersi da rumore di ampiezze maggiori di alcuni
 ordini di grandezza.
 
 %================================================================

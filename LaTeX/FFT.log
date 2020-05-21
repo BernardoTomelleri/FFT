@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.4)  21 MAY 2020 01:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.4)  21 MAY 2020 10:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1282,12 +1282,12 @@ Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/pplj/m/sc/9'.
 (microtype)             Ignoring protrusion settings for this character.
  [2] [3]
-LaTeX Font Info:    Trying to load font information for T1+fvm on input line 238.
+LaTeX Font Info:    Trying to load font information for T1+fvm on input line 239.
  (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
 File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
 )
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.50006pt on input line 238.
+(Font)              scaled to size 8.50006pt on input line 239.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `fvm' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
@@ -1301,7 +1301,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 <./figs/RLCschm.png, id=126, 1361.085pt x 566.86781pt>
 File: ./figs/RLCschm.png Graphic file (type png)
 <use ./figs/RLCschm.png>
-Package pdftex.def Info: ./figs/RLCschm.png  used on input line 289.
+Package pdftex.def Info: ./figs/RLCschm.png  used on input line 290.
 (pdftex.def)             Requested size: 398.33858pt x 165.90115pt.
 
 
@@ -1309,158 +1309,158 @@ pdfTeX warning: pdflatex (file ./figs/BJTschm.pdf): PDF inclusion: found PDF ver
 <./figs/BJTschm.pdf, id=127, 285.6833pt x 130.51964pt>
 File: ./figs/BJTschm.pdf Graphic file (type pdf)
 <use ./figs/BJTschm.pdf>
-Package pdftex.def Info: ./figs/BJTschm.pdf  used on input line 301.
+Package pdftex.def Info: ./figs/BJTschm.pdf  used on input line 302.
 (pdftex.def)             Requested size: 398.33858pt x 182.00328pt.
 [4] [5 <./figs/RLCschm.png> <./figs/BJTschm.pdf>]
 <./figs/cal1.1.pdf, id=149, 462.52798pt x 341.8371pt>
 File: ./figs/cal1.1.pdf Graphic file (type pdf)
 <use ./figs/cal1.1.pdf>
-Package pdftex.def Info: ./figs/cal1.1.pdf  used on input line 328.
+Package pdftex.def Info: ./figs/cal1.1.pdf  used on input line 329.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 328--330
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 329--331
 [][] 
  []
 
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 6.80005pt on input line 330.
+(Font)              scaled to size 6.80005pt on input line 331.
 <./figs/cal5.pdf, id=150, 462.52798pt x 341.8371pt>
 File: ./figs/cal5.pdf Graphic file (type pdf)
 <use ./figs/cal5.pdf>
-Package pdftex.def Info: ./figs/cal5.pdf  used on input line 333.
+Package pdftex.def Info: ./figs/cal5.pdf  used on input line 334.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 333--335
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 334--336
 [][] 
  []
 
 <./figs/RCsin50.pdf, id=151, 462.52798pt x 341.8371pt>
 File: ./figs/RCsin50.pdf Graphic file (type pdf)
 <use ./figs/RCsin50.pdf>
-Package pdftex.def Info: ./figs/RCsin50.pdf  used on input line 349.
+Package pdftex.def Info: ./figs/RCsin50.pdf  used on input line 350.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 349--350
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 350--351
 [][] 
  []
 
 <./figs/DSOsqw200.pdf, id=152, 462.52798pt x 341.8371pt>
 File: ./figs/DSOsqw200.pdf Graphic file (type pdf)
 <use ./figs/DSOsqw200.pdf>
-Package pdftex.def Info: ./figs/DSOsqw200.pdf  used on input line 351.
+Package pdftex.def Info: ./figs/DSOsqw200.pdf  used on input line 352.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 351--353
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 352--354
 [][] 
  []
 
 <./figs/RCtrg100.pdf, id=153, 462.52798pt x 341.8371pt>
 File: ./figs/RCtrg100.pdf Graphic file (type pdf)
 <use ./figs/RCtrg100.pdf>
-Package pdftex.def Info: ./figs/RCtrg100.pdf  used on input line 354.
+Package pdftex.def Info: ./figs/RCtrg100.pdf  used on input line 355.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 354--356
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 355--357
 [][] 
  []
 
 <./figs/DSOsin200.pdf, id=154, 462.52798pt x 341.8371pt>
 File: ./figs/DSOsin200.pdf Graphic file (type pdf)
 <use ./figs/DSOsin200.pdf>
-Package pdftex.def Info: ./figs/DSOsin200.pdf  used on input line 360.
+Package pdftex.def Info: ./figs/DSOsin200.pdf  used on input line 361.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 360--362
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 361--363
 [][] 
  []
 
 <./figs/RCfin50.pdf, id=155, 462.52798pt x 341.8371pt>
 File: ./figs/RCfin50.pdf Graphic file (type pdf)
 <use ./figs/RCfin50.pdf>
-Package pdftex.def Info: ./figs/RCfin50.pdf  used on input line 363.
+Package pdftex.def Info: ./figs/RCfin50.pdf  used on input line 364.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 363--364
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 364--365
 [][] 
  []
 
 <./figs/RCpar100.pdf, id=156, 462.52798pt x 341.8371pt>
 File: ./figs/RCpar100.pdf Graphic file (type pdf)
 <use ./figs/RCpar100.pdf>
-Package pdftex.def Info: ./figs/RCpar100.pdf  used on input line 365.
+Package pdftex.def Info: ./figs/RCpar100.pdf  used on input line 366.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 365--366
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 366--367
 [][] 
  []
 
 <./figs/RLC0.1b4.pdf, id=157, 462.52798pt x 341.8371pt>
 File: ./figs/RLC0.1b4.pdf Graphic file (type pdf)
 <use ./figs/RLC0.1b4.pdf>
-Package pdftex.def Info: ./figs/RLC0.1b4.pdf  used on input line 378.
+Package pdftex.def Info: ./figs/RLC0.1b4.pdf  used on input line 379.
 (pdftex.def)             Requested size: 462.52684pt x 341.83624pt.
 
-Overfull \hbox (7.28273pt too wide) in paragraph at lines 378--385
+Overfull \hbox (7.28273pt too wide) in paragraph at lines 379--386
  [][] 
  []
 
 <./figs/RLC0.1b3_net.pdf, id=158, 462.52798pt x 341.8371pt>
 File: ./figs/RLC0.1b3_net.pdf Graphic file (type pdf)
 <use ./figs/RLC0.1b3_net.pdf>
-Package pdftex.def Info: ./figs/RLC0.1b3_net.pdf  used on input line 414.
+Package pdftex.def Info: ./figs/RLC0.1b3_net.pdf  used on input line 415.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 414--416
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 415--417
 [][] 
  []
 
 <./figs/RLC0.22b3.pdf, id=159, 462.52798pt x 341.8371pt>
 File: ./figs/RLC0.22b3.pdf Graphic file (type pdf)
 <use ./figs/RLC0.22b3.pdf>
-Package pdftex.def Info: ./figs/RLC0.22b3.pdf  used on input line 417.
+Package pdftex.def Info: ./figs/RLC0.22b3.pdf  used on input line 418.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 417--419
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 418--420
 [][] 
  []
 
 <./figs/RLC0.47b3.pdf, id=160, 462.52798pt x 341.8371pt>
 File: ./figs/RLC0.47b3.pdf Graphic file (type pdf)
 <use ./figs/RLC0.47b3.pdf>
-Package pdftex.def Info: ./figs/RLC0.47b3.pdf  used on input line 420.
+Package pdftex.def Info: ./figs/RLC0.47b3.pdf  used on input line 421.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 420--422
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 421--423
 [][] 
  []
 
 <./figs/RLC0.1b3_traf.pdf, id=161, 462.52798pt x 341.8371pt>
 File: ./figs/RLC0.1b3_traf.pdf Graphic file (type pdf)
 <use ./figs/RLC0.1b3_traf.pdf>
-Package pdftex.def Info: ./figs/RLC0.1b3_traf.pdf  used on input line 425.
+Package pdftex.def Info: ./figs/RLC0.1b3_traf.pdf  used on input line 426.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 425--427
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 426--428
 [][] 
  []
 
 <./figs/RLC0.22b3_traf.pdf, id=162, 462.52798pt x 341.8371pt>
 File: ./figs/RLC0.22b3_traf.pdf Graphic file (type pdf)
 <use ./figs/RLC0.22b3_traf.pdf>
-Package pdftex.def Info: ./figs/RLC0.22b3_traf.pdf  used on input line 428.
+Package pdftex.def Info: ./figs/RLC0.22b3_traf.pdf  used on input line 429.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 428--430
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 429--431
 [][] 
  []
 
 <./figs/RLC0.47b5_all.pdf, id=163, 462.52798pt x 341.8371pt>
 File: ./figs/RLC0.47b5_all.pdf Graphic file (type pdf)
 <use ./figs/RLC0.47b5_all.pdf>
-Package pdftex.def Info: ./figs/RLC0.47b5_all.pdf  used on input line 431.
+Package pdftex.def Info: ./figs/RLC0.47b5_all.pdf  used on input line 432.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 431--433
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 432--434
 [][] 
  []
 
@@ -1486,60 +1486,60 @@ pdfTeX warning: pdflatex (file ./figs/RCpar100.pdf): PDF inclusion: multiple pdf
 <./figs/DSObjt44.pdf, id=364, 462.52798pt x 341.8371pt>
 File: ./figs/DSObjt44.pdf Graphic file (type pdf)
 <use ./figs/DSObjt44.pdf>
-Package pdftex.def Info: ./figs/DSObjt44.pdf  used on input line 488.
+Package pdftex.def Info: ./figs/DSObjt44.pdf  used on input line 489.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 488--490
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 489--491
 [][] 
  []
 
 <./figs/DSObjt201.pdf, id=365, 462.52798pt x 341.8371pt>
 File: ./figs/DSObjt201.pdf Graphic file (type pdf)
 <use ./figs/DSObjt201.pdf>
-Package pdftex.def Info: ./figs/DSObjt201.pdf  used on input line 491.
+Package pdftex.def Info: ./figs/DSObjt201.pdf  used on input line 492.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 491--493
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 492--494
 [][] 
  []
 
 <./figs/DSObjt206.pdf, id=366, 462.52798pt x 341.8371pt>
 File: ./figs/DSObjt206.pdf Graphic file (type pdf)
 <use ./figs/DSObjt206.pdf>
-Package pdftex.def Info: ./figs/DSObjt206.pdf  used on input line 494.
+Package pdftex.def Info: ./figs/DSObjt206.pdf  used on input line 495.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 494--496
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 495--497
 [][] 
  []
 
 <./figs/DSObjt44hamm.pdf, id=367, 462.52798pt x 341.8371pt>
 File: ./figs/DSObjt44hamm.pdf Graphic file (type pdf)
 <use ./figs/DSObjt44hamm.pdf>
-Package pdftex.def Info: ./figs/DSObjt44hamm.pdf  used on input line 500.
+Package pdftex.def Info: ./figs/DSObjt44hamm.pdf  used on input line 501.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 500--501
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 501--502
 [][] 
  []
 
 <./figs/DSObjt201blak.pdf, id=368, 462.52798pt x 341.8371pt>
 File: ./figs/DSObjt201blak.pdf Graphic file (type pdf)
 <use ./figs/DSObjt201blak.pdf>
-Package pdftex.def Info: ./figs/DSObjt201blak.pdf  used on input line 502.
+Package pdftex.def Info: ./figs/DSObjt201blak.pdf  used on input line 503.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 502--503
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 503--504
 [][] 
  []
 
 <./figs/DSObjt206bart.pdf, id=369, 462.52798pt x 341.8371pt>
 File: ./figs/DSObjt206bart.pdf Graphic file (type pdf)
 <use ./figs/DSObjt206bart.pdf>
-Package pdftex.def Info: ./figs/DSObjt206bart.pdf  used on input line 504.
+Package pdftex.def Info: ./figs/DSObjt206bart.pdf  used on input line 505.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 504--505
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 505--506
 [][] 
  []
 
@@ -1547,30 +1547,30 @@ Overfull \hbox (14.22636pt too wide) in paragraph at lines 504--505
 <./figs/LIA1k.pdf, id=403, 462.52798pt x 341.8371pt>
 File: ./figs/LIA1k.pdf Graphic file (type pdf)
 <use ./figs/LIA1k.pdf>
-Package pdftex.def Info: ./figs/LIA1k.pdf  used on input line 529.
+Package pdftex.def Info: ./figs/LIA1k.pdf  used on input line 530.
 (pdftex.def)             Requested size: 462.52684pt x 341.83624pt.
 
-Overfull \hbox (7.28273pt too wide) in paragraph at lines 529--533
+Overfull \hbox (7.28273pt too wide) in paragraph at lines 530--534
  [][] 
  []
 
 <./figs/LIAFFT1k.pdf, id=404, 462.52798pt x 341.8371pt>
 File: ./figs/LIAFFT1k.pdf Graphic file (type pdf)
 <use ./figs/LIAFFT1k.pdf>
-Package pdftex.def Info: ./figs/LIAFFT1k.pdf  used on input line 541.
+Package pdftex.def Info: ./figs/LIAFFT1k.pdf  used on input line 542.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 541--543
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 542--544
 [][] 
  []
 
 <./figs/LIAmag1k.pdf, id=405, 462.52798pt x 341.8371pt>
 File: ./figs/LIAmag1k.pdf Graphic file (type pdf)
 <use ./figs/LIAmag1k.pdf>
-Package pdftex.def Info: ./figs/LIAmag1k.pdf  used on input line 546.
+Package pdftex.def Info: ./figs/LIAmag1k.pdf  used on input line 547.
 (pdftex.def)             Requested size: 241.84842pt x 178.74213pt.
 
-Overfull \hbox (14.22636pt too wide) in paragraph at lines 546--547
+Overfull \hbox (14.22636pt too wide) in paragraph at lines 547--548
 [][] 
  []
 
@@ -1608,11 +1608,11 @@ pdfTeX warning: pdflatex (file ./figs/DSObjt206bart.pdf): PDF inclusion: multipl
 
 pdfTeX warning: pdflatex (file ./figs/LIAmag1k.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 >]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 610.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 610.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 613.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 613.
  (./FFT.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 610.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 610.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 613.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 613.
 Package rerunfilecheck Info: File `FFT.out' has not changed.
 (rerunfilecheck)             Checksum: 0C9729CA0083E744317754DA4EF625F1;1327.
 
@@ -1620,18 +1620,18 @@ Package rerunfilecheck Info: File `FFT.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 3.35835pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 610.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 613.
  ) 
 Here is how much of TeX's memory you used:
- 55865 strings out of 481239
- 1364895 string characters out of 5920378
- 2069795 words of memory out of 5000000
+ 55870 strings out of 481239
+ 1364940 string characters out of 5920378
+ 2069796 words of memory out of 5000000
  69828 multiletter control sequences out of 15000+600000
- 664994 words of font info for 480 fonts, out of 8000000 for 9000
+ 665275 words of font info for 484 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  76i,23n,121p,958b,1276s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/fpl/fplrc8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on FFT.pdf (12 pages, 7586994 bytes).
+Output written on FFT.pdf (12 pages, 7587388 bytes).
 PDF statistics:
  765 PDF objects out of 1000 (max. 8388607)
  592 compressed objects within 6 object streams
