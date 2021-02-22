@@ -10,22 +10,19 @@ arbitrarily large scale.
 from lab import np, plt, sine, cosn, sqw, grid, RMS, args, butf, sampling
 
 ''' Variables that control the script '''
-log = False # log-scale axis/es
-dB = False # plots response y-axis in deciBels
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-DAQ = False # Use a real sampled singal or simulate it internally 
+DAQ = True # Use a real sampled singal or simulate it internally 
 
 x_min = 0.; x_max = 0.2
 t = np.linspace(x_min, x_max, 100_000)
-if DAQ: ref = args(A=1, frq=201.22, phs=0, ofs=0)
-else: ref = args(1, frq=1e3, phs=0, ofs=0)
+ref = args(A=1, frq=210.22, phs=0, ofs=0) if DAQ else args(1, frq=1e3, phs=0, ofs=0)
 sig = args(A=0.1, frq=1e3, phs=0.2, ofs=0)
 cut = round(len(t)*1e-2) # Discarded initial points from LPFed components
 
 Vsig = sine(t, *sig); Vpu = sine(t, A=2, frq=50); DC = 2.5
 Ve = np.array(Vsig, copy=True)
-if DAQ: from data import x as t, y as Vsig, DSO
+if DAQ: from data import sx as t, sy as Vsig, DSO
 else: DSO = False;
 
 fs = len(t)/x_max
@@ -41,7 +38,7 @@ Xmag = np.sqrt(X**2 + Y**2); Xphs = np.arctan2(Y, X);
 
 # Plot
 if tex: plt.rc('text', usetex=True); plt.rc('font', family='serif')
-fig_sig, (ax1, ax2) = plt.subplots(2, 1, True, gridspec_kw={'wspace':0.05,'hspace':0.05})
+fig_sig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, gridspec_kw={'wspace':0.05,'hspace':0.05})
 grid(ax1, ylab='$V_{\\rm{sig}}(t)$')
 ax1.errorbar(t, Vsig, ls='--', lw=0.9, c='k')
 grid(ax2, xlab='Time $t$ [ms]', ylab='$V_{\\rm{ref}}(t)$')
@@ -54,7 +51,7 @@ Xmag = Xmag[cut:]; Xphs = Xphs[cut:]; Z = Z[cut:]; Ve = Ve[cut:]; Vpu = Vpu[cut:
 avg_mag = np.mean(Xmag); avg_phs = np.mean(Xphs); RMS_mag = RMS(Xmag)
 std_mag = np.std(Xmag); std_phs = np.std(Xphs)
 
-fig_mult, (ax1, ax2) = plt.subplots(2, 1, True, gridspec_kw={'wspace':0.05,'hspace':0.05})
+fig_mult, (ax1, ax2) = plt.subplots(2, 1, sharex=True, gridspec_kw={'wspace':0.05,'hspace':0.05})
 grid(ax1, ylab='Magnitude $V(t)$ [arb. un.]')
 ax1.plot(t, Xmag)
 ax1.axhline(avg_mag + std_mag, c='orange', ls='--', lw=.9)
