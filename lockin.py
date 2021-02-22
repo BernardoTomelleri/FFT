@@ -12,7 +12,7 @@ from lab import np, plt, sine, cosn, sqw, grid, RMS, args, butf, sampling
 ''' Variables that control the script '''
 tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
-DAQ = True # Use a real sampled singal or simulate it internally 
+DAQ = False # Use a real sampled singal or simulate it internally 
 
 x_min = 0.; x_max = 0.2
 t = np.linspace(x_min, x_max, 100_000)

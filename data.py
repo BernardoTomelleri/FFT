@@ -32,5 +32,6 @@ dy = np.full(len(y), (V2[1] - V2[0])/4) if DSO else np.ones_like(V2)
 if not DSO: y*=m1; dy*=m1
 # Estrazione di un sottointervallo di dati
 sx, sdx, sy, sdy = mesrange(x, dx, y, dy, x_min, x_max)
+# for messing with propfit's convergence conditions
 #dx *=1e3; sdx*=1e3
 #dy *=1e-2; sdy*=1e-2
