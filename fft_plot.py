@@ -16,7 +16,8 @@ tix = False # manually choose spacing between axis ticks
 tex = True # LaTeX typesetting maths and descriptions
 log = False # log-scale axis/es
 dB = True # plots response y-axis in deciBels
-if lock and fit or log and dB: raise Warning('Mutually exclusive options, choose either.')
+if lock and fit or log and dB:
+    raise Warning('Mutually exclusive options, choose either one.')
 
 from data import x, dx, y, dy, sx, sdx, sy, sdy, DSO, AC
 function = dosc
@@ -31,7 +32,8 @@ ax.errorbar(x, y, dy, dx, 'ko', ms=1.2, elinewidth=0.8, capsize= 1.1,
         ls='',label='data', zorder=5)
 ax.plot(x, y, 'gray', ls='-', lw=0.8, alpha = 0.8)
 if fit:
-    init = (0.5, 44, 0., round(np.mean(y))) if DSO else (300, 300, 1.5, round(np.mean(y)), 0.015)
+    init = (np.std(sy), 300, 1.5, round(np.mean(y)), 0.015)
+    if DSO: init = (0.5, 44, 0., round(np.mean(y)))
     ax.plot(xx, function(xx, *init), 'k--', lw=0.8, zorder=10, alpha =0.6,
                 label='initial fit')
 legend = ax.legend(loc ='best')
@@ -42,17 +44,18 @@ if tix:
 if fit:
     #Fit V(t) con sinusoide
     pars, covm = curve_fit(function, sx, sy, init, sdy, absolute_sigma = False)
-    dy, pars, covm = propfit(sx, sdx, sy, sdy, function, pars, tail=3, tol=0.3, max_iter=100, v=True)
+    pars, covm, sdy = propfit(function, sx, sy, sdx, sdy, p0=pars,
+                             tail=3, rtol=0.3, max_iter=20, v=True)
     perr, pcor = errcor(covm)
     #print('Matrice di correlazione:\n', pcor) 
     #prncor(pcor, function)
 
-    res = sy - function(sx, *pars)
-    chisq, ndof, resnorm = chitest(sy, sdy, function(sx, *pars), ddof=len(pars), v=True)
+    chisq, ndof, resnorm = chitest(function(sx, *pars), data=sy, unc=sdy,
+                                   ddof=len(pars), v=True)
     print(f'Chi quadro ridotto: {chisq/ndof:.1f}' )
    
     #Plot DV vs t
-    fig1, (ax1, ax2) = pltfitres(sx, sdx, sy, sdy, function, pars)
+    fig1, (ax1, ax2) = pltfitres(function, sx, sy, sdx, sdy, pars)
     ax1.set_ylabel('Differenza di potenziale $\Delta V$ [digit]')
     legend = ax1.legend(loc ='lower right', framealpha = 0.3)
     legend.set_zorder(100)
@@ -63,38 +66,33 @@ if fit:
     if tix: tick(ax2, xmaj=1e-2, ymaj=20)
 
     # Fit V(t) con rimozione degli outliers
-    TT, dTT, VV, dVV, outT, doutT, outV, doutV = outlier(
-        sx, sdx, sy, sdy, function, pars, thr=5, out=True)
-    pars, covm = curve_fit(function, TT, VV, pars, dVV, absolute_sigma = False)
+    tin, vin, dtin, dvin, mask = outlier(function, sx, sy, sdx, sdy, pars,
+                                         thr=5, mask=True)
+    pars, covm = curve_fit(function, tin, vin, pars, dvin, absolute_sigma=False)
     perr, pcor = errcor(covm)
     print('Parametri del fit:\n', pars)
     prnpar(pars, perr, function)
     print('Matrice di correlazione:\n', pcor)
     prncor(pcor, function)
-
-    normout = (outV-function(outT, *pars))/doutV
-    chisqin, ndof, normin = chitest(VV, dVV, function(TT, *pars), ddof=len(pars))
+    chisqin, ndof, normin = chitest(function(tin, *pars), data=vin, unc=dvin,
+                                    ddof=len(pars), v=True)
     print(f'Chi quadro ridotto: {chisqin/ndof:.1f}' )
-
+    
     # Plot V(t) con outliers
-    fig2, (ax1, ax2) = pltfitres(TT, dTT, VV, dVV, function, pars, out=sx)
-    ax1.errorbar(outT, outV, doutV, doutT, 'gx',  ms=3, elinewidth=1.,
-                 capsize=1.5, ls='', label='outliers')
+    fig2, (ax1, ax2) = pltfitres(function, sx, sy, sdx, sdy, pars, in_out=mask)
     ax1.set_ylabel('Differenza di potenziale $\Delta V$ [digit]')
     #if log: ax1.set_yscale('log')
     if tix: tick(ax1, ymaj=50, ymin=None)
     legend = ax1.legend(loc ='lower right', framealpha = 0.3)
     legend.set_zorder(100)
 
-    ax2.errorbar(outT, normout, None, None, 'gx', elinewidth = 0.7, capsize=0.7,
-                 ms=3., ls='', zorder=5)
     ax2.set_xlabel('Tempo $t$ [ms]', x=0.92); ax2.set_ylabel('Residui')
     if tix:
         tick(ax2, xmaj=1e-2, ymaj=5, ymin=None)
         ax2.set_ylim(np.min(normin)-np.std(normin), np.max(normin)+np.std(normin))
 
 if lock:
-    from lockin import t as time, Xmag as signal, DAQ, Ve, Vpu, DSO
+    from lockin import t as time, Xmag as signal, DSO#, DAQ, Ve, Vpu, 
     dt = ds = None
 else: time = sx; signal = sy; dt = sdx; ds = sdy
 # FFT Computation with numpy window functions
@@ -107,7 +105,7 @@ if AC and not lock:
     Qf = np.sqrt(3)*fmax/fwhm; print(f'Qf = {Qf:.1f}')
 
 # FFT and signal plot
-fig, (ax1, ax2) = plotfft(freq, tran, signal=(time, dt, signal, ds),
+fig, (ax1, ax2) = plotfft(freq, tran, signal=(time, signal, dt, ds),
                           norm=True, dB=dB, re_im=False)
 
 if log: logy(ax2, 16)
@@ -116,19 +114,19 @@ elif tix:
 if dB: tick(ax2, ymaj=20, ymin=5); ax2.set_ylim(-100, 1)
 
 if tix:
-    ax2.set_xlim(0, 3000)
     tick(ax1, xmaj=5e-2, ymaj=100, ymin=None)
-    if DSO: tick(ax1, xmaj=0.1, ymaj=0.2, ymin=5e-2)
-
-# if lock and not DAQ:
-    # ax1.plot(x, Ve, lw=1, label='Signal', zorder=10)
-    # ax1.plot(x, Vpu, lw=1, label='Pick-up noise', zorder=15)
+    if DSO:
+        tick(ax1, xmaj=0.1, ymaj=0.2, ymin=5e-2)
+    ax2.set_xlim(0, 3000)
+    if lock:
+        tick(ax1, xmaj=2e-2, ymaj=0.1, ymin=None)
     
 if fit: 
     ax1.plot(xx, function(xx, *pars), c='gray', lw=1.2,
                  label='fit$\chi^2 = %.e/%d$' %(chisq, ndof))
-    ax1.errorbar(outT, outV, doutV, doutT, 'gx',  ms=3, elinewidth=1.,
-                 capsize=1.5, ls='', label='outliers')
+    out = np.invert(mask)
+    ax1.errorbar(sx[out], sy[out], sdy[out], sdx[out], 'gx',  ms=3,
+                 elinewidth=1., capsize=1.5, ls='', label='outliers')
     C = 0.47e-6; L = 1./(C*((2*np.pi*pars[1])**2 + (1./pars[-1])**2))
     r = 2*L/pars[-1]
     print(f'Inductance: {L:.2f} H'); print(f'Circuit resistance: {r:.2f} ohm')
