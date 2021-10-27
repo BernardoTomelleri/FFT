@@ -195,8 +195,8 @@ alla differenza $f - f_{\text{ref}}$.
 	V_{\text{sig}}\sin{(\omega t + \phi)} 
 	V_{\text{ref}}\sin{(\omega_{\text{ref}}t + \phi_{\text{ref}})} = \\
 	=& \frac{1}{2} V_{\text{sig}} V_{\text{ref}} \left(\cos{([\omega - 
-		\omega_{\text{ref}}] + \phi - \phi_{\text{ref}}}) + 
-	\cos{([\omega + \omega_{\text{ref}}] + \phi + \phi_{\text{ref}})} \right) \\
+		\omega_{\text{ref}}]t + \phi - \phi_{\text{ref}}}) + 
+	\cos{([\omega + \omega_{\text{ref}}]t + \phi + \phi_{\text{ref}})} \right) \\
 \end{align*}
 Nel caso in cui anche la frequenza $f$ del segnale di nostro interesse sia
 nota possiamo imporre $f_{\text{ref}} = f$, in questa configurazione "omodina"
@@ -348,23 +348,23 @@ superiori dei segnali integrati per $f \gg f_T$.
 \centering
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{RCsin50}
-	\caption{$\Delta t = 100 + 13 \pm 2 \si{\us} \; f = 50.01 \pm 0.01 \si{\Hz}$}
+	\caption{$\Delta t = 100 + 13 \pm 2 \si{\micro\s} \; f = 50.01 \pm 0.01 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{DSOsqw200}
-	\caption{$\Delta t = 2 \pm 100 \si{ppm \, \us}$ (nom.)
+	\caption{$\Delta t = 2 \pm 100 \si{ppm} \; \si{\micro\s}$ (nom.)
 	$\; f = 199.80 \pm 0.01 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCtrg100}
-	\caption{$\Delta t = 20 \pm 100 \si{ppm \, \us}$ (nom.)
+	\caption{$\Delta t = 20 \pm 100 \si{ppm} \; \si{\micro\s}$ (nom.)
 	$ \; f = 100.50 \pm 0.02 \si{\Hz}$}
 \label{fig: RCin}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{DSOsin200}
-	\caption{$\Delta t = 2 \pm 100 \si{ppm \, \us}$ (nom.)
+	\caption{$\Delta t = 2 \pm 100 \si{ppm} \; \si{\micro\s}$ (nom.)
 	$\; f = 199.68 \pm 0.01 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCfin50}
-	\caption{$\Delta t = 100 + 13 \pm 2 \si{\us} \; f = 50.51 \pm 0.02 \si{\Hz}$}
+	\caption{$\Delta t = 100 + 13 \pm 2 \si{\micro\s} \; f = 50.51 \pm 0.02 \si{\Hz}$}
 	\includegraphics[width=8.5cm]{RCpar100}
-	\caption{$\Delta t = 100 + 13 \pm 2 \si{\us} \; f = 99.10 \pm 0.04 \si{\Hz}$}
+	\caption{$\Delta t = 100 + 13 \pm 2 \si{\micro\s} \; f = 99.10 \pm 0.04 \si{\Hz}$}
 \label{fig: Rcint}
 	\end{subfigure}%
 	\caption{Risultati trovati sull'effetto dell'integratore RC sui segnali
@@ -380,7 +380,7 @@ superiori dei segnali integrati per $f \gg f_T$.
 	\caption{Illustrazione del picco che si trova nei dati campionati
 			in fondo all'oscillazione smorzata del circuito, ovviamente
 			non prevista dal modello di best fit. 
-			$\Delta t = 50 + 13 \pm 3 \; [\si{\us}]$ $f = 715.15 \pm 2 \si{\Hz}$
+			$\Delta t = 50 + 13 \pm 3 \; [\si{\micro\s}]$ $f = 715.15 \pm 2 \si{\Hz}$
 			$C = 0.1 \pm 10\% \; [\si{\micro\F}]$ $L = 0.5 \pm 10 \% \;
 			[\si{\henry}]$ $r = 58 \pm 10\%	\; [\si{\ohm}]$.
 			$Q_f = 62$.	\label{fig: RLC0.1b5}}
@@ -413,24 +413,24 @@ rispetto alla risoluzione del sistema di acquisizione.
 \centering
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{RLC0.1b3_net} 
-	\caption{$\Delta t = 30 + 13 \pm 2 \si{\us} \; C = 0.1
+	\caption{$\Delta t = 30 + 13 \pm 2 \si{\micro\s} \; C = 0.1
 			\pm 10 \% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.22b3} 
-	\caption{$\Delta t = 30 + 12 \pm 3 \si{\us} \; C = 0.22 
+	\caption{$\Delta t = 30 + 12 \pm 3 \si{\micro\s} \; C = 0.22 
 			\pm 10 \% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.47b3} 
-	\caption{$\Delta t = 30 + 12 \pm 3 \si{\us} \; C = 0.47
+	\caption{$\Delta t = 30 + 12 \pm 3 \si{\micro\s} \; C = 0.47
 			\pm 10 \% \si{\micro\F}$}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=8.5cm]{RLC0.1b3_traf}
-	\caption{$\Delta t = 30 + 12 \pm 3 \si{\us} \; C = 0.1
+	\caption{$\Delta t = 30 + 12 \pm 3 \si{\micro\s} \; C = 0.1
 			\pm 10 \% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.22b3_traf}
-	\caption{$\Delta t = 30 + 12 \pm 3 \si{\us} \; C = 0.22
+	\caption{$\Delta t = 30 + 12 \pm 3 \si{\micro\s} \; C = 0.22
 			\pm 10\% \si{\micro\F}$}
 		\includegraphics[width=8.5cm]{RLC0.47b5_all}
-	\caption{$\Delta t = 50 + 13 \pm 3 \si{\us} \; C = 0.47
+	\caption{$\Delta t = 50 + 13 \pm 3 \si{\micro\s} \; C = 0.47
 			\pm 10 \% \si{\micro\F}$}
 	\end{subfigure}%
 	\caption{Risultati sugli effetti dovuti ai diversi nuclei inseriti
@@ -487,13 +487,13 @@ fondamentale risulta $\Delta \omega_{\text{FWHM}} \approx 0.4 - 0.5 \si{\Hz}$.
 \centering
 	\begin{subfigure}{.5\textwidth}
 	\includegraphics[width=8.5cm]{DSObjt44}
-	\caption{$\Delta t = 200 \pm 0.01 \% \si{\us} \; f = 43.87
+	\caption{$\Delta t = 200 \pm 0.01 \% \si{\micro\s} \; f = 43.87
 	\pm 0.04 \si{\Hz} \; I_b = 0.98 \pm 0.04 \si{\uA}$}
 	\includegraphics[width=8.5cm]{DSObjt201}
-	\caption{$\Delta t = 100 \pm 0.01 \% \si{\us} \; f = 201.22
+	\caption{$\Delta t = 100 \pm 0.01 \% \si{\micro\s} \; f = 201.22
 	\pm 0.02 \si{\Hz} \; I_b = 1.20 \pm 0.06 \si{\uA}$}
 	\includegraphics[width=8.5cm]{DSObjt206}
-	\caption{$\Delta t = 200 \pm 0.01 \% \si{\us} \; f = 206.65
+	\caption{$\Delta t = 200 \pm 0.01 \% \si{\micro\s} \; f = 206.65
 	\pm 0.01 \si{\Hz} \; I_b = 1.27 \pm 0.06 \si{\uA}$}
 \label{fig: BJTin}
 	\end{subfigure}%
@@ -552,7 +552,7 @@ fase rispetto ai riferimenti ed al segnale stesso:
 			grandezza SNR $\approx 10^{-2}$. Per la misura si è scelto un
 			intervallo di campionamento abbastanza breve per ridurre
 			gli effetti dovuti alla rappresentazione discreta del segnale
-			nel tempo, $\Delta t = 2 \si{\us}$ ed un tempo totale di
+			nel tempo, $\Delta t = 2 \si{\micro\s}$ ed un tempo totale di
 			"acquisizione" $T_{\text{mis}} = 200 \si{\ms}$.
 		\label{fig: LIAall}}
 \end{figure}
